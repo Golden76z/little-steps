@@ -1183,6 +1183,576 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Coming soon'**
   String get premiumSoon;
+
+  /// No description provided for @backLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Back'**
+  String get backLabel;
+
+  /// No description provided for @everyDay.
+  ///
+  /// In en, this message translates to:
+  /// **'every day'**
+  String get everyDay;
+
+  /// No description provided for @everyMorning.
+  ///
+  /// In en, this message translates to:
+  /// **'every morning'**
+  String get everyMorning;
+
+  /// No description provided for @everyNoon.
+  ///
+  /// In en, this message translates to:
+  /// **'every noon'**
+  String get everyNoon;
+
+  /// No description provided for @everyEvening.
+  ///
+  /// In en, this message translates to:
+  /// **'every evening'**
+  String get everyEvening;
+
+  /// No description provided for @timesAWeek.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, one{once a week} other{{count} times a week}}'**
+  String timesAWeek(int count);
+
+  /// No description provided for @fromTime.
+  ///
+  /// In en, this message translates to:
+  /// **'from {time}'**
+  String fromTime(String time);
+
+  /// No description provided for @journalLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'journal'**
+  String get journalLabel;
+
+  /// No description provided for @statStreak.
+  ///
+  /// In en, this message translates to:
+  /// **'days in a row'**
+  String get statStreak;
+
+  /// No description provided for @statBest.
+  ///
+  /// In en, this message translates to:
+  /// **'best'**
+  String get statBest;
+
+  /// No description provided for @statMonth.
+  ///
+  /// In en, this message translates to:
+  /// **'this month'**
+  String get statMonth;
+
+  /// No description provided for @goalMetDays.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, one{goal met 1 day} other{goal met {count} days}}'**
+  String goalMetDays(int count);
+
+  /// No description provided for @calendarOf.
+  ///
+  /// In en, this message translates to:
+  /// **'{month} calendar'**
+  String calendarOf(String month);
+
+  /// No description provided for @bigOf.
+  ///
+  /// In en, this message translates to:
+  /// **'/ {goal}'**
+  String bigOf(String goal);
+
+  /// No description provided for @litersOf.
+  ///
+  /// In en, this message translates to:
+  /// **'{value} L of {goal} L'**
+  String litersOf(String value, String goal);
+
+  /// No description provided for @glassesOf.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, one{{value} glass of 25 cl} other{{value} glasses of 25 cl}}'**
+  String glassesOf(String value, num count);
+
+  /// No description provided for @percentOfGoal.
+  ///
+  /// In en, this message translates to:
+  /// **'{percent} of the goal'**
+  String percentOfGoal(String percent);
+
+  /// No description provided for @addByDetailHint.
+  ///
+  /// In en, this message translates to:
+  /// **'can be changed in the habit'**
+  String get addByDetailHint;
+
+  /// No description provided for @displayedUnit.
+  ///
+  /// In en, this message translates to:
+  /// **'Displayed unit'**
+  String get displayedUnit;
+
+  /// No description provided for @amountAdded.
+  ///
+  /// In en, this message translates to:
+  /// **'Amount added'**
+  String get amountAdded;
+
+  /// No description provided for @removeStep.
+  ///
+  /// In en, this message translates to:
+  /// **'Remove {step}'**
+  String removeStep(String step);
+
+  /// No description provided for @goalReached.
+  ///
+  /// In en, this message translates to:
+  /// **'Goal reached!'**
+  String get goalReached;
+
+  /// No description provided for @sessionLength.
+  ///
+  /// In en, this message translates to:
+  /// **'Session length'**
+  String get sessionLength;
+
+  /// No description provided for @timerRunning.
+  ///
+  /// In en, this message translates to:
+  /// **'In progress…'**
+  String get timerRunning;
+
+  /// No description provided for @timerOf.
+  ///
+  /// In en, this message translates to:
+  /// **'of {time}'**
+  String timerOf(String time);
+
+  /// No description provided for @sessionDone.
+  ///
+  /// In en, this message translates to:
+  /// **'Session complete!'**
+  String get sessionDone;
+
+  /// No description provided for @ringLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'{minutes} minutes of {goal}'**
+  String ringLabel(int minutes, int goal);
+
+  /// No description provided for @restartTimer.
+  ///
+  /// In en, this message translates to:
+  /// **'Start over'**
+  String get restartTimer;
+
+  /// No description provided for @startTimer.
+  ///
+  /// In en, this message translates to:
+  /// **'Start'**
+  String get startTimer;
+
+  /// No description provided for @pauseTimer.
+  ///
+  /// In en, this message translates to:
+  /// **'Pause'**
+  String get pauseTimer;
+
+  /// No description provided for @finishSession.
+  ///
+  /// In en, this message translates to:
+  /// **'End session'**
+  String get finishSession;
+
+  /// No description provided for @alreadyDone.
+  ///
+  /// In en, this message translates to:
+  /// **'Already done, log {minutes} min'**
+  String alreadyDone(int minutes);
+
+  /// No description provided for @thisWeek.
+  ///
+  /// In en, this message translates to:
+  /// **'This week'**
+  String get thisWeek;
+
+  /// No description provided for @weekTotal.
+  ///
+  /// In en, this message translates to:
+  /// **'{minutes} min in total'**
+  String weekTotal(String minutes);
+
+  /// No description provided for @weekMinutesA11y.
+  ///
+  /// In en, this message translates to:
+  /// **'Minutes per day this week'**
+  String get weekMinutesA11y;
+
+  /// No description provided for @currentStreak.
+  ///
+  /// In en, this message translates to:
+  /// **'Current streak'**
+  String get currentStreak;
+
+  /// No description provided for @unitDays.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, one{day} other{days}}'**
+  String unitDays(num count);
+
+  /// No description provided for @unitMornings.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, one{morning} other{mornings}}'**
+  String unitMornings(num count);
+
+  /// No description provided for @unitNoons.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, one{noon} other{noons}}'**
+  String unitNoons(num count);
+
+  /// No description provided for @unitEvenings.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, one{evening} other{evenings}}'**
+  String unitEvenings(num count);
+
+  /// No description provided for @inARow.
+  ///
+  /// In en, this message translates to:
+  /// **'{unit} in a row'**
+  String inARow(String unit);
+
+  /// No description provided for @bestLine.
+  ///
+  /// In en, this message translates to:
+  /// **'best: {best}'**
+  String bestLine(String best);
+
+  /// No description provided for @reminderAt.
+  ///
+  /// In en, this message translates to:
+  /// **'reminder at {time}'**
+  String reminderAt(String time);
+
+  /// No description provided for @iDidIt.
+  ///
+  /// In en, this message translates to:
+  /// **'I did it'**
+  String get iDidIt;
+
+  /// No description provided for @doneOf.
+  ///
+  /// In en, this message translates to:
+  /// **'{done} {unit} of {total}'**
+  String doneOf(String done, String unit, String total);
+
+  /// No description provided for @legendDone.
+  ///
+  /// In en, this message translates to:
+  /// **'Done'**
+  String get legendDone;
+
+  /// No description provided for @legendJoker.
+  ///
+  /// In en, this message translates to:
+  /// **'Joker'**
+  String get legendJoker;
+
+  /// No description provided for @legendMissed.
+  ///
+  /// In en, this message translates to:
+  /// **'Missed'**
+  String get legendMissed;
+
+  /// No description provided for @jokerTip.
+  ///
+  /// In en, this message translates to:
+  /// **'A missed {unit} doesn’t erase your streak if you use a joker. You have **{count}** left.'**
+  String jokerTip(String unit, String count);
+
+  /// No description provided for @periodLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Period'**
+  String get periodLabel;
+
+  /// No description provided for @periodWeek.
+  ///
+  /// In en, this message translates to:
+  /// **'Week'**
+  String get periodWeek;
+
+  /// No description provided for @periodMonth.
+  ///
+  /// In en, this message translates to:
+  /// **'Month'**
+  String get periodMonth;
+
+  /// No description provided for @periodYear.
+  ///
+  /// In en, this message translates to:
+  /// **'Year'**
+  String get periodYear;
+
+  /// No description provided for @historyTab.
+  ///
+  /// In en, this message translates to:
+  /// **'History'**
+  String get historyTab;
+
+  /// No description provided for @viewLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'View'**
+  String get viewLabel;
+
+  /// No description provided for @monthDoneA11y.
+  ///
+  /// In en, this message translates to:
+  /// **'Days done in {month}'**
+  String monthDoneA11y(String month);
+
+  /// No description provided for @journalPrompt1.
+  ///
+  /// In en, this message translates to:
+  /// **'What made you smile today?'**
+  String get journalPrompt1;
+
+  /// No description provided for @journalPrompt2.
+  ///
+  /// In en, this message translates to:
+  /// **'One thing you learned?'**
+  String get journalPrompt2;
+
+  /// No description provided for @journalPrompt3.
+  ///
+  /// In en, this message translates to:
+  /// **'What are you proud of today?'**
+  String get journalPrompt3;
+
+  /// No description provided for @otherQuestion.
+  ///
+  /// In en, this message translates to:
+  /// **'Another question'**
+  String get otherQuestion;
+
+  /// No description provided for @journalHint.
+  ///
+  /// In en, this message translates to:
+  /// **'One line per idea…'**
+  String get journalHint;
+
+  /// No description provided for @moodTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Today’s mood'**
+  String get moodTitle;
+
+  /// No description provided for @moodLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Mood'**
+  String get moodLabel;
+
+  /// No description provided for @mood0.
+  ///
+  /// In en, this message translates to:
+  /// **'Not great'**
+  String get mood0;
+
+  /// No description provided for @mood1.
+  ///
+  /// In en, this message translates to:
+  /// **'Meh'**
+  String get mood1;
+
+  /// No description provided for @mood2.
+  ///
+  /// In en, this message translates to:
+  /// **'Good'**
+  String get mood2;
+
+  /// No description provided for @mood3.
+  ///
+  /// In en, this message translates to:
+  /// **'Great'**
+  String get mood3;
+
+  /// No description provided for @journalSave.
+  ///
+  /// In en, this message translates to:
+  /// **'Save'**
+  String get journalSave;
+
+  /// No description provided for @journalSaved.
+  ///
+  /// In en, this message translates to:
+  /// **'Saved!'**
+  String get journalSaved;
+
+  /// No description provided for @linesLeft.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, one{1 more line} other{{count} more lines}}'**
+  String linesLeft(int count);
+
+  /// No description provided for @linesCount.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, one{1 line} other{{count} lines}}'**
+  String linesCount(int count);
+
+  /// No description provided for @noEntries.
+  ///
+  /// In en, this message translates to:
+  /// **'Nothing written yet.'**
+  String get noEntries;
+
+  /// No description provided for @sessionsOf.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} / {target} sessions'**
+  String sessionsOf(int count, int target);
+
+  /// No description provided for @weekGoalMet.
+  ///
+  /// In en, this message translates to:
+  /// **'Weekly goal reached, well done!'**
+  String get weekGoalMet;
+
+  /// No description provided for @sessionsLeft.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, one{1 more session} other{{count} more sessions}} by {lastDay}, {days, plural, one{1 day} other{{days} days}} left.'**
+  String sessionsLeft(int count, String lastDay, int days);
+
+  /// No description provided for @lastWeeks.
+  ///
+  /// In en, this message translates to:
+  /// **'Last {count} weeks'**
+  String lastWeeks(int count);
+
+  /// No description provided for @goalKept.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, one{goal met once} other{goal met {count} times}}'**
+  String goalKept(int count);
+
+  /// No description provided for @weekShort.
+  ///
+  /// In en, this message translates to:
+  /// **'W{week}'**
+  String weekShort(int week);
+
+  /// No description provided for @logSession.
+  ///
+  /// In en, this message translates to:
+  /// **'Log a session today'**
+  String get logSession;
+
+  /// No description provided for @sessionLogged.
+  ///
+  /// In en, this message translates to:
+  /// **'Session logged today'**
+  String get sessionLogged;
+
+  /// No description provided for @weekSessionsA11y.
+  ///
+  /// In en, this message translates to:
+  /// **'This week’s sessions, day by day'**
+  String get weekSessionsA11y;
+
+  /// No description provided for @weeksA11y.
+  ///
+  /// In en, this message translates to:
+  /// **'Sessions per week over {count} weeks'**
+  String weeksA11y(int count);
+
+  /// No description provided for @streakAtRisk.
+  ///
+  /// In en, this message translates to:
+  /// **'Your streak is at risk'**
+  String get streakAtRisk;
+
+  /// No description provided for @missedYesterday.
+  ///
+  /// In en, this message translates to:
+  /// **'Yesterday you didn’t do **{names}**. A joker keeps your **{streak}** streak intact.'**
+  String missedYesterday(String names, String streak);
+
+  /// No description provided for @useJoker.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, one{Use a joker · 1 left} other{Use a joker · {count} left}}'**
+  String useJoker(int count);
+
+  /// No description provided for @letItGo.
+  ///
+  /// In en, this message translates to:
+  /// **'Let it go'**
+  String get letItGo;
+
+  /// No description provided for @jokerEarnHint.
+  ///
+  /// In en, this message translates to:
+  /// **'You earn a joker every 7 perfect days.'**
+  String get jokerEarnHint;
+
+  /// No description provided for @streakSaved.
+  ///
+  /// In en, this message translates to:
+  /// **'Streak saved!'**
+  String get streakSaved;
+
+  /// No description provided for @stillInARow.
+  ///
+  /// In en, this message translates to:
+  /// **'Still {streak} in a row. {jokers, plural, =0{No joker left.} one{1 joker left.} other{{jokers} jokers left.}}'**
+  String stillInARow(String streak, int jokers);
+
+  /// No description provided for @letsGo.
+  ///
+  /// In en, this message translates to:
+  /// **'Let’s go'**
+  String get letsGo;
+
+  /// No description provided for @freshStart.
+  ///
+  /// In en, this message translates to:
+  /// **'Starting from zero'**
+  String get freshStart;
+
+  /// No description provided for @recordKept.
+  ///
+  /// In en, this message translates to:
+  /// **'Your {streak} record stays in your trophies. Keep your jokers for another time.'**
+  String recordKept(String streak);
+
+  /// No description provided for @okay.
+  ///
+  /// In en, this message translates to:
+  /// **'OK'**
+  String get okay;
+
+  /// No description provided for @yesterdayShort.
+  ///
+  /// In en, this message translates to:
+  /// **'Yest.'**
+  String get yesterdayShort;
+
+  /// No description provided for @todayShort.
+  ///
+  /// In en, this message translates to:
+  /// **'Today'**
+  String get todayShort;
 }
 
 class _AppLocalizationsDelegate

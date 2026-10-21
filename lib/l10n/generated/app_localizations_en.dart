@@ -741,4 +741,444 @@ class AppLocalizationsEn extends AppLocalizations {
 
   @override
   String get premiumSoon => 'Coming soon';
+
+  @override
+  String get backLabel => 'Back';
+
+  @override
+  String get everyDay => 'every day';
+
+  @override
+  String get everyMorning => 'every morning';
+
+  @override
+  String get everyNoon => 'every noon';
+
+  @override
+  String get everyEvening => 'every evening';
+
+  @override
+  String timesAWeek(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count times a week',
+      one: 'once a week',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String fromTime(String time) {
+    return 'from $time';
+  }
+
+  @override
+  String get journalLabel => 'journal';
+
+  @override
+  String get statStreak => 'days in a row';
+
+  @override
+  String get statBest => 'best';
+
+  @override
+  String get statMonth => 'this month';
+
+  @override
+  String goalMetDays(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'goal met $count days',
+      one: 'goal met 1 day',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String calendarOf(String month) {
+    return '$month calendar';
+  }
+
+  @override
+  String bigOf(String goal) {
+    return '/ $goal';
+  }
+
+  @override
+  String litersOf(String value, String goal) {
+    return '$value L of $goal L';
+  }
+
+  @override
+  String glassesOf(String value, num count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$value glasses of 25 cl',
+      one: '$value glass of 25 cl',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String percentOfGoal(String percent) {
+    return '$percent of the goal';
+  }
+
+  @override
+  String get addByDetailHint => 'can be changed in the habit';
+
+  @override
+  String get displayedUnit => 'Displayed unit';
+
+  @override
+  String get amountAdded => 'Amount added';
+
+  @override
+  String removeStep(String step) {
+    return 'Remove $step';
+  }
+
+  @override
+  String get goalReached => 'Goal reached!';
+
+  @override
+  String get sessionLength => 'Session length';
+
+  @override
+  String get timerRunning => 'In progress…';
+
+  @override
+  String timerOf(String time) {
+    return 'of $time';
+  }
+
+  @override
+  String get sessionDone => 'Session complete!';
+
+  @override
+  String ringLabel(int minutes, int goal) {
+    return '$minutes minutes of $goal';
+  }
+
+  @override
+  String get restartTimer => 'Start over';
+
+  @override
+  String get startTimer => 'Start';
+
+  @override
+  String get pauseTimer => 'Pause';
+
+  @override
+  String get finishSession => 'End session';
+
+  @override
+  String alreadyDone(int minutes) {
+    return 'Already done, log $minutes min';
+  }
+
+  @override
+  String get thisWeek => 'This week';
+
+  @override
+  String weekTotal(String minutes) {
+    return '$minutes min in total';
+  }
+
+  @override
+  String get weekMinutesA11y => 'Minutes per day this week';
+
+  @override
+  String get currentStreak => 'Current streak';
+
+  @override
+  String unitDays(num count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'days',
+      one: 'day',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String unitMornings(num count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'mornings',
+      one: 'morning',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String unitNoons(num count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'noons',
+      one: 'noon',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String unitEvenings(num count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'evenings',
+      one: 'evening',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String inARow(String unit) {
+    return '$unit in a row';
+  }
+
+  @override
+  String bestLine(String best) {
+    return 'best: $best';
+  }
+
+  @override
+  String reminderAt(String time) {
+    return 'reminder at $time';
+  }
+
+  @override
+  String get iDidIt => 'I did it';
+
+  @override
+  String doneOf(String done, String unit, String total) {
+    return '$done $unit of $total';
+  }
+
+  @override
+  String get legendDone => 'Done';
+
+  @override
+  String get legendJoker => 'Joker';
+
+  @override
+  String get legendMissed => 'Missed';
+
+  @override
+  String jokerTip(String unit, String count) {
+    return 'A missed $unit doesn’t erase your streak if you use a joker. You have **$count** left.';
+  }
+
+  @override
+  String get periodLabel => 'Period';
+
+  @override
+  String get periodWeek => 'Week';
+
+  @override
+  String get periodMonth => 'Month';
+
+  @override
+  String get periodYear => 'Year';
+
+  @override
+  String get historyTab => 'History';
+
+  @override
+  String get viewLabel => 'View';
+
+  @override
+  String monthDoneA11y(String month) {
+    return 'Days done in $month';
+  }
+
+  @override
+  String get journalPrompt1 => 'What made you smile today?';
+
+  @override
+  String get journalPrompt2 => 'One thing you learned?';
+
+  @override
+  String get journalPrompt3 => 'What are you proud of today?';
+
+  @override
+  String get otherQuestion => 'Another question';
+
+  @override
+  String get journalHint => 'One line per idea…';
+
+  @override
+  String get moodTitle => 'Today’s mood';
+
+  @override
+  String get moodLabel => 'Mood';
+
+  @override
+  String get mood0 => 'Not great';
+
+  @override
+  String get mood1 => 'Meh';
+
+  @override
+  String get mood2 => 'Good';
+
+  @override
+  String get mood3 => 'Great';
+
+  @override
+  String get journalSave => 'Save';
+
+  @override
+  String get journalSaved => 'Saved!';
+
+  @override
+  String linesLeft(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count more lines',
+      one: '1 more line',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String linesCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count lines',
+      one: '1 line',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get noEntries => 'Nothing written yet.';
+
+  @override
+  String sessionsOf(int count, int target) {
+    return '$count / $target sessions';
+  }
+
+  @override
+  String get weekGoalMet => 'Weekly goal reached, well done!';
+
+  @override
+  String sessionsLeft(int count, String lastDay, int days) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count more sessions',
+      one: '1 more session',
+    );
+    String _temp1 = intl.Intl.pluralLogic(
+      days,
+      locale: localeName,
+      other: '$days days',
+      one: '1 day',
+    );
+    return '$_temp0 by $lastDay, $_temp1 left.';
+  }
+
+  @override
+  String lastWeeks(int count) {
+    return 'Last $count weeks';
+  }
+
+  @override
+  String goalKept(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'goal met $count times',
+      one: 'goal met once',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String weekShort(int week) {
+    return 'W$week';
+  }
+
+  @override
+  String get logSession => 'Log a session today';
+
+  @override
+  String get sessionLogged => 'Session logged today';
+
+  @override
+  String get weekSessionsA11y => 'This week’s sessions, day by day';
+
+  @override
+  String weeksA11y(int count) {
+    return 'Sessions per week over $count weeks';
+  }
+
+  @override
+  String get streakAtRisk => 'Your streak is at risk';
+
+  @override
+  String missedYesterday(String names, String streak) {
+    return 'Yesterday you didn’t do **$names**. A joker keeps your **$streak** streak intact.';
+  }
+
+  @override
+  String useJoker(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Use a joker · $count left',
+      one: 'Use a joker · 1 left',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get letItGo => 'Let it go';
+
+  @override
+  String get jokerEarnHint => 'You earn a joker every 7 perfect days.';
+
+  @override
+  String get streakSaved => 'Streak saved!';
+
+  @override
+  String stillInARow(String streak, int jokers) {
+    String _temp0 = intl.Intl.pluralLogic(
+      jokers,
+      locale: localeName,
+      other: '$jokers jokers left.',
+      one: '1 joker left.',
+      zero: 'No joker left.',
+    );
+    return 'Still $streak in a row. $_temp0';
+  }
+
+  @override
+  String get letsGo => 'Let’s go';
+
+  @override
+  String get freshStart => 'Starting from zero';
+
+  @override
+  String recordKept(String streak) {
+    return 'Your $streak record stays in your trophies. Keep your jokers for another time.';
+  }
+
+  @override
+  String get okay => 'OK';
+
+  @override
+  String get yesterdayShort => 'Yest.';
+
+  @override
+  String get todayShort => 'Today';
 }

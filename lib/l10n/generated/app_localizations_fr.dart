@@ -723,4 +723,432 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get premiumSoon => 'Bientôt disponible';
+
+  @override
+  String get backLabel => 'Retour';
+
+  @override
+  String get everyDay => 'chaque jour';
+
+  @override
+  String get everyMorning => 'chaque matin';
+
+  @override
+  String get everyNoon => 'chaque midi';
+
+  @override
+  String get everyEvening => 'chaque soir';
+
+  @override
+  String timesAWeek(int count) {
+    return '$count fois par semaine';
+  }
+
+  @override
+  String fromTime(String time) {
+    return 'dès $time';
+  }
+
+  @override
+  String get journalLabel => 'journal';
+
+  @override
+  String get statStreak => 'jours de suite';
+
+  @override
+  String get statBest => 'record';
+
+  @override
+  String get statMonth => 'ce mois-ci';
+
+  @override
+  String goalMetDays(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'objectif atteint $count jours',
+      one: 'objectif atteint 1 jour',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String calendarOf(String month) {
+    return 'Calendrier de $month';
+  }
+
+  @override
+  String bigOf(String goal) {
+    return '/ $goal';
+  }
+
+  @override
+  String litersOf(String value, String goal) {
+    return '$value L sur $goal L';
+  }
+
+  @override
+  String glassesOf(String value, num count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$value verres de 25 cl',
+      one: '$value verre de 25 cl',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String percentOfGoal(String percent) {
+    return '$percent de l’objectif';
+  }
+
+  @override
+  String get addByDetailHint => 'réglable dans l’habitude';
+
+  @override
+  String get displayedUnit => 'Unité affichée';
+
+  @override
+  String get amountAdded => 'Quantité ajoutée';
+
+  @override
+  String removeStep(String step) {
+    return 'Retirer $step';
+  }
+
+  @override
+  String get goalReached => 'Objectif atteint !';
+
+  @override
+  String get sessionLength => 'Durée de la séance';
+
+  @override
+  String get timerRunning => 'En cours…';
+
+  @override
+  String timerOf(String time) {
+    return 'sur $time';
+  }
+
+  @override
+  String get sessionDone => 'Séance terminée !';
+
+  @override
+  String ringLabel(int minutes, int goal) {
+    return '$minutes minutes sur $goal';
+  }
+
+  @override
+  String get restartTimer => 'Recommencer';
+
+  @override
+  String get startTimer => 'Démarrer';
+
+  @override
+  String get pauseTimer => 'Mettre en pause';
+
+  @override
+  String get finishSession => 'Terminer la séance';
+
+  @override
+  String alreadyDone(int minutes) {
+    return 'Déjà fait, noter $minutes min';
+  }
+
+  @override
+  String get thisWeek => 'Cette semaine';
+
+  @override
+  String weekTotal(String minutes) {
+    return '$minutes min au total';
+  }
+
+  @override
+  String get weekMinutesA11y => 'Minutes par jour cette semaine';
+
+  @override
+  String get currentStreak => 'Série en cours';
+
+  @override
+  String unitDays(num count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'jours',
+      one: 'jour',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String unitMornings(num count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'matins',
+      one: 'matin',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String unitNoons(num count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'midis',
+      one: 'midi',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String unitEvenings(num count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'soirs',
+      one: 'soir',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String inARow(String unit) {
+    return '$unit de suite';
+  }
+
+  @override
+  String bestLine(String best) {
+    return 'record : $best';
+  }
+
+  @override
+  String reminderAt(String time) {
+    return 'rappel à $time';
+  }
+
+  @override
+  String get iDidIt => 'Je l’ai fait';
+
+  @override
+  String doneOf(String done, String unit, String total) {
+    return '$done $unit sur $total';
+  }
+
+  @override
+  String get legendDone => 'Fait';
+
+  @override
+  String get legendJoker => 'Joker';
+
+  @override
+  String get legendMissed => 'Raté';
+
+  @override
+  String jokerTip(String unit, String count) {
+    return 'Un $unit raté n’efface pas ta série si tu utilises un joker. Il t’en reste **$count**.';
+  }
+
+  @override
+  String get periodLabel => 'Période';
+
+  @override
+  String get periodWeek => 'Semaine';
+
+  @override
+  String get periodMonth => 'Mois';
+
+  @override
+  String get periodYear => 'Année';
+
+  @override
+  String get historyTab => 'Historique';
+
+  @override
+  String get viewLabel => 'Vue';
+
+  @override
+  String monthDoneA11y(String month) {
+    return 'Jours réussis en $month';
+  }
+
+  @override
+  String get journalPrompt1 => 'Qu’est-ce qui t’a fait sourire aujourd’hui ?';
+
+  @override
+  String get journalPrompt2 => 'Une chose que tu as apprise ?';
+
+  @override
+  String get journalPrompt3 => 'De quoi es-tu fier·e aujourd’hui ?';
+
+  @override
+  String get otherQuestion => 'Autre question';
+
+  @override
+  String get journalHint => 'Une ligne par idée…';
+
+  @override
+  String get moodTitle => 'Humeur du jour';
+
+  @override
+  String get moodLabel => 'Humeur';
+
+  @override
+  String get mood0 => 'Pas terrible';
+
+  @override
+  String get mood1 => 'Bof';
+
+  @override
+  String get mood2 => 'Bien';
+
+  @override
+  String get mood3 => 'Super';
+
+  @override
+  String get journalSave => 'Enregistrer';
+
+  @override
+  String get journalSaved => 'Enregistré !';
+
+  @override
+  String linesLeft(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Encore $count lignes',
+      one: 'Encore 1 ligne',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String linesCount(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count lignes',
+      one: '1 ligne',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get noEntries => 'Rien d’écrit pour l’instant.';
+
+  @override
+  String sessionsOf(int count, int target) {
+    return '$count / $target séances';
+  }
+
+  @override
+  String get weekGoalMet => 'Objectif de la semaine atteint, bravo !';
+
+  @override
+  String sessionsLeft(int count, String lastDay, int days) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Encore $count séances',
+      one: 'Encore 1 séance',
+    );
+    String _temp1 = intl.Intl.pluralLogic(
+      days,
+      locale: localeName,
+      other: 'il te reste $days jours',
+      one: 'il te reste 1 jour',
+    );
+    return '$_temp0 d’ici $lastDay, $_temp1.';
+  }
+
+  @override
+  String lastWeeks(int count) {
+    return '$count dernières semaines';
+  }
+
+  @override
+  String goalKept(int count) {
+    return 'objectif tenu $count fois';
+  }
+
+  @override
+  String weekShort(int week) {
+    return 'S$week';
+  }
+
+  @override
+  String get logSession => 'Noter une séance aujourd’hui';
+
+  @override
+  String get sessionLogged => 'Séance notée aujourd’hui';
+
+  @override
+  String get weekSessionsA11y => 'Séances de la semaine, jour par jour';
+
+  @override
+  String weeksA11y(int count) {
+    return 'Séances par semaine sur $count semaines';
+  }
+
+  @override
+  String get streakAtRisk => 'Ta série est en danger';
+
+  @override
+  String missedYesterday(String names, String streak) {
+    return 'Hier, tu n’as pas fait **$names**. Un joker garde ta série de **$streak** intacte.';
+  }
+
+  @override
+  String useJoker(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'Utiliser un joker · $count restants',
+      one: 'Utiliser un joker · 1 restant',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get letItGo => 'Laisser passer';
+
+  @override
+  String get jokerEarnHint => 'Tu gagnes un joker tous les 7 jours parfaits.';
+
+  @override
+  String get streakSaved => 'Série sauvée !';
+
+  @override
+  String stillInARow(String streak, int jokers) {
+    String _temp0 = intl.Intl.pluralLogic(
+      jokers,
+      locale: localeName,
+      other: 'Il te reste $jokers jokers.',
+      one: 'Il te reste 1 joker.',
+      zero: 'Il ne te reste plus de joker.',
+    );
+    return 'Toujours $streak de suite. $_temp0';
+  }
+
+  @override
+  String get letsGo => 'C’est reparti';
+
+  @override
+  String get freshStart => 'On repart de zéro';
+
+  @override
+  String recordKept(String streak) {
+    return 'Ton record de $streak reste dans tes trophées. Garde tes jokers pour une autre fois.';
+  }
+
+  @override
+  String get okay => 'D’accord';
+
+  @override
+  String get yesterdayShort => 'Hier';
+
+  @override
+  String get todayShort => 'Auj.';
 }

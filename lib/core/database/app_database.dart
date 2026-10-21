@@ -58,6 +58,16 @@ class JokerDays extends Table {
   Set<Column> get primaryKey => {day};
 }
 
+/// Small app preferences, as text by key.
+@DataClassName('SettingRow')
+class Settings extends Table {
+  TextColumn get key => text()();
+  TextColumn get value => text()();
+
+  @override
+  Set<Column> get primaryKey => {key};
+}
+
 class DayConverter extends TypeConverter<Day, int> {
   const DayConverter();
 
@@ -95,16 +105,19 @@ class MinutesConverter extends TypeConverter<List<int>, String> {
   String toSql(List<int> value) => value.join(',');
 }
 
-@DriftDatabase(tables: [Habits, Pauses, Entries, JokerDays])
+@DriftDatabase(tables: [Habits, Pauses, Entries, JokerDays, Settings])
 class AppDatabase extends _$AppDatabase {
   AppDatabase([QueryExecutor? executor])
     : super(executor ?? driftDatabase(name: 'little_steps'));
 
   @override
-  int get schemaVersion => 1;
+  int get schemaVersion => 2;
 
   @override
   MigrationStrategy get migration => MigrationStrategy(
+    onUpgrade: (m, from, to) async {
+      if (from < 2) await m.createTable(settings);
+    },
     beforeOpen: (details) => customStatement('PRAGMA foreign_keys = ON'),
   );
 }

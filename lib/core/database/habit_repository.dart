@@ -146,6 +146,14 @@ class HabitRepository {
       .watch()
       .map((rows) => {for (final r in rows) r.day});
 
+  Future<String?> getSetting(String key) async => (await (_db.select(
+    _db.settings,
+  )..where((s) => s.key.equals(key))).getSingleOrNull())?.value;
+
+  Future<void> setSetting(String key, String value) => _db
+      .into(_db.settings)
+      .insertOnConflictUpdate(SettingsCompanion.insert(key: key, value: value));
+
   Habit _toHabit(HabitRow r, List<Pause> pauses) => Habit(
     id: r.id,
     name: r.name,

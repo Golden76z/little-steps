@@ -7,7 +7,12 @@ import '../theme/sorbet_colors.dart';
 
 /// Bottom sheet in the E2/E3 style: white, top corners 32, grab handle,
 /// ink scrim.
-Future<T?> showSorbetSheet<T>(BuildContext context, WidgetBuilder builder) {
+Future<T?> showSorbetSheet<T>(
+  BuildContext context,
+  WidgetBuilder builder, {
+  double sidePadding = 20,
+  double bottomPadding = 28,
+}) {
   final c = context.sorbet;
   return showModalBottomSheet<T>(
     context: context,
@@ -32,10 +37,10 @@ Future<T?> showSorbetSheet<T>(BuildContext context, WidgetBuilder builder) {
       child: SingleChildScrollView(
         // 28 from the bottom edge, as in the mockup, unless the system inset is taller.
         padding: EdgeInsets.fromLTRB(
-          20,
+          sidePadding,
           12,
-          20,
-          math.max(28.0, MediaQuery.viewPaddingOf(context).bottom),
+          sidePadding,
+          math.max(bottomPadding, MediaQuery.viewPaddingOf(context).bottom),
         ),
         child: Column(
           mainAxisSize: MainAxisSize.min,
@@ -80,7 +85,6 @@ class SheetHeader extends StatelessWidget {
     return Padding(
       padding: const EdgeInsets.only(top: 14),
       child: Row(
-        spacing: 10,
         children: [
           Container(
             width: 40,
@@ -88,6 +92,7 @@ class SheetHeader extends StatelessWidget {
             decoration: BoxDecoration(shape: BoxShape.circle, color: color),
             child: Icon(icon, size: 20, color: c.ink),
           ),
+          const SizedBox(width: 10),
           Expanded(
             child: Text(
               title,
@@ -95,7 +100,9 @@ class SheetHeader extends StatelessWidget {
                   .copyWith(height: null),
             ),
           ),
-          // 48 px target; shifted so the 40 px disc keeps the 20 px margin.
+          // 48 px target shifted 4 px outwards: the 40 px disc keeps the 20 px
+          // margin, and the 2 px gap makes 10 px visually.
+          const SizedBox(width: 2),
           Transform.translate(
             offset: const Offset(4, 0),
             child: Semantics(

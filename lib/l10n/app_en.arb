@@ -595,5 +595,378 @@
   "toastSaved": "Changes saved",
   "premiumTitle": "Little Steps Premium",
   "premiumBody": "The free plan holds 5 habits. Premium unlocks unlimited habits, full stats, themes and export.",
-  "premiumSoon": "Coming soon"
+  "premiumSoon": "Coming soon",
+  "backLabel": "Back",
+  "everyDay": "every day",
+  "everyMorning": "every morning",
+  "everyNoon": "every noon",
+  "everyEvening": "every evening",
+  "timesAWeek": "{count, plural, one{once a week} other{{count} times a week}}",
+  "@timesAWeek": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "fromTime": "from {time}",
+  "@fromTime": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "journalLabel": "journal",
+  "statStreak": "days in a row",
+  "statBest": "best",
+  "statMonth": "this month",
+  "goalMetDays": "{count, plural, one{goal met 1 day} other{goal met {count} days}}",
+  "@goalMetDays": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "calendarOf": "{month} calendar",
+  "@calendarOf": {
+    "placeholders": {
+      "month": {
+        "type": "String"
+      }
+    }
+  },
+  "bigOf": "/ {goal}",
+  "@bigOf": {
+    "placeholders": {
+      "goal": {
+        "type": "String"
+      }
+    }
+  },
+  "litersOf": "{value} L of {goal} L",
+  "@litersOf": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      },
+      "goal": {
+        "type": "String"
+      }
+    }
+  },
+  "glassesOf": "{count, plural, one{{value} glass of 25 cl} other{{value} glasses of 25 cl}}",
+  "@glassesOf": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      },
+      "count": {
+        "type": "num"
+      }
+    }
+  },
+  "percentOfGoal": "{percent} of the goal",
+  "@percentOfGoal": {
+    "placeholders": {
+      "percent": {
+        "type": "String"
+      }
+    }
+  },
+  "addByDetailHint": "can be changed in the habit",
+  "displayedUnit": "Displayed unit",
+  "amountAdded": "Amount added",
+  "removeStep": "Remove {step}",
+  "@removeStep": {
+    "placeholders": {
+      "step": {
+        "type": "String"
+      }
+    }
+  },
+  "goalReached": "Goal reached!",
+  "sessionLength": "Session length",
+  "timerRunning": "In progress…",
+  "timerOf": "of {time}",
+  "@timerOf": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "sessionDone": "Session complete!",
+  "ringLabel": "{minutes} minutes of {goal}",
+  "@ringLabel": {
+    "placeholders": {
+      "minutes": {
+        "type": "int"
+      },
+      "goal": {
+        "type": "int"
+      }
+    }
+  },
+  "restartTimer": "Start over",
+  "startTimer": "Start",
+  "pauseTimer": "Pause",
+  "finishSession": "End session",
+  "alreadyDone": "Already done, log {minutes} min",
+  "@alreadyDone": {
+    "placeholders": {
+      "minutes": {
+        "type": "int"
+      }
+    }
+  },
+  "thisWeek": "This week",
+  "weekTotal": "{minutes} min in total",
+  "@weekTotal": {
+    "placeholders": {
+      "minutes": {
+        "type": "String"
+      }
+    }
+  },
+  "weekMinutesA11y": "Minutes per day this week",
+  "currentStreak": "Current streak",
+  "unitDays": "{count, plural, one{day} other{days}}",
+  "@unitDays": {
+    "placeholders": {
+      "count": {
+        "type": "num"
+      }
+    }
+  },
+  "unitMornings": "{count, plural, one{morning} other{mornings}}",
+  "@unitMornings": {
+    "placeholders": {
+      "count": {
+        "type": "num"
+      }
+    }
+  },
+  "unitNoons": "{count, plural, one{noon} other{noons}}",
+  "@unitNoons": {
+    "placeholders": {
+      "count": {
+        "type": "num"
+      }
+    }
+  },
+  "unitEvenings": "{count, plural, one{evening} other{evenings}}",
+  "@unitEvenings": {
+    "placeholders": {
+      "count": {
+        "type": "num"
+      }
+    }
+  },
+  "inARow": "{unit} in a row",
+  "@inARow": {
+    "placeholders": {
+      "unit": {
+        "type": "String"
+      }
+    }
+  },
+  "bestLine": "best: {best}",
+  "@bestLine": {
+    "placeholders": {
+      "best": {
+        "type": "String"
+      }
+    }
+  },
+  "reminderAt": "reminder at {time}",
+  "@reminderAt": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "iDidIt": "I did it",
+  "doneOf": "{done} {unit} of {total}",
+  "@doneOf": {
+    "placeholders": {
+      "done": {
+        "type": "String"
+      },
+      "unit": {
+        "type": "String"
+      },
+      "total": {
+        "type": "String"
+      }
+    }
+  },
+  "legendDone": "Done",
+  "legendJoker": "Joker",
+  "legendMissed": "Missed",
+  "jokerTip": "A missed {unit} doesn’t erase your streak if you use a joker. You have **{count}** left.",
+  "@jokerTip": {
+    "placeholders": {
+      "unit": {
+        "type": "String"
+      },
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "periodLabel": "Period",
+  "periodWeek": "Week",
+  "periodMonth": "Month",
+  "periodYear": "Year",
+  "historyTab": "History",
+  "viewLabel": "View",
+  "monthDoneA11y": "Days done in {month}",
+  "@monthDoneA11y": {
+    "placeholders": {
+      "month": {
+        "type": "String"
+      }
+    }
+  },
+  "journalPrompt1": "What made you smile today?",
+  "journalPrompt2": "One thing you learned?",
+  "journalPrompt3": "What are you proud of today?",
+  "otherQuestion": "Another question",
+  "journalHint": "One line per idea…",
+  "moodTitle": "Today’s mood",
+  "moodLabel": "Mood",
+  "mood0": "Not great",
+  "mood1": "Meh",
+  "mood2": "Good",
+  "mood3": "Great",
+  "journalSave": "Save",
+  "journalSaved": "Saved!",
+  "linesLeft": "{count, plural, one{1 more line} other{{count} more lines}}",
+  "@linesLeft": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "linesCount": "{count, plural, one{1 line} other{{count} lines}}",
+  "@linesCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "noEntries": "Nothing written yet.",
+  "sessionsOf": "{count} / {target} sessions",
+  "@sessionsOf": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "target": {
+        "type": "int"
+      }
+    }
+  },
+  "weekGoalMet": "Weekly goal reached, well done!",
+  "sessionsLeft": "{count, plural, one{1 more session} other{{count} more sessions}} by {lastDay}, {days, plural, one{1 day} other{{days} days}} left.",
+  "@sessionsLeft": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "lastDay": {
+        "type": "String"
+      },
+      "days": {
+        "type": "int"
+      }
+    }
+  },
+  "lastWeeks": "Last {count} weeks",
+  "@lastWeeks": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "goalKept": "{count, plural, one{goal met once} other{goal met {count} times}}",
+  "@goalKept": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "weekShort": "W{week}",
+  "@weekShort": {
+    "placeholders": {
+      "week": {
+        "type": "int"
+      }
+    }
+  },
+  "logSession": "Log a session today",
+  "sessionLogged": "Session logged today",
+  "weekSessionsA11y": "This week’s sessions, day by day",
+  "weeksA11y": "Sessions per week over {count} weeks",
+  "@weeksA11y": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "streakAtRisk": "Your streak is at risk",
+  "missedYesterday": "Yesterday you didn’t do **{names}**. A joker keeps your **{streak}** streak intact.",
+  "@missedYesterday": {
+    "placeholders": {
+      "names": {
+        "type": "String"
+      },
+      "streak": {
+        "type": "String"
+      }
+    }
+  },
+  "useJoker": "{count, plural, one{Use a joker · 1 left} other{Use a joker · {count} left}}",
+  "@useJoker": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "letItGo": "Let it go",
+  "jokerEarnHint": "You earn a joker every 7 perfect days.",
+  "streakSaved": "Streak saved!",
+  "stillInARow": "Still {streak} in a row. {jokers, plural, =0{No joker left.} one{1 joker left.} other{{jokers} jokers left.}}",
+  "@stillInARow": {
+    "placeholders": {
+      "streak": {
+        "type": "String"
+      },
+      "jokers": {
+        "type": "int"
+      }
+    }
+  },
+  "letsGo": "Let’s go",
+  "freshStart": "Starting from zero",
+  "recordKept": "Your {streak} record stays in your trophies. Keep your jokers for another time.",
+  "@recordKept": {
+    "placeholders": {
+      "streak": {
+        "type": "String"
+      }
+    }
+  },
+  "okay": "OK",
+  "yesterdayShort": "Yest.",
+  "todayShort": "Today"
 }

@@ -1,8 +1,10 @@
 import 'package:flutter/material.dart';
 
 import '../domain/habit.dart';
+import 'habit_tones.dart';
 
 export '../domain/habit.dart' show HabitColor;
+export 'habit_tones.dart' show HabitTones;
 
 /// Sorbet design tokens. Widgets read every color from here so a dark
 /// variant only needs a second instance.
@@ -48,7 +50,14 @@ class SorbetColors extends ThemeExtension<SorbetColors> {
     required this.cellOff,
     required this.cellOffInk,
     required this.knobShadow,
+    required this.jokerSoft,
+    required this.jokerSoftShadow,
+    required this.jokerCell,
+    required this.joker,
+    required this.jokerShadow,
+    required this.todayOutline,
     required this.habit,
+    required this.tones,
   });
 
   final Color bg;
@@ -134,7 +143,20 @@ class SorbetColors extends ThemeExtension<SorbetColors> {
 
   /// Shadow under a switch knob, ink 25 %.
   final Color knobShadow;
+
+  /// Joker card and disc background.
+  final Color jokerSoft;
+  final Color jokerSoftShadow;
+
+  /// Calendar cell of a day saved by a joker.
+  final Color jokerCell;
+  final Color joker;
+  final Color jokerShadow;
+
+  /// Outline of today's empty cell in the joker strip.
+  final Color todayOutline;
   final Map<HabitColor, Color> habit;
+  final Map<HabitColor, HabitTones> tones;
 
   static const light = SorbetColors(
     bg: Color(0xFFFFF0F4),
@@ -176,6 +198,12 @@ class SorbetColors extends ThemeExtension<SorbetColors> {
     cellOff: Color(0xFFFBF4F7),
     cellOffInk: Color(0xFFB9A0AF),
     knobShadow: Color(0x403B1730),
+    jokerSoft: Color(0xFFE9DDFF),
+    jokerSoftShadow: Color(0xFFD3C1F5),
+    jokerCell: Color(0xFFE3D6FF),
+    joker: Color(0xFF7A55D6),
+    jokerShadow: Color(0xFF5E3FB3),
+    todayOutline: Color(0xFFF3E2EA),
     habit: {
       HabitColor.lilac: Color(0xFFDCC8FF),
       HabitColor.lavender: Color(0xFFC9D0FF),
@@ -190,6 +218,7 @@ class SorbetColors extends ThemeExtension<SorbetColors> {
       HabitColor.pink: Color(0xFFFFB8CF),
       HabitColor.raspberry: Color(0xFFF5B0E0),
     },
+    tones: lightHabitTones,
   );
 
   @override
@@ -233,7 +262,14 @@ class SorbetColors extends ThemeExtension<SorbetColors> {
     Color? cellOff,
     Color? cellOffInk,
     Color? knobShadow,
+    Color? jokerSoft,
+    Color? jokerSoftShadow,
+    Color? jokerCell,
+    Color? joker,
+    Color? jokerShadow,
+    Color? todayOutline,
     Map<HabitColor, Color>? habit,
+    Map<HabitColor, HabitTones>? tones,
   }) {
     return SorbetColors(
       bg: bg ?? this.bg,
@@ -275,7 +311,14 @@ class SorbetColors extends ThemeExtension<SorbetColors> {
       cellOff: cellOff ?? this.cellOff,
       cellOffInk: cellOffInk ?? this.cellOffInk,
       knobShadow: knobShadow ?? this.knobShadow,
+      jokerSoft: jokerSoft ?? this.jokerSoft,
+      jokerSoftShadow: jokerSoftShadow ?? this.jokerSoftShadow,
+      jokerCell: jokerCell ?? this.jokerCell,
+      joker: joker ?? this.joker,
+      jokerShadow: jokerShadow ?? this.jokerShadow,
+      todayOutline: todayOutline ?? this.todayOutline,
       habit: habit ?? this.habit,
+      tones: tones ?? this.tones,
     );
   }
 
@@ -323,8 +366,18 @@ class SorbetColors extends ThemeExtension<SorbetColors> {
       cellOff: l(cellOff, other.cellOff),
       cellOffInk: l(cellOffInk, other.cellOffInk),
       knobShadow: l(knobShadow, other.knobShadow),
+      jokerSoft: l(jokerSoft, other.jokerSoft),
+      jokerSoftShadow: l(jokerSoftShadow, other.jokerSoftShadow),
+      jokerCell: l(jokerCell, other.jokerCell),
+      joker: l(joker, other.joker),
+      jokerShadow: l(jokerShadow, other.jokerShadow),
+      todayOutline: l(todayOutline, other.todayOutline),
       habit: {
         for (final c in HabitColor.values) c: l(habit[c]!, other.habit[c]!),
+      },
+      tones: {
+        for (final c in HabitColor.values)
+          c: HabitTones.lerp(tones[c]!, other.tones[c]!, t),
       },
     );
   }

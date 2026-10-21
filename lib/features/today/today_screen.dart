@@ -20,6 +20,7 @@ import '../../core/widgets/streak_chip.dart';
 import '../../core/widgets/xp_avatar.dart';
 import 'empty_today.dart';
 import 'habit_options_sheet.dart';
+import 'joker_sheet.dart';
 import 'today_model.dart';
 
 /// Day picked in the week strip or the calendar; null follows today.
@@ -65,6 +66,7 @@ class TodayScreen extends ConsumerWidget {
     final editable = selected <= today;
     return Column(
       children: [
+        const JokerPromptGate(),
         header,
         Expanded(
           child: ListView(
@@ -243,7 +245,6 @@ class _TodayHeader extends ConsumerWidget {
       child: Column(
         children: [
           Row(
-            spacing: 10,
             children: [
               XpAvatar(
                 fraction: level.fraction,
@@ -254,6 +255,7 @@ class _TodayHeader extends ConsumerWidget {
                 ),
                 onTap: interactive ? () => context.go(Routes.trophies) : null,
               ),
+              const SizedBox(width: 10),
               Expanded(
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
@@ -269,11 +271,14 @@ class _TodayHeader extends ConsumerWidget {
                   ],
                 ),
               ),
+              const SizedBox(width: 10),
               StreakChip(
                 days: data.streak.current,
                 semanticLabel: l10n.streakDays(data.streak.current),
               ),
-              // 48 px target; shifted so the 40 px disc keeps the 20 px margin.
+              // 48 px target shifted 4 px outwards: the 40 px disc keeps the 20 px
+              // margin, and the 2 px gap makes 10 px visually.
+              const SizedBox(width: 2),
               Transform.translate(
                 offset: const Offset(4, 0),
                 child: Semantics(

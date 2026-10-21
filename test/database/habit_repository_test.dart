@@ -190,6 +190,13 @@ void main() {
     expect(await db.select(db.pauses).get(), isEmpty);
   });
 
+  test('settings store one value per key', () async {
+    expect(await repo.getSetting('jokerPromptDay'), isNull);
+    await repo.setSetting('jokerPromptDay', '20000');
+    await repo.setSetting('jokerPromptDay', '20001');
+    expect(await repo.getSetting('jokerPromptDay'), '20001');
+  });
+
   test('joker days are recorded once', () async {
     await repo.useJoker(day);
     await repo.useJoker(day);

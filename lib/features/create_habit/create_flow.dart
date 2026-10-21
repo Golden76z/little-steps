@@ -43,9 +43,9 @@ class CreateFlowScaffold extends StatelessWidget {
                 child: Column(
                   children: [
                     Row(
-                      spacing: 10,
                       children: [
-                        // 48 px target; shifted so the 40 px disc keeps the 20 px margin.
+                        // 48 px target shifted 4 px outwards: the 40 px disc keeps the
+                        // 20 px margin, and the 2 px gap makes 10 px visually.
                         Transform.translate(
                           offset: const Offset(-4, 0),
                           child: RoundIconButton(
@@ -57,6 +57,7 @@ class CreateFlowScaffold extends StatelessWidget {
                             onTap: () => Navigator.pop(context),
                           ),
                         ),
+                        const SizedBox(width: 2),
                         Expanded(
                           child: Semantics(
                             header: true,
@@ -67,11 +68,11 @@ class CreateFlowScaffold extends StatelessWidget {
                             ),
                           ),
                         ),
+                        const SizedBox(width: 10),
                         Container(
                           width: 40,
                           constraints: const BoxConstraints(minHeight: 28),
                           alignment: Alignment.center,
-                          margin: const EdgeInsets.only(left: 4),
                           decoration: BoxDecoration(
                             color: c.bg,
                             borderRadius: BorderRadius.circular(14),

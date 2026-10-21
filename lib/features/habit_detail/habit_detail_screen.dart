@@ -2,9 +2,14 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../core/database/providers.dart';
-import '../../core/widgets/placeholder_screen.dart';
+import '../../core/domain/habit.dart';
+import 'duration_detail.dart';
+import 'frequency_detail.dart';
+import 'journal_detail.dart';
+import 'quantity_detail.dart';
+import 'yes_no_detail.dart';
 
-// ponytail: stand-in until the per-type detail screens (T1–T5, step 5).
+/// Opens the detail screen of the habit's type (T1–T5).
 class HabitDetailScreen extends ConsumerWidget {
   const HabitDetailScreen({
     super.key,
@@ -24,9 +29,16 @@ class HabitDetailScreen extends ConsumerWidget {
         .value
         ?.where((h) => h.id == habitId)
         .firstOrNull;
-    return Scaffold(
-      appBar: AppBar(),
-      body: PlaceholderScreen(title: habit?.name ?? ''),
-    );
+    if (habit == null) return const Scaffold();
+    return switch (habit.type) {
+      HabitType.quantity => QuantityDetail(habit: habit),
+      HabitType.duration => DurationDetail(
+        habit: habit,
+        startTimer: startTimer,
+      ),
+      HabitType.yesNo => YesNoDetail(habit: habit),
+      HabitType.journal => JournalDetail(habit: habit),
+      HabitType.frequency => FrequencyDetail(habit: habit),
+    };
   }
 }

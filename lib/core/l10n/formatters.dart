@@ -76,6 +76,59 @@ class HabitFormat {
     };
   }
 
+  /// Daily goal in words, e.g. "8 verres", "2 L", "10 min".
+  String goal(Habit h) {
+    final g = h.goal;
+    return switch (h.type) {
+      HabitType.quantity => switch (h.unit ?? QuantityUnit.times) {
+        QuantityUnit.glasses =>
+          '${number(g / 250)} ${l10n.wordGlasses(g / 250)}',
+        QuantityUnit.liters => '${number(g / 1000)} L',
+        QuantityUnit.milliliters => '${number(g)} ml',
+        QuantityUnit.pages => '${number(g)} ${l10n.wordPages(g)}',
+        QuantityUnit.steps => '${number(g)} ${l10n.wordSteps}',
+        QuantityUnit.kilometers => '${number(g / 1000)} km',
+        QuantityUnit.times => '${number(g)} ${l10n.wordTimes(g)}',
+      },
+      HabitType.duration => '${number(g ~/ 60)} min',
+      HabitType.journal => '${number(g)} ${l10n.wordLines(g)}',
+      HabitType.yesNo || HabitType.frequency => number(g),
+    };
+  }
+
+  /// "chaque soir", "Lun, Mer, Ven", "3 fois par semaine".
+  String schedule(Habit h) {
+    if (h.isWeekly) return l10n.timesAWeek(h.timesPerWeek);
+    if (h.activeDays.length < 7) {
+      final monday = Day(
+        2026,
+        10,
+        19,
+      ); // any Monday: only weekday names are used
+      return [
+        for (final d in h.activeDays.toList()..sort())
+          weekdayShort(monday.addDays(d - 1)),
+      ].join(', ');
+    }
+    return switch (h.moment) {
+      Moment.morning => l10n.everyMorning,
+      Moment.noon => l10n.everyNoon,
+      Moment.evening => l10n.everyEvening,
+      Moment.anytime => l10n.everyDay,
+    };
+  }
+
+  /// One-letter weekday names, from [firstWeekday] (DateTime numbering).
+  List<String> weekdayLetters(int firstWeekday) {
+    final start = Day(2026, 10, 19).weekStart(firstWeekday);
+    return [
+      for (var i = 0; i < 7; i++)
+        DateFormat.EEEEE(locale)
+            .format(start.addDays(i).toLocalDate())
+            .toUpperCase(),
+    ];
+  }
+
   /// "mardi 27 octobre" / "Tuesday, October 27".
   String longDate(Day d) =>
       DateFormat.MMMMEEEEd(locale).format(d.toLocalDate());

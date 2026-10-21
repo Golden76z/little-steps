@@ -94,6 +94,31 @@ void main() {
     expect(fmt('fr').step(habit(type: HabitType.yesNo)), isNull);
   });
 
+  test('goal and schedule labels for detail headers', () {
+    final f = fmt('fr');
+    expect(f.goal(qty(QuantityUnit.glasses, 2000, 250)), '8 verres');
+    expect(f.goal(qty(QuantityUnit.liters, 2000, 250)), '2 L');
+    expect(f.goal(habit(type: HabitType.duration, goal: 600)), '10 min');
+    expect(f.goal(habit(type: HabitType.journal, goal: 3)), '3 lignes');
+    expect(f.schedule(habit()), 'chaque jour');
+    expect(f.schedule(habit(moment: Moment.evening)), 'chaque soir');
+    expect(f.schedule(habit(activeDays: {1, 3, 5})), 'Lun, Mer, Ven');
+    expect(
+      f.schedule(habit(mode: ScheduleMode.weekly, timesPerWeek: 3)),
+      '3 fois par semaine',
+    );
+    expect(f.weekdayLetters(DateTime.monday), [
+      'L',
+      'M',
+      'M',
+      'J',
+      'V',
+      'S',
+      'D',
+    ]);
+    expect(fmt('en').weekdayLetters(DateTime.sunday).first, 'S');
+  });
+
   test('long date and short weekday follow the locale', () {
     expect(fmt('fr').longDate(Day(2026, 10, 27)), 'mardi 27 octobre');
     expect(fmt('en').longDate(Day(2026, 10, 27)), 'Tuesday, October 27');
