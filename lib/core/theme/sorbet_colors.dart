@@ -1,20 +1,8 @@
 import 'package:flutter/material.dart';
 
-/// The 12 habit tints offered at creation, in the P2-Reglages order.
-enum HabitColor {
-  lilac,
-  lavender,
-  sky,
-  lagoon,
-  mint,
-  pistachio,
-  lemon,
-  apricot,
-  peach,
-  coral,
-  pink,
-  raspberry,
-}
+import '../domain/habit.dart';
+
+export '../domain/habit.dart' show HabitColor;
 
 /// Sorbet design tokens. Widgets read every color from here so a dark
 /// variant only needs a second instance.
