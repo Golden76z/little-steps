@@ -1,0 +1,120 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<title>Jour raté — joker</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Sour+Gummy:wght@400;500;600&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+a{color:#3B1730}a:hover{color:#000}
+button{font:inherit;cursor:pointer}
+</style>
+</helmet>
+<div style="width: 390px; height: 844px; box-sizing: border-box; position: relative; overflow: hidden; background: #FFF0F4; color: #3B1730; font-family: 'Sour Gummy', system-ui, sans-serif">
+
+  <div aria-hidden="true">
+    <div style="background: #FFFFFF; border-radius: 0 0 32px 32px; padding: 52px 20px 16px">
+      <div style="display: flex; align-items: center; gap: 10px">
+        <span style="width: 48px; height: 48px; border-radius: 50%; background: #DCC8FF"></span>
+        <div style="flex: 1">
+          <div style="font-size: 14px; color: #7A5670">Niveau 7 · octobre</div>
+          <div style="font-size: 26px; font-weight: 600; line-height: 1.1">Aujourd'hui</div>
+        </div>
+        <span style="width: 60px; height: 40px; border-radius: 20px; background: #FFE6D6"></span>
+        <span style="width: 40px; height: 40px; border-radius: 50%; background: #FFF0F4"></span>
+      </div>
+      <div style="height: 1.5px; background: #F6DCE6; margin: 16px 4px 0"></div>
+      <div style="height: 66px; margin-top: 14px; border-radius: 22px; background: #FFF4F7"></div>
+    </div>
+    <div style="display: flex; flex-direction: column; gap: 8px; padding: 16px 20px 0">
+      <span style="height: 64px; border-radius: 32px; background: #FFFFFF; box-shadow: 0 3px 0 #F3D6E0; position: relative; overflow: hidden"><span style="position: absolute; left: 0; top: 0; bottom: 0; width: 100%; background: #DCC8FF; border-radius: 32px"></span></span>
+      <span style="height: 64px; border-radius: 32px; background: #FFFFFF; box-shadow: 0 3px 0 #F3D6E0; position: relative; overflow: hidden"><span style="position: absolute; left: 0; top: 0; bottom: 0; width: 62%; background: #BFE3FF; border-radius: 32px"></span></span>
+      <span style="height: 64px; border-radius: 32px; background: #FFFFFF; box-shadow: 0 3px 0 #F3D6E0; position: relative; overflow: hidden"><span style="position: absolute; left: 0; top: 0; bottom: 0; width: 60%; background: #B6F0D2; border-radius: 32px"></span></span>
+      <span style="height: 64px; border-radius: 32px; background: #FFFFFF; box-shadow: 0 3px 0 #F3D6E0"></span>
+    </div>
+  </div>
+
+  <div aria-hidden="true" style="position: absolute; inset: 0; background: rgba(59,23,48,0.38)"></div>
+
+  <section role="dialog" aria-modal="true" aria-labelledby="jk-title" style="position: absolute; left: 0; right: 0; bottom: 0; background: #FFFFFF; border-radius: 32px 32px 0 0; padding: 12px 22px 30px; box-shadow: 0 -10px 30px rgba(59,23,48,0.15)">
+    <div aria-hidden="true" style="width: 44px; height: 5px; border-radius: 3px; background: #EBDDE4; margin: 0 auto"></div>
+
+    <sc-if value="{{ask}}" hint-placeholder-val="{{ true }}">
+      <div style="display: flex; flex-direction: column; align-items: center; text-align: center; margin-top: 18px">
+        <span style="width: 76px; height: 76px; border-radius: 50%; background: #E9DDFF; display: flex; align-items: center; justify-content: center">
+          <svg width="38" height="38" viewBox="0 0 256 256" fill="#7A55D6" aria-hidden="true" style="display: block"><path d="{{ic.shieldF}}"/></svg>
+        </span>
+        <h2 id="jk-title" style="margin: 14px 0 0; font-size: 25px; font-weight: 600; line-height: 1.15">Ta série est en danger</h2>
+        <p style="margin: 8px 0 0; font-size: 16px; font-weight: 400; line-height: 1.35; color: #5E4A58">Hier, tu n'as pas fait <strong style="font-weight: 600; color: #3B1730">Sport</strong>. Un joker garde ta série de <strong style="font-weight: 600; color: #3B1730">12 jours</strong> intacte.</p>
+      </div>
+      <div aria-hidden="true" style="display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 1px; margin-top: 16px; border-radius: 14px; overflow: hidden">
+        <sc-for list="{{strip}}" as="d" hint-placeholder-count="7">
+          <span style="height: 50px; border-radius: 3px; background: {{d.bg}}; box-shadow: {{d.ring}}; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; line-height: 1">
+            <span style="font-size: 12px; font-weight: 500; color: {{d.lc}}">{{d.l}}</span>
+            <svg width="15" height="15" viewBox="0 0 256 256" fill="{{d.fill}}" aria-hidden="true" style="display: block"><path d="{{d.d}}"/></svg>
+          </span>
+        </sc-for>
+      </div>
+      <button onClick="{{useJoker}}" style="width: 100%; margin-top: 18px; height: 58px; border-radius: 29px; border: 0; background: #7A55D6; color: #FFFFFF; font-size: 18px; font-weight: 500; display: flex; align-items: center; justify-content: center; gap: 8px; box-shadow: 0 4px 0 #5E3FB3">
+        <svg width="20" height="20" viewBox="0 0 256 256" fill="#FFFFFF" aria-hidden="true" style="display: block"><path d="{{ic.shieldF}}"/></svg>
+        Utiliser un joker · 2 restants
+      </button>
+      <button onClick="{{skip}}" style="width: 100%; margin-top: 10px; height: 50px; border-radius: 25px; border: 0; background: #FFF0F4; color: #5E4A58; font-size: 16px; font-weight: 500">Laisser passer</button>
+      <p style="margin: 12px 0 0; text-align: center; font-size: 13px; font-weight: 400; color: #7A5670">Tu gagnes un joker tous les 7 jours parfaits.</p>
+    </sc-if>
+
+    <sc-if value="{{saved}}" hint-placeholder-val="{{ false }}">
+      <div style="display: flex; flex-direction: column; align-items: center; text-align: center; margin-top: 22px">
+        <span style="width: 76px; height: 76px; border-radius: 50%; background: #FFE6D6; display: flex; align-items: center; justify-content: center">
+          <svg width="38" height="38" viewBox="0 0 256 256" fill="#FF7A3D" aria-hidden="true" style="display: block"><path d="{{ic.fireF}}"/></svg>
+        </span>
+        <h2 style="margin: 14px 0 0; font-size: 25px; font-weight: 600">Série sauvée !</h2>
+        <p style="margin: 8px 0 0; font-size: 16px; font-weight: 400; color: #5E4A58">Toujours 12 jours de suite. Il te reste 1 joker.</p>
+        <a href="H2-SemaineBonbon.dc.html" style="width: 100%; margin-top: 22px; height: 58px; border-radius: 29px; background: {{accent}}; color: #FFFFFF; font-size: 18px; font-weight: 500; display: flex; align-items: center; justify-content: center; text-decoration: none; box-shadow: 0 4px 0 rgba(59,23,48,0.2)">C'est reparti</a>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{skipped}}" hint-placeholder-val="{{ false }}">
+      <div style="display: flex; flex-direction: column; align-items: center; text-align: center; margin-top: 22px">
+        <span style="width: 76px; height: 76px; border-radius: 50%; background: #FFF0F4; display: flex; align-items: center; justify-content: center">
+          <svg width="36" height="36" viewBox="0 0 256 256" fill="#C9A9BC" aria-hidden="true" style="display: block"><path d="{{ic.fireF}}"/></svg>
+        </span>
+        <h2 style="margin: 14px 0 0; font-size: 25px; font-weight: 600">On repart de zéro</h2>
+        <p style="margin: 8px 0 0; font-size: 16px; font-weight: 400; color: #5E4A58">Ton record de 12 jours reste dans tes trophées. Garde tes jokers pour une autre fois.</p>
+        <a href="H2-SemaineBonbon.dc.html" style="width: 100%; margin-top: 22px; height: 58px; border-radius: 29px; background: {{accent}}; color: #FFFFFF; font-size: 18px; font-weight: 500; display: flex; align-items: center; justify-content: center; text-decoration: none; box-shadow: 0 4px 0 rgba(59,23,48,0.2)">D'accord</a>
+      </div>
+    </sc-if>
+  </section>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"accent":{"editor":"color","default":"#F0507F","options":["#F0507F","#FF8A4C","#9B6BFF","#2FB48A"]},"$preview":{"width":390,"height":844}}'>
+const IC={shieldF:'M208,40H48A16,16,0,0,0,32,56v56c0,52.72,25.52,84.67,46.93,102.19,23.06,18.86,46,25.26,47,25.53a8,8,0,0,0,4.2,0c1-.27,23.91-6.67,47-25.53C198.48,196.67,224,164.72,224,112V56A16,16,0,0,0,208,40Zm-34.32,69.66-56,56a8,8,0,0,1-11.32,0l-24-24a8,8,0,0,1,11.32-11.32L112,148.69l50.34-50.35a8,8,0,0,1,11.32,11.32Z',
+fireF:'M143.38,17.85a8,8,0,0,0-12.63,3.41l-22,60.41L84.59,58.26a8,8,0,0,0-11.93.89C51,87.53,40,116.08,40,144a88,88,0,0,0,176,0C216,84.55,165.21,36,143.38,17.85Zm40.51,135.49a57.6,57.6,0,0,1-46.56,46.55A7.65,7.65,0,0,1,136,200a8,8,0,0,1-1.32-15.89c16.57-2.79,30.63-16.85,33.44-33.45a8,8,0,0,1,15.78,2.68Z',
+checkB:'M232.49,80.49l-128,128a12,12,0,0,1-17,0l-56-56a12,12,0,1,1,17-17L96,183,215.51,63.51a12,12,0,0,1,17,17Z',
+warnR:'M128,24A104,104,0,1,0,232,128,104.11,104.11,0,0,0,128,24Zm0,192a88,88,0,1,1,88-88A88.1,88.1,0,0,1,128,216Zm-8-80V80a8,8,0,0,1,16,0v56a8,8,0,0,1-16,0Zm20,36a12,12,0,1,1-12-12A12,12,0,0,1,140,172Z'};
+class Component extends DCLogic {
+  constructor(p) { super(p); this.state = { choice: 'ask' }; }
+  renderVals() {
+    const accent = this.props.accent ?? '#F0507F';
+    const c = this.state.choice;
+    const L = ['Mer', 'Jeu', 'Ven', 'Sam', 'Dim', 'Hier', 'Auj.'];
+    const strip = L.map((l, i) => {
+      if (i < 5) return { l, bg: '#FFB8CF', ring: 'none', lc: '#3B1730', fill: '#3B1730', d: IC.checkB };
+      if (i === 5) return { l, bg: '#F6ECF0', ring: 'inset 0 0 0 2.5px #7A55D6', lc: '#7A55D6', fill: '#7A55D6', d: IC.warnR };
+      return { l, bg: '#FFFFFF', ring: 'inset 0 0 0 1.5px #F3E2EA', lc: '#9A7A90', fill: 'transparent', d: IC.checkB };
+    });
+    return { accent, ic: IC, strip,
+      ask: c === 'ask', saved: c === 'saved', skipped: c === 'skipped',
+      useJoker: () => this.setState({ choice: 'saved' }),
+      skip: () => this.setState({ choice: 'skipped' }) };
+  }
+}
+</script>
+</body>
+</html>

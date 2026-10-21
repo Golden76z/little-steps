@@ -1,0 +1,173 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<title>Accueil</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Sour+Gummy:wght@400;500;600&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+a{color:#3B1730}a:hover{color:#000}
+button{font:inherit;cursor:pointer}
+</style>
+</helmet>
+<div style="width: 390px; height: 844px; box-sizing: border-box; position: relative; overflow: hidden; background: #FFF0F4; color: #3B1730; font-family: 'Sour Gummy', system-ui, sans-serif">
+
+  <header style="background: #FFFFFF; border-radius: 0 0 32px 32px; box-shadow: 0 6px 20px rgba(59,23,48,0.06); padding: 52px 20px 16px">
+    <div style="display: flex; align-items: center; gap: 10px">
+      <a href="F-Trophees.dc.html" aria-label="Niveau 7, 68 % vers le niveau 8" style="position: relative; width: 48px; height: 48px; flex: none; display: block">
+        <svg width="48" height="48" viewBox="0 0 60 60" aria-hidden="true" style="position: absolute; inset: 0">
+          <circle cx="30" cy="30" r="27" fill="none" stroke="#F9E3EB" stroke-width="5"/>
+          <circle cx="30" cy="30" r="27" fill="none" stroke="{{accent}}" stroke-width="5" stroke-linecap="round" stroke-dasharray="115.4 169.6" transform="rotate(-90 30 30)"/>
+        </svg>
+        <span style="position: absolute; inset: 7px; border-radius: 50%; background: #DCC8FF; display: flex; align-items: center; justify-content: center; color: #3B1730">
+          <svg width="18" height="18" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="{{ic.userF}}"/></svg>
+        </span>
+      </a>
+      <div style="flex: 1; min-width: 0">
+        <div style="font-size: 14px; font-weight: 400; color: #7A5670">Niveau 7 · octobre</div>
+        <h1 style="margin: 0; font-size: 26px; font-weight: 600; line-height: 1.1">Aujourd'hui</h1>
+      </div>
+      <span aria-label="Série de 12 jours" style="height: 40px; flex: none; align-self: center; box-sizing: border-box; padding: 0 12px; border-radius: 20px; background: #FFE6D6; display: inline-flex; align-items: center; justify-content: center; gap: 5px; font-size: 17px; font-weight: 600; line-height: 1">
+        <svg width="18" height="18" viewBox="0 0 256 256" fill="#FF7A3D" aria-hidden="true" style="display: block; flex: none"><path d="{{ic.fireF}}"/></svg>
+        12
+      </span>
+      <button aria-label="Calendrier" style="width: 40px; height: 40px; flex: none; align-self: center; padding: 0; border-radius: 50%; border: 0; background: #FFF0F4; display: flex; align-items: center; justify-content: center; color: #3B1730">
+        <svg width="20" height="20" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" style="display: block"><path d="{{ic.calR}}"/></svg>
+      </button>
+    </div>
+    <div aria-hidden="true" style="height: 1.5px; border-radius: 1px; background: #F6DCE6; margin: 16px 4px 0"></div>
+    <div role="tablist" aria-label="Jours de la semaine" style="display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 0; margin-top: 14px; background: #FFF4F7; border-radius: 22px; padding: 4px">
+      <sc-for list="{{week}}" as="d" hint-placeholder-count="7">
+        <button role="tab" aria-selected="{{d.sel}}" onClick="{{d.pick}}" style="height: 58px; border: 0; border-radius: 18px; background: {{d.bg}}; box-shadow: {{d.sh}}; color: #3B1730; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 2px">
+          <span style="font-size: 13px; font-weight: 400; color: {{d.lc}}">{{d.l}}</span>
+          <span style="font-size: 18px; font-weight: 600; line-height: 1">{{d.n}}</span>
+          <span aria-hidden="true" style="width: 5px; height: 5px; border-radius: 50%; background: {{d.dot}}"></span>
+        </button>
+      </sc-for>
+    </div>
+  </header>
+
+  <div style="display: flex; flex-direction: column; gap: 8px; margin-top: 16px; padding: 0 20px">
+    <sc-for list="{{habits}}" as="h" hint-placeholder-count="6">
+      <button onClick="{{h.step}}" aria-label="{{h.aria}}" style="position: relative; overflow: hidden; height: 64px; border: 0; border-radius: 32px; background: #FFFFFF; box-shadow: 0 3px 0 #F3D6E0; padding: 0; text-align: left; color: #3B1730">
+        <span aria-hidden="true" style="position: absolute; left: 0; top: 0; bottom: 0; width: {{h.w}}; background: {{h.bg}}; border-radius: 32px; transition: width 0.3s"></span>
+        <span style="position: relative; display: flex; align-items: center; gap: 12px; height: 100%; padding: 0 11px">
+          <span style="width: 42px; height: 42px; flex: none; border-radius: 50%; background: rgba(255,255,255,0.75); display: flex; align-items: center; justify-content: center">
+            <svg width="22" height="22" viewBox="0 0 256 256" fill="#3B1730" aria-hidden="true"><path d="{{h.icon}}"/></svg>
+          </span>
+          <span style="flex: 1; display: flex; flex-direction: column">
+            <span style="font-size: 18px; font-weight: 500; line-height: 1.1">{{h.name}}</span>
+            <span style="font-size: 14px; font-weight: 400; color: #6A4A60">{{h.count}}</span>
+          </span>
+          <span style="min-width: 42px; text-align: right; font-size: 15px; font-weight: 600; font-variant-numeric: tabular-nums; color: #3B1730">{{h.pct}}</span>
+          <span style="width: 40px; height: 40px; flex: none; border-radius: 50%; background: {{h.btn}}; display: flex; align-items: center; justify-content: center">
+            <svg width="16" height="16" viewBox="0 0 256 256" fill="{{h.btnFg}}" aria-hidden="true"><path d="{{h.btnIcon}}"/></svg>
+          </span>
+        </span>
+      </button>
+    </sc-for>
+  </div>
+
+  <nav aria-label="Navigation principale" style="position: absolute; left: 24px; right: 24px; bottom: 28px; height: 68px; border-radius: 34px; background: {{nav}}; box-shadow: 0 4px 0 #F3D6E0, 0 10px 24px rgba(59,23,48,0.08); display: flex; align-items: center; justify-content: space-around; padding: 0 8px">
+    <sc-for list="{{tabsL}}" as="t" hint-placeholder-count="2">
+      <a href="{{t.href}}" aria-label="{{t.label}}" aria-current="{{t.current}}" style="text-decoration: none; width: 50px; height: 50px; border-radius: 50%; border: 0; background: {{t.bg}}; box-shadow: {{t.sh}}; display: flex; align-items: center; justify-content: center; color: {{t.fg}}">
+        <svg width="24" height="24" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="{{t.d}}"/></svg>
+      </a>
+    </sc-for>
+    <a href="P1-Type.dc.html" aria-label="Nouvelle habitude" style="width: 54px; height: 54px; border-radius: 50%; background: {{accent}}; display: flex; align-items: center; justify-content: center; box-shadow: 0 3px 0 rgba(59,23,48,0.22)">
+      <svg width="24" height="24" viewBox="0 0 256 256" fill="#FFFFFF" aria-hidden="true"><path d="{{ic.plusB}}"/></svg>
+    </a>
+    <sc-for list="{{tabsR}}" as="t" hint-placeholder-count="2">
+      <a href="{{t.href}}" aria-label="{{t.label}}" aria-current="{{t.current}}" style="text-decoration: none; width: 50px; height: 50px; border-radius: 50%; border: 0; background: {{t.bg}}; box-shadow: {{t.sh}}; display: flex; align-items: center; justify-content: center; color: {{t.fg}}">
+        <svg width="24" height="24" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true"><path d="{{t.d}}"/></svg>
+      </a>
+    </sc-for>
+  </nav>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"accent":{"editor":"color","default":"#F0507F","options":["#F0507F","#FF8A4C","#9B6BFF","#2FB48A"]},"nav":{"editor":"color","default":"#FFFFFF","options":["#FFFFFF","#D3F2E2","#D9E8FF","#FFE1CC"]},"$preview":{"width":390,"height":844}}'>
+const IC={houseR:'M219.31,108.68l-80-80a16,16,0,0,0-22.62,0l-80,80A15.87,15.87,0,0,0,32,120v96a8,8,0,0,0,8,8h64a8,8,0,0,0,8-8V160h32v56a8,8,0,0,0,8,8h64a8,8,0,0,0,8-8V120A15.87,15.87,0,0,0,219.31,108.68ZM208,208H160V152a8,8,0,0,0-8-8H104a8,8,0,0,0-8,8v56H48V120l80-80,80,80Z',
+houseF:'M224,120v96a8,8,0,0,1-8,8H160a8,8,0,0,1-8-8V164a4,4,0,0,0-4-4H108a4,4,0,0,0-4,4v52a8,8,0,0,1-8,8H40a8,8,0,0,1-8-8V120a16,16,0,0,1,4.69-11.31l80-80a16,16,0,0,1,22.62,0l80,80A16,16,0,0,1,224,120Z',
+chartR:'M224,200h-8V40a8,8,0,0,0-8-8H152a8,8,0,0,0-8,8V80H96a8,8,0,0,0-8,8v40H48a8,8,0,0,0-8,8v64H32a8,8,0,0,0,0,16H224a8,8,0,0,0,0-16ZM160,48h40V200H160ZM104,96h40V200H104ZM56,144H88v56H56Z',
+chartF:'M232,208a8,8,0,0,1-8,8H32a8,8,0,0,1,0-16h8V136a8,8,0,0,1,8-8H72a8,8,0,0,1,8,8v64H96V88a8,8,0,0,1,8-8h32a8,8,0,0,1,8,8V200h16V40a8,8,0,0,1,8-8h40a8,8,0,0,1,8,8V200h8A8,8,0,0,1,232,208Z',
+trophyR:'M232,64H208V48a8,8,0,0,0-8-8H56a8,8,0,0,0-8,8V64H24A16,16,0,0,0,8,80V96a40,40,0,0,0,40,40h3.65A80.13,80.13,0,0,0,120,191.61V216H96a8,8,0,0,0,0,16h64a8,8,0,0,0,0-16H136V191.58c31.94-3.23,58.44-25.64,68.08-55.58H208a40,40,0,0,0,40-40V80A16,16,0,0,0,232,64ZM48,120A24,24,0,0,1,24,96V80H48v32q0,4,.39,8Zm144-8.9c0,35.52-29,64.64-64,64.9a64,64,0,0,1-64-64V56H192ZM232,96a24,24,0,0,1-24,24h-.5a81.81,81.81,0,0,0,.5-8.9V80h24Z',
+trophyF:'M232,64H208V48a8,8,0,0,0-8-8H56a8,8,0,0,0-8,8V64H24A16,16,0,0,0,8,80V96a40,40,0,0,0,40,40h3.65A80.13,80.13,0,0,0,120,191.61V216H96a8,8,0,0,0,0,16h64a8,8,0,0,0,0-16H136V191.58c31.94-3.23,58.44-25.64,68.08-55.58H208a40,40,0,0,0,40-40V80A16,16,0,0,0,232,64ZM48,120A24,24,0,0,1,24,96V80H48v32q0,4,.39,8ZM232,96a24,24,0,0,1-24,24h-.5a81.81,81.81,0,0,0,.5-8.9V80h24Z',
+userR:'M230.92,212c-15.23-26.33-38.7-45.21-66.09-54.16a72,72,0,1,0-73.66,0C63.78,166.78,40.31,185.66,25.08,212a8,8,0,1,0,13.85,8c18.84-32.56,52.14-52,89.07-52s70.23,19.44,89.07,52a8,8,0,1,0,13.85-8ZM72,96a56,56,0,1,1,56,56A56.06,56.06,0,0,1,72,96Z',
+userF:'M230.93,220a8,8,0,0,1-6.93,4H32a8,8,0,0,1-6.92-12c15.23-26.33,38.7-45.21,66.09-54.16a72,72,0,1,1,73.66,0c27.39,8.95,50.86,27.83,66.09,54.16A8,8,0,0,1,230.93,220Z',
+plusB:'M228,128a12,12,0,0,1-12,12H140v76a12,12,0,0,1-24,0V140H40a12,12,0,0,1,0-24h76V40a12,12,0,0,1,24,0v76h76A12,12,0,0,1,228,128Z',
+calR:'M208,32H184V24a8,8,0,0,0-16,0v8H88V24a8,8,0,0,0-16,0v8H48A16,16,0,0,0,32,48V208a16,16,0,0,0,16,16H208a16,16,0,0,0,16-16V48A16,16,0,0,0,208,32ZM72,48v8a8,8,0,0,0,16,0V48h80v8a8,8,0,0,0,16,0V48h24V80H48V48ZM208,208H48V96H208V208Z',
+fireF:'M143.38,17.85a8,8,0,0,0-12.63,3.41l-22,60.41L84.59,58.26a8,8,0,0,0-11.93.89C51,87.53,40,116.08,40,144a88,88,0,0,0,176,0C216,84.55,165.21,36,143.38,17.85Zm40.51,135.49a57.6,57.6,0,0,1-46.56,46.55A7.65,7.65,0,0,1,136,200a8,8,0,0,1-1.32-15.89c16.57-2.79,30.63-16.85,33.44-33.45a8,8,0,0,1,15.78,2.68Z',
+lotusR:'M245.83,121.63a15.53,15.53,0,0,0-9.52-7.33,73.51,73.51,0,0,0-22.17-2.22c4-19.85,1-35.55-2.06-44.86a16.15,16.15,0,0,0-18.79-10.88,85.53,85.53,0,0,0-28.55,12.12,94.58,94.58,0,0,0-27.11-33.25,16.05,16.05,0,0,0-19.26,0A94.48,94.48,0,0,0,91.26,68.46,85.53,85.53,0,0,0,62.71,56.34,16.15,16.15,0,0,0,43.92,67.22c-3,9.31-6,25-2.06,44.86a73.51,73.51,0,0,0-22.17,2.22,15.53,15.53,0,0,0-9.52,7.33,16,16,0,0,0-1.6,12.27c3.39,12.57,13.8,36.48,45.33,55.32S113.13,208,128.05,208s42.67,0,74-18.78c31.53-18.84,41.94-42.75,45.33-55.32A16,16,0,0,0,245.83,121.63ZM59.14,72.14a.2.2,0,0,1,.23-.15A70.43,70.43,0,0,1,85.18,83.66,118.65,118.65,0,0,0,80,119.17c0,18.74,3.77,34,9.11,46.28A123.59,123.59,0,0,1,69.57,140C51.55,108.62,55.3,84,59.14,72.14Zm3,103.35C35.47,159.57,26.82,140.05,24,129.7a59.82,59.82,0,0,1,22.5-1.17,129.08,129.08,0,0,0,9.15,19.41,142.28,142.28,0,0,0,34,39.56A114.92,114.92,0,0,1,62.1,175.49ZM128,190.4c-9.33-6.94-32-28.23-32-71.23C96,76.7,118.38,55.24,128,48c9.62,7.26,32,28.72,32,71.19C160,162.17,137.33,183.46,128,190.4ZM170.82,83.66A70.43,70.43,0,0,1,196.63,72a.2.2,0,0,1,.23.15C200.7,84,204.45,108.62,186.43,140a123.32,123.32,0,0,1-19.54,25.48c5.34-12.26,9.11-27.54,9.11-46.28A118.65,118.65,0,0,0,170.82,83.66ZM232,129.72c-2.77,10.25-11.4,29.81-38.09,45.77a114.92,114.92,0,0,1-27.55,12,142.28,142.28,0,0,0,34-39.56,129.08,129.08,0,0,0,9.15-19.41A59.69,59.69,0,0,1,232,129.71Z',
+dropR:'M174,47.75a254.19,254.19,0,0,0-41.45-38.3,8,8,0,0,0-9.18,0A254.19,254.19,0,0,0,82,47.75C54.51,79.32,40,112.6,40,144a88,88,0,0,0,176,0C216,112.6,201.49,79.32,174,47.75ZM128,216a72.08,72.08,0,0,1-72-72c0-57.23,55.47-105,72-118,16.53,13,72,60.75,72,118A72.08,72.08,0,0,1,128,216Zm55.89-62.66a57.6,57.6,0,0,1-46.56,46.55A8.75,8.75,0,0,1,136,200a8,8,0,0,1-1.32-15.89c16.57-2.79,30.63-16.85,33.44-33.45a8,8,0,0,1,15.78,2.68Z',
+bookR:'M232,48H160a40,40,0,0,0-32,16A40,40,0,0,0,96,48H24a8,8,0,0,0-8,8V200a8,8,0,0,0,8,8H96a24,24,0,0,1,24,24,8,8,0,0,0,16,0,24,24,0,0,1,24-24h72a8,8,0,0,0,8-8V56A8,8,0,0,0,232,48ZM96,192H32V64H96a24,24,0,0,1,24,24V200A39.81,39.81,0,0,0,96,192Zm128,0H160a39.81,39.81,0,0,0-24,8V88a24,24,0,0,1,24-24h64Z',
+barbellR:'M248,120h-8V88a16,16,0,0,0-16-16H208V64a16,16,0,0,0-16-16H168a16,16,0,0,0-16,16v56H104V64A16,16,0,0,0,88,48H64A16,16,0,0,0,48,64v8H32A16,16,0,0,0,16,88v32H8a8,8,0,0,0,0,16h8v32a16,16,0,0,0,16,16H48v8a16,16,0,0,0,16,16H88a16,16,0,0,0,16-16V136h48v56a16,16,0,0,0,16,16h24a16,16,0,0,0,16-16v-8h16a16,16,0,0,0,16-16V136h8a8,8,0,0,0,0-16ZM32,168V88H48v80Zm56,24H64V64H88V192Zm104,0H168V64h24V175.82c0,.06,0,.12,0,.18s0,.12,0,.18V192Zm32-24H208V88h16Z',
+pencilR:'M227.31,73.37,182.63,28.68a16,16,0,0,0-22.63,0L36.69,152A15.86,15.86,0,0,0,32,163.31V208a16,16,0,0,0,16,16H92.69A15.86,15.86,0,0,0,104,219.31L227.31,96a16,16,0,0,0,0-22.63ZM92.69,208H48V163.31l88-88L180.69,120ZM192,108.68,147.31,64l24-24L216,84.68Z',
+moonR:'M233.54,142.23a8,8,0,0,0-8-2,88.08,88.08,0,0,1-109.8-109.8,8,8,0,0,0-10-10,104.84,104.84,0,0,0-52.91,37A104,104,0,0,0,136,224a103.09,103.09,0,0,0,62.52-20.88,104.84,104.84,0,0,0,37-52.91A8,8,0,0,0,233.54,142.23ZM188.9,190.34A88,88,0,0,1,65.66,67.11a89,89,0,0,1,31.4-26A106,106,0,0,0,96,56,104.11,104.11,0,0,0,200,160a106,106,0,0,0,14.92-1.06A89,89,0,0,1,188.9,190.34Z',
+checkB:'M232.49,80.49l-128,128a12,12,0,0,1-17,0l-56-56a12,12,0,1,1,17-17L96,183,215.51,63.51a12,12,0,0,1,17,17Z'};
+class Component extends DCLogic {
+  constructor(p) { super(p); this.state = { v: [5, 1250, 12, 1, 2, 0], tab: 0, day: 1 }; }
+  renderVals() {
+    const accent = this.props.accent ?? '#F0507F';
+    const base = [
+      { name: 'Méditer', goal: 10, inc: 5, add: '5 min', bg: '#DCC8FF', icon: IC.lotusR, fmt: (c) => c + ' / 10 min' },
+      { name: 'Boire de l’eau', goal: 2000, inc: 250, add: '25 cl', bg: '#BFE3FF', icon: IC.dropR, fmt: (c) => String(c / 1000).replace('.', ',') + ' / 2 L' },
+      { name: 'Lire', goal: 20, inc: 4, add: '4 pages', bg: '#B6F0D2', icon: IC.bookR, fmt: (c) => c + ' / 20 pages' },
+      { name: 'Sport', goal: 3, inc: 1, add: 'une séance', bg: '#FFB8CF', icon: IC.barbellR, fmt: (c) => c + ' / 3 cette semaine' },
+      { name: 'Écrire', goal: 3, inc: 1, add: 'une ligne', bg: '#FFCBA4', icon: IC.pencilR, fmt: (c) => c + ' / 3 lignes' },
+      { name: 'Pas d’écran au lit', goal: 1, inc: 1, add: 'fait', bg: '#FFF09A', icon: IC.moonR, fmt: (c) => c ? 'C’est fait !' : 'Ce soir' }
+    ];
+    const v = this.state.v;
+    const habits = base.map((h, i) => {
+      const cur = v[i];
+      const done = cur >= h.goal;
+      const pct = Math.max(cur / h.goal, 0);
+      return { name: h.name, bg: h.bg, icon: h.icon,
+        w: pct === 0 ? '0px' : Math.max(pct * 100, 24) + '%',
+        count: h.fmt(cur),
+        pct: Math.round(Math.min(1, pct) * 100) + ' %',
+        btn: done ? '#3B1730' : '#F9E3EB',
+        btnFg: done ? '#FFFFFF' : '#3B1730',
+        btnIcon: done ? IC.checkB : IC.plusB,
+        aria: h.name + ', ' + Math.round(Math.min(1, pct) * 100) + ' %' + (done ? ', terminé' : ', ajouter ' + h.add),
+        step: () => { const nv = v.slice(); nv[i] = done ? 0 : Math.min(cur + h.inc, h.goal); this.setState({ v: nv }); } };
+    });
+    const L = ['Lun','Mar','Mer','Jeu','Ven','Sam','Dim'];
+    const week = L.map((l, i) => {
+      const sel = i === this.state.day;
+      return { l, n: 19 + i, sel: sel ? 'true' : 'false',
+        bg: sel ? '#FFFFFF' : 'transparent',
+        sh: sel ? '0 2px 0 #F3D6E0, inset 0 0 0 2px #FFC9DA' : 'none',
+        lc: sel ? '#3B1730' : '#7A5670',
+        dot: i <= 1 ? accent : 'transparent',
+        pick: () => this.setState({ day: i }) };
+    });
+    const T = [
+      { label: 'Aujourd’hui', r: IC.houseR, f: IC.houseF },
+      { label: 'Progrès', r: IC.chartR, f: IC.chartF },
+      { label: 'Trophées', r: IC.trophyR, f: IC.trophyF },
+      { label: 'Profil', r: IC.userR, f: IC.userF }
+    ];
+    const nav = this.props.nav ?? '#FFFFFF';
+    const whiteNav = nav.toUpperCase() === '#FFFFFF';
+    const tabs = T.map((t, i) => {
+      const on = i === this.state.tab;
+      return { label: t.label, d: on ? t.f : t.r,
+        href: ['H2-SemaineBonbon.dc.html', 'F-Progres.dc.html', 'F-Trophees.dc.html', 'F-Profil.dc.html'][i],
+        current: on ? 'page' : 'false',
+        bg: on ? '#EF6F9C' : 'transparent',
+        sh: on ? '0 3px 0 #D9527F' : 'none',
+        fg: on ? '#FFFFFF' : '#5E4A58',
+        pick: () => this.setState({ tab: i }) };
+    });
+    return { accent, nav, habits, week, tabsL: tabs.slice(0, 2), tabsR: tabs.slice(2), ic: IC };
+  }
+}
+</script>
+</body>
+</html>

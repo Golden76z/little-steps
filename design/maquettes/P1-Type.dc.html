@@ -1,0 +1,171 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<title>Créer une habitude — type</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Sour+Gummy:wght@400;500;600&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+a{color:#3B1730}a:hover{color:#000}
+button,input{font:inherit}
+button{cursor:pointer}
+input::placeholder{color:#9A7A90}
+</style>
+</helmet>
+<div style="width: 390px; height: 844px; box-sizing: border-box; position: relative; overflow: hidden; background: #FFF0F4; color: #3B1730; font-family: 'Sour Gummy', system-ui, sans-serif">
+
+  <header style="background: #FFFFFF; border-radius: 0 0 32px 32px; box-shadow: 0 6px 20px rgba(59,23,48,0.06); padding: 52px 20px 16px">
+    <div style="display: grid; grid-template-columns: 40px 1fr 40px; align-items: center; gap: 10px">
+      <a href="H2-SemaineBonbon.dc.html" aria-label="Fermer" style="width: 40px; height: 40px; border-radius: 50%; background: #FFF0F4; display: flex; align-items: center; justify-content: center; color: #3B1730">
+        <svg width="16" height="16" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" style="display: block"><path d="{{ic.xB}}"/></svg>
+      </a>
+      <h1 style="margin: 0; text-align: center; font-size: 22px; font-weight: 600; line-height: 1.1">Nouvelle habitude</h1>
+      <span style="height: 28px; border-radius: 14px; background: #FFF0F4; display: flex; align-items: center; justify-content: center; font-size: 13px; font-weight: 500; color: #5E4A58; line-height: 1">1/3</span>
+    </div>
+    <div aria-hidden="true" style="height: 1.5px; border-radius: 1px; background: #F6DCE6; margin: 16px 4px 0"></div>
+    <div role="progressbar" aria-label="Étape 1 sur 3" aria-valuemin="1" aria-valuemax="3" aria-valuenow="1" style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 3px; margin-top: 14px; background: #FFF4F7; border-radius: 8px; padding: 3px">
+      <span style="height: 8px; border-radius: 5px; background: {{accent}}"></span>
+      <span style="height: 8px; border-radius: 5px; background: transparent"></span>
+      <span style="height: 8px; border-radius: 5px; background: transparent"></span>
+    </div>
+  </header>
+
+  <div style="padding: 14px 20px 0">
+    <label style="display: flex; align-items: center; gap: 10px; height: 48px; padding: 0 16px; border-radius: 24px; background: #FFFFFF; box-shadow: 0 3px 0 #F3D6E0">
+      <svg width="19" height="19" viewBox="0 0 256 256" fill="#7A5670" aria-hidden="true" style="display: block; flex: none"><path d="{{ic.searchR}}"/></svg>
+      <input aria-label="Rechercher ou nommer une habitude" placeholder="Rechercher ou nommer une habitude" style="flex: 1; min-width: 0; border: 0; background: transparent; font-size: 16px; color: #3B1730; outline: none">
+    </label>
+
+    <div style="display: flex; justify-content: space-between; align-items: baseline; margin-top: 14px; padding: 0 4px">
+      <h2 style="margin: 0; font-size: 17px; font-weight: 600">Populaires</h2>
+      <span style="font-size: 13px; font-weight: 400; color: #7A5670">type choisi pour toi</span>
+    </div>
+
+    <sc-if value="{{vTiles}}" hint-placeholder-val="{{ true }}">
+      <div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 8px; margin-top: 8px">
+        <sc-for list="{{pop}}" as="c" hint-placeholder-count="6">
+          <button onClick="{{c.pick}}" aria-pressed="{{c.sel}}" style="position: relative; height: 76px; padding: 10px 10px 8px; border: 0; border-radius: 20px; background: {{c.bg}}; box-shadow: {{c.tileSh}}; display: flex; flex-direction: column; justify-content: space-between; align-items: flex-start; text-align: left; color: #3B1730">
+            <svg width="22" height="22" viewBox="0 0 256 256" fill="#3B1730" aria-hidden="true" style="display: block"><path d="{{c.icon}}"/></svg>
+            <span style="font-size: 14px; font-weight: 500; line-height: 1.1">{{c.label}}</span>
+            <span style="position: absolute; top: 9px; right: 9px; height: 18px; padding: 0 6px; border-radius: 9px; background: rgba(255,255,255,0.7); font-size: 10.5px; font-weight: 500; display: flex; align-items: center; line-height: 1">{{c.tname}}</span>
+          </button>
+        </sc-for>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{vCarousel}}" hint-placeholder-val="{{ false }}">
+      <div style="display: flex; gap: 10px; margin: 8px -20px 0; padding: 0 20px 4px; overflow-x: auto; scrollbar-width: none">
+        <sc-for list="{{pop}}" as="c" hint-placeholder-count="6">
+          <button onClick="{{c.pick}}" aria-pressed="{{c.sel}}" style="flex: none; width: 112px; height: 132px; padding: 12px; border: 0; border-radius: 24px; background: #FFFFFF; box-shadow: {{c.cardSh}}; display: flex; flex-direction: column; align-items: flex-start; gap: 8px; text-align: left; color: #3B1730">
+            <span style="width: 48px; height: 48px; border-radius: 16px; background: {{c.bg}}; display: flex; align-items: center; justify-content: center">
+              <svg width="24" height="24" viewBox="0 0 256 256" fill="#3B1730" aria-hidden="true" style="display: block"><path d="{{c.icon}}"/></svg>
+            </span>
+            <span style="font-size: 15px; font-weight: 500; line-height: 1.1">{{c.label}}</span>
+            <span style="margin-top: auto; font-size: 12px; font-weight: 400; color: #7A5670">{{c.tname}} · {{c.hint}}</span>
+          </button>
+        </sc-for>
+      </div>
+    </sc-if>
+
+    <sc-if value="{{vBento}}" hint-placeholder-val="{{ false }}">
+      <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 1px; margin-top: 8px; border-radius: 20px; overflow: hidden; box-shadow: 0 3px 0 #F3D6E0">
+        <sc-for list="{{pop}}" as="c" hint-placeholder-count="6">
+          <button onClick="{{c.pick}}" aria-pressed="{{c.sel}}" style="height: 48px; padding: 0 10px; border: 0; border-radius: 3px; background: {{c.bentoBg}}; box-shadow: {{c.bentoRing}}; display: flex; align-items: center; gap: 8px; text-align: left; color: #3B1730">
+            <span style="width: 30px; height: 30px; flex: none; border-radius: 10px; background: {{c.bg}}; display: flex; align-items: center; justify-content: center">
+              <svg width="17" height="17" viewBox="0 0 256 256" fill="#3B1730" aria-hidden="true" style="display: block"><path d="{{c.icon}}"/></svg>
+            </span>
+            <span style="flex: 1; min-width: 0; font-size: 14px; font-weight: 500; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{{c.label}}</span>
+            <span style="font-size: 11px; font-weight: 400; color: #7A5670">{{c.tname}}</span>
+          </button>
+        </sc-for>
+      </div>
+    </sc-if>
+
+    <h2 style="margin: 14px 0 0; padding: 0 4px; font-size: 17px; font-weight: 600">Ou choisis un type</h2>
+    <div role="radiogroup" aria-label="Type d'habitude" style="margin-top: 8px; background: #FFFFFF; border-radius: 24px; padding: 2px 12px; box-shadow: 0 3px 0 #F3D6E0">
+      <sc-for list="{{types}}" as="t" hint-placeholder-count="5">
+        <button role="radio" aria-checked="{{t.sel}}" onClick="{{t.pick}}" style="width: 100%; display: flex; align-items: center; gap: 12px; height: 54px; padding: 0 2px; border: 0; border-bottom: {{t.line}}; background: transparent; text-align: left; color: #3B1730">
+          <span style="width: 36px; height: 36px; flex: none; border-radius: 12px; background: {{t.bg}}; display: flex; align-items: center; justify-content: center">
+            <svg width="19" height="19" viewBox="0 0 256 256" fill="#3B1730" aria-hidden="true" style="display: block"><path d="{{t.icon}}"/></svg>
+          </span>
+          <span style="flex: 1; min-width: 0; display: flex; flex-direction: column">
+            <span style="font-size: 15px; font-weight: 500">{{t.name}}</span>
+            <span style="font-size: 12.5px; font-weight: 400; color: #7A5670; white-space: nowrap; overflow: hidden; text-overflow: ellipsis">{{t.ex}}</span>
+          </span>
+          <span aria-hidden="true" style="width: 22px; height: 22px; flex: none; box-sizing: border-box; border-radius: 50%; border: {{t.radio}}; background: #FFFFFF"></span>
+        </button>
+      </sc-for>
+    </div>
+  </div>
+
+  <div style="position: absolute; left: 20px; right: 20px; bottom: 28px">
+    <a href="P2-Reglages.dc.html" style="height: 60px; border-radius: 30px; background: {{accent}}; color: #FFFFFF; font-size: 19px; font-weight: 500; display: flex; align-items: center; justify-content: center; text-decoration: none; box-shadow: 0 4px 0 rgba(59,23,48,0.2)">Continuer · {{selName}}</a>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"accent":{"editor":"color","default":"#F0507F","options":["#F0507F","#FF8A4C","#9B6BFF","#2FB48A"]},"populaires":{"editor":"enum","options":["Tuiles","Carrousel","Bento"],"default":"Tuiles"},"$preview":{"width":390,"height":844}}'>
+const IC={xB:'M208.49,191.51a12,12,0,0,1-17,17L128,145,64.49,208.49a12,12,0,0,1-17-17L111,128,47.51,64.49a12,12,0,0,1,17-17L128,111l63.51-63.52a12,12,0,0,1,17,17L145,128Z',
+searchR:'M229.66,218.34l-50.07-50.06a88.11,88.11,0,1,0-11.31,11.31l50.06,50.07a8,8,0,0,0,11.32-11.32ZM40,112a72,72,0,1,1,72,72A72.08,72.08,0,0,1,40,112Z',
+hashR:'M224,88H175.4l8.47-46.57a8,8,0,0,0-15.74-2.86l-9,49.43H111.4l8.47-46.57a8,8,0,0,0-15.74-2.86L95.14,88H48a8,8,0,0,0,0,16H92.23L83.5,152H32a8,8,0,0,0,0,16H80.6l-8.47,46.57a8,8,0,0,0,6.44,9.3A7.79,7.79,0,0,0,80,224a8,8,0,0,0,7.86-6.57l9-49.43H144.6l-8.47,46.57a8,8,0,0,0,6.44,9.3A7.79,7.79,0,0,0,144,224a8,8,0,0,0,7.86-6.57l9-49.43H208a8,8,0,0,0,0-16H163.77l8.73-48H224a8,8,0,0,0,0-16Zm-76.5,64H99.77l8.73-48h47.73Z',
+timerR:'M128,40a96,96,0,1,0,96,96A96.11,96.11,0,0,0,128,40Zm0,176a80,80,0,1,1,80-80A80.09,80.09,0,0,1,128,216ZM173.66,90.34a8,8,0,0,1,0,11.32l-40,40a8,8,0,0,1-11.32-11.32l40-40A8,8,0,0,1,173.66,90.34ZM96,16a8,8,0,0,1,8-8h48a8,8,0,0,1,0,16H104A8,8,0,0,1,96,16Z',
+checkCR:'M173.66,98.34a8,8,0,0,1,0,11.32l-56,56a8,8,0,0,1-11.32,0l-24-24a8,8,0,0,1,11.32-11.32L112,148.69l50.34-50.35A8,8,0,0,1,173.66,98.34ZM232,128A104,104,0,1,1,128,24,104.11,104.11,0,0,1,232,128Zm-16,0a88,88,0,1,0-88,88A88.1,88.1,0,0,0,216,128Z',
+noteR:'M229.66,58.34l-32-32a8,8,0,0,0-11.32,0l-96,96A8,8,0,0,0,88,128v32a8,8,0,0,0,8,8h32a8,8,0,0,0,5.66-2.34l96-96A8,8,0,0,0,229.66,58.34ZM124.69,152H104V131.31l64-64L188.69,88ZM200,76.69,179.31,56,192,43.31,212.69,64ZM224,128v80a16,16,0,0,1-16,16H48a16,16,0,0,1-16-16V48A16,16,0,0,1,48,32h80a8,8,0,0,1,0,16H48V208H208V128a8,8,0,0,1,16,0Z',
+calCheckR:'M208,32H184V24a8,8,0,0,0-16,0v8H88V24a8,8,0,0,0-16,0v8H48A16,16,0,0,0,32,48V208a16,16,0,0,0,16,16H208a16,16,0,0,0,16-16V48A16,16,0,0,0,208,32ZM72,48v8a8,8,0,0,0,16,0V48h80v8a8,8,0,0,0,16,0V48h24V80H48V48ZM208,208H48V96H208V208Zm-38.34-85.66a8,8,0,0,1,0,11.32l-48,48a8,8,0,0,1-11.32,0l-24-24a8,8,0,0,1,11.32-11.32L116,164.69l42.34-42.35A8,8,0,0,1,169.66,122.34Z',
+dropR:'M174,47.75a254.19,254.19,0,0,0-41.45-38.3,8,8,0,0,0-9.18,0A254.19,254.19,0,0,0,82,47.75C54.51,79.32,40,112.6,40,144a88,88,0,0,0,176,0C216,112.6,201.49,79.32,174,47.75ZM128,216a72.08,72.08,0,0,1-72-72c0-57.23,55.47-105,72-118,16.53,13,72,60.75,72,118A72.08,72.08,0,0,1,128,216Zm55.89-62.66a57.6,57.6,0,0,1-46.56,46.55A8.75,8.75,0,0,1,136,200a8,8,0,0,1-1.32-15.89c16.57-2.79,30.63-16.85,33.44-33.45a8,8,0,0,1,15.78,2.68Z',
+bookR:'M232,48H160a40,40,0,0,0-32,16A40,40,0,0,0,96,48H24a8,8,0,0,0-8,8V200a8,8,0,0,0,8,8H96a24,24,0,0,1,24,24,8,8,0,0,0,16,0,24,24,0,0,1,24-24h72a8,8,0,0,0,8-8V56A8,8,0,0,0,232,48ZM96,192H32V64H96a24,24,0,0,1,24,24V200A39.81,39.81,0,0,0,96,192Zm128,0H160a39.81,39.81,0,0,0-24,8V88a24,24,0,0,1,24-24h64Z',
+brushR:'M232,32a8,8,0,0,0-8-8c-44.08,0-89.31,49.71-114.43,82.63A60,60,0,0,0,32,164c0,30.88-19.54,44.73-20.47,45.37A8,8,0,0,0,16,224H92a60,60,0,0,0,57.37-77.57C182.3,121.31,232,76.08,232,32ZM92,208H34.63C41.38,198.41,48,183.92,48,164a44,44,0,1,1,44,44Zm32.42-94.45q5.14-6.66,10.09-12.55A76.23,76.23,0,0,1,155,121.49q-5.9,4.94-12.55,10.09A60.54,60.54,0,0,0,124.42,113.55Zm42.7-2.68a92.57,92.57,0,0,0-22-22c31.78-34.53,55.75-45,69.9-47.91C212.17,55.12,201.65,79.09,167.12,110.87Z',
+runR:'M152,88a32,32,0,1,0-32-32A32,32,0,0,0,152,88Zm0-48a16,16,0,1,1-16,16A16,16,0,0,1,152,40Zm67.31,100.68c-.61.28-7.49,3.28-19.67,3.28-13.85,0-34.55-3.88-60.69-20a169.31,169.31,0,0,1-15.41,32.34,104.29,104.29,0,0,1,31.31,15.81C173.92,186.65,184,207.35,184,232a8,8,0,0,1-16,0c0-41.7-34.69-56.71-54.14-61.85-.55.7-1.12,1.41-1.69,2.1-19.64,23.8-44.25,36.18-71.63,36.18A92.29,92.29,0,0,1,31.2,208,8,8,0,0,1,32.8,192c25.92,2.58,48.47-7.49,67-30,12.49-15.14,21-33.61,25.25-47C86.13,92.35,61.27,111.63,61,111.84A8,8,0,1,1,51,99.36c1.5-1.2,37.22-29,89.51,6.57,45.47,30.91,71.93,20.31,72.18,20.19a8,8,0,1,1,6.63,14.56Z',
+pillR:'M216.42,39.6a53.26,53.26,0,0,0-75.32,0L39.6,141.09a53.26,53.26,0,0,0,75.32,75.31h0L216.43,114.91A53.31,53.31,0,0,0,216.42,39.6ZM103.61,205.09h0a37.26,37.26,0,0,1-52.7-52.69L96,107.31,148.7,160ZM205.11,103.6,160,148.69,107.32,96l45.1-45.09a37.26,37.26,0,0,1,52.69,52.69ZM189.68,82.34a8,8,0,0,1,0,11.32l-24,24a8,8,0,1,1-11.31-11.32l24-24A8,8,0,0,1,189.68,82.34Z'};
+class Component extends DCLogic {
+  constructor(p) { super(p); this.state = { type: 1, chip: 2 }; }
+  renderVals() {
+    const accent = this.props.accent ?? '#F0507F';
+    const variant = this.props.populaires ?? 'Tuiles';
+    const s = this.state;
+    const T = [
+      { name: 'Quantité', ex: 'eau, pages, pas, kilomètres', bg: '#BFE3FF', icon: IC.hashR },
+      { name: 'Durée', ex: 'méditer, dessiner, instrument', bg: '#DCC8FF', icon: IC.timerR },
+      { name: 'Oui / non', ex: 'vitamines, pas d’écran au lit', bg: '#FFF09A', icon: IC.checkCR },
+      { name: 'Journal', ex: 'écrire 3 lignes, gratitude', bg: '#FFCBA4', icon: IC.noteR },
+      { name: 'Fréquence', ex: 'sport 3 fois, appeler un proche', bg: '#FFB8CF', icon: IC.calCheckR }
+    ];
+    const types = T.map((t, i) => {
+      const sel = i === s.type;
+      return { ...t, sel: sel ? 'true' : 'false',
+        radio: sel ? '7px solid ' + accent : '2px solid #E2C6D3',
+        line: i < T.length - 1 ? '1.5px solid #FBEAF0' : '0',
+        pick: () => this.setState({ type: i, chip: -1 }) };
+    });
+    const C = [
+      { label: 'Boire de l’eau', icon: IC.dropR, bg: '#BFE3FF', type: 0, hint: '2 L' },
+      { label: 'Lire', icon: IC.bookR, bg: '#B6F0D2', type: 0, hint: '20 pages' },
+      { label: 'Dessiner', icon: IC.brushR, bg: '#DCC8FF', type: 1, hint: '30 min' },
+      { label: 'Courir', icon: IC.runR, bg: '#FFB8CF', type: 4, hint: '3× / sem.' },
+      { label: 'Vitamines', icon: IC.pillR, bg: '#FFF09A', type: 2, hint: 'le matin' },
+      { label: 'Gratitude', icon: IC.noteR, bg: '#FFCBA4', type: 3, hint: '3 lignes' }
+    ];
+    const pop = C.map((c, i) => {
+      const sel = i === s.chip;
+      return { ...c, tname: T[c.type].name, sel: sel ? 'true' : 'false',
+        tileSh: sel ? 'inset 0 0 0 2.5px #3B1730' : '0 3px 0 rgba(59,23,48,0.08)',
+        cardSh: sel ? '0 3px 0 #F3D6E0, inset 0 0 0 2.5px #FFC9DA' : '0 3px 0 #F3D6E0',
+        bentoBg: sel ? '#FFF4F7' : '#FFFFFF',
+        bentoRing: sel ? 'inset 0 0 0 2px #FFC9DA' : 'none',
+        pick: () => this.setState({ chip: i, type: c.type }) };
+    });
+    return {
+      accent, ic: IC, types, pop,
+      vTiles: variant === 'Tuiles', vCarousel: variant === 'Carrousel', vBento: variant === 'Bento',
+      selName: s.chip >= 0 ? C[s.chip].label : T[s.type].name
+    };
+  }
+}
+</script>
+</body>
+</html>

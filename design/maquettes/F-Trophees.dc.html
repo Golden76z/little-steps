@@ -1,0 +1,206 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<title>Trophées</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Sour+Gummy:wght@400;500;600&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+a{color:#3B1730}a:hover{color:#000}
+button{font:inherit;cursor:pointer}
+</style>
+</helmet>
+<div style="width: 390px; height: 844px; box-sizing: border-box; position: relative; overflow: hidden; background: #FFF0F4; color: #3B1730; font-family: 'Sour Gummy', system-ui, sans-serif">
+
+  <header style="background: #FFFFFF; border-radius: 0 0 32px 32px; box-shadow: 0 6px 20px rgba(59,23,48,0.06); padding: 52px 20px 16px">
+    <div style="display: flex; align-items: center; gap: 10px">
+      <span role="img" aria-label="Niveau 7, 68 % vers le niveau 8" style="position: relative; width: 48px; height: 48px; flex: none; display: block">
+        <svg width="48" height="48" viewBox="0 0 60 60" aria-hidden="true" style="position: absolute; inset: 0">
+          <circle cx="30" cy="30" r="27" fill="none" stroke="#F9E3EB" stroke-width="5"/>
+          <circle cx="30" cy="30" r="27" fill="none" stroke="{{accent}}" stroke-width="5" stroke-linecap="round" stroke-dasharray="115.4 169.6" transform="rotate(-90 30 30)"/>
+        </svg>
+        <span style="position: absolute; inset: 7px; border-radius: 50%; background: #FFF09A; display: flex; align-items: center; justify-content: center; font-size: 16px; font-weight: 600">7</span>
+      </span>
+      <div style="flex: 1; min-width: 0">
+        <div style="font-size: 14px; font-weight: 400; color: #7A5670">340 / 500 XP</div>
+        <h1 style="margin: 0; font-size: 26px; font-weight: 600; line-height: 1.1">Trophées</h1>
+      </div>
+      <span aria-label="Série de 12 jours" style="height: 40px; flex: none; align-self: center; box-sizing: border-box; padding: 0 12px; border-radius: 20px; background: #FFE6D6; display: inline-flex; align-items: center; gap: 5px; font-size: 17px; font-weight: 600; line-height: 1">
+        <svg width="18" height="18" viewBox="0 0 256 256" fill="#FF7A3D" aria-hidden="true" style="display: block; flex: none"><path d="{{ic.fireF}}"/></svg>
+        12
+      </span>
+    </div>
+    <div aria-hidden="true" style="height: 1.5px; border-radius: 1px; background: #F6DCE6; margin: 16px 4px 0"></div>
+    <div role="tablist" aria-label="Catégorie" style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); margin-top: 14px; background: #FFF4F7; border-radius: 22px; padding: 4px">
+      <sc-for list="{{segs}}" as="p" hint-placeholder-count="2">
+        <button role="tab" aria-selected="{{p.sel}}" onClick="{{p.pick}}" style="height: 40px; border: 0; border-radius: 18px; background: {{p.bg}}; box-shadow: {{p.sh}}; color: {{p.fg}}; font-size: 16px; font-weight: 500">{{p.label}}</button>
+      </sc-for>
+    </div>
+  </header>
+
+  <div style="padding: 16px 20px 0">
+    <sc-if value="{{showBadges}}" hint-placeholder-val="{{ true }}">
+      <div style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 10px">
+        <div style="background: #FFFFFF; border-radius: 22px; padding: 12px 14px; box-shadow: 0 3px 0 #F3D6E0; display: flex; align-items: center; gap: 10px">
+          <span style="width: 40px; height: 40px; flex: none; border-radius: 50%; background: #FFF09A; display: flex; align-items: center; justify-content: center">
+            <svg width="22" height="22" viewBox="0 0 256 256" fill="#3B1730" aria-hidden="true" style="display: block"><path d="{{ic.shieldR}}"/></svg>
+          </span>
+          <span><span style="display: block; font-size: 20px; font-weight: 600; line-height: 1">2</span><span style="font-size: 13px; font-weight: 400; color: #7A5670">jokers de série</span></span>
+        </div>
+        <div style="background: #FFFFFF; border-radius: 22px; padding: 12px 14px; box-shadow: 0 3px 0 #F3D6E0; display: flex; align-items: center; gap: 10px">
+          <span style="width: 40px; height: 40px; flex: none; border-radius: 50%; background: #FFE6D6; display: flex; align-items: center; justify-content: center">
+            <svg width="22" height="22" viewBox="0 0 256 256" fill="#3B1730" aria-hidden="true" style="display: block"><path d="{{ic.fireR}}"/></svg>
+          </span>
+          <span><span style="display: block; font-size: 20px; font-weight: 600; line-height: 1">31 j</span><span style="font-size: 13px; font-weight: 400; color: #7A5670">meilleure série</span></span>
+        </div>
+      </div>
+
+      <div style="display: flex; justify-content: space-between; align-items: baseline; margin-top: 16px; padding: 0 4px">
+        <h2 style="margin: 0; font-size: 18px; font-weight: 600">Badges</h2>
+        <span style="font-size: 14px; font-weight: 400; color: #7A5670">4 sur 12</span>
+      </div>
+      <div style="display: grid; grid-template-columns: repeat(3, minmax(0, 1fr)); gap: 10px; margin-top: 8px">
+        <sc-for list="{{badges}}" as="b" hint-placeholder-count="6">
+          <div style="background: #FFFFFF; border-radius: 22px; padding: 12px 6px 10px; box-shadow: 0 3px 0 #F3D6E0; display: flex; flex-direction: column; align-items: center; gap: 6px">
+            <span style="width: 52px; height: 52px; border-radius: 50%; background: {{b.bg}}; display: flex; align-items: center; justify-content: center">
+              <svg width="26" height="26" viewBox="0 0 256 256" fill="{{b.fill}}" aria-hidden="true" style="display: block"><path d="{{b.icon}}"/></svg>
+            </span>
+            <span style="font-size: 13px; font-weight: 500; text-align: center; color: {{b.fg}}">{{b.name}}</span>
+          </div>
+        </sc-for>
+      </div>
+
+      <section style="margin-top: 12px; background: #B6F0D2; border-radius: 24px; padding: 14px 16px; box-shadow: 0 3px 0 #93DDB6">
+        <div style="display: flex; justify-content: space-between; align-items: center">
+          <span style="display: inline-flex; align-items: center; gap: 6px; font-size: 13px; font-weight: 500; color: #1F4D35">
+            <svg width="16" height="16" viewBox="0 0 256 256" fill="#1F4D35" aria-hidden="true" style="display: block"><path d="{{ic.targetR}}"/></svg>
+            Défi de la semaine
+          </span>
+          <span style="font-size: 13px; font-weight: 600; color: #1F4D35">+150 XP</span>
+        </div>
+        <div style="font-size: 18px; font-weight: 600; margin-top: 4px">Lire 7 jours d'affilée</div>
+        <div aria-label="2 jours sur 7" role="img" style="display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); margin-top: 10px; background: rgba(255,255,255,0.55); border-radius: 8px; padding: 3px; gap: 3px">
+          <sc-for list="{{challengeSegs}}" as="s" hint-placeholder-count="7">
+            <span style="height: 8px; border-radius: 5px; background: {{s}}"></span>
+          </sc-for>
+        </div>
+      </section>
+    </sc-if>
+
+    <sc-if value="{{showChallenges}}" hint-placeholder-val="{{ false }}">
+      <div style="display: flex; flex-direction: column; gap: 10px">
+        <sc-for list="{{challenges}}" as="c" hint-placeholder-count="4">
+          <div style="background: #FFFFFF; border-radius: 24px; padding: 14px; box-shadow: 0 3px 0 #F3D6E0; display: flex; gap: 12px; align-items: center">
+            <span style="width: 46px; height: 46px; flex: none; border-radius: 50%; background: {{c.bg}}; display: flex; align-items: center; justify-content: center">
+              <svg width="22" height="22" viewBox="0 0 256 256" fill="#3B1730" aria-hidden="true" style="display: block"><path d="{{c.icon}}"/></svg>
+            </span>
+            <span style="flex: 1; min-width: 0; display: flex; flex-direction: column; gap: 6px">
+              <span style="display: flex; justify-content: space-between; gap: 8px">
+                <span style="font-size: 16px; font-weight: 500">{{c.name}}</span>
+                <span style="font-size: 13px; font-weight: 600; color: #7A5670; white-space: nowrap">+{{c.xp}} XP</span>
+              </span>
+              <span aria-hidden="true" style="display: block; height: 10px; border-radius: 6px; background: #F9E3EB; overflow: hidden"><span style="display: block; height: 10px; border-radius: 6px; width: {{c.w}}; background: {{c.bar}}"></span></span>
+              <span style="font-size: 13px; font-weight: 400; color: #7A5670">{{c.sub}}</span>
+            </span>
+          </div>
+        </sc-for>
+      </div>
+    </sc-if>
+  </div>
+
+  <nav aria-label="Navigation principale" style="position: absolute; left: 24px; right: 24px; bottom: 28px; height: 68px; border-radius: 34px; background: #FFFFFF; box-shadow: 0 4px 0 #F3D6E0, 0 10px 24px rgba(59,23,48,0.08); display: flex; align-items: center; justify-content: space-around; padding: 0 8px">
+    <sc-for list="{{tabsL}}" as="t" hint-placeholder-count="2">
+      <a href="{{t.href}}" aria-label="{{t.label}}" aria-current="{{t.current}}" style="text-decoration: none; width: 50px; height: 50px; border-radius: 50%; background: {{t.bg}}; box-shadow: {{t.sh}}; display: flex; align-items: center; justify-content: center; color: {{t.fg}}">
+        <svg width="24" height="24" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" style="display: block"><path d="{{t.d}}"/></svg>
+      </a>
+    </sc-for>
+    <a href="P1-Type.dc.html" aria-label="Nouvelle habitude" style="width: 54px; height: 54px; border-radius: 50%; background: {{accent}}; display: flex; align-items: center; justify-content: center; box-shadow: 0 3px 0 rgba(59,23,48,0.22)">
+      <svg width="24" height="24" viewBox="0 0 256 256" fill="#FFFFFF" aria-hidden="true" style="display: block"><path d="{{ic.plusB}}"/></svg>
+    </a>
+    <sc-for list="{{tabsR}}" as="t" hint-placeholder-count="2">
+      <a href="{{t.href}}" aria-label="{{t.label}}" aria-current="{{t.current}}" style="text-decoration: none; width: 50px; height: 50px; border-radius: 50%; background: {{t.bg}}; box-shadow: {{t.sh}}; display: flex; align-items: center; justify-content: center; color: {{t.fg}}">
+        <svg width="24" height="24" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" style="display: block"><path d="{{t.d}}"/></svg>
+      </a>
+    </sc-for>
+  </nav>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"accent":{"editor":"color","default":"#F0507F","options":["#F0507F","#FF8A4C","#9B6BFF","#2FB48A"]},"$preview":{"width":390,"height":844}}'>
+const IC={houseR:'M219.31,108.68l-80-80a16,16,0,0,0-22.62,0l-80,80A15.87,15.87,0,0,0,32,120v96a8,8,0,0,0,8,8h64a8,8,0,0,0,8-8V160h32v56a8,8,0,0,0,8,8h64a8,8,0,0,0,8-8V120A15.87,15.87,0,0,0,219.31,108.68ZM208,208H160V152a8,8,0,0,0-8-8H104a8,8,0,0,0-8,8v56H48V120l80-80,80,80Z',
+houseF:'M224,120v96a8,8,0,0,1-8,8H160a8,8,0,0,1-8-8V164a4,4,0,0,0-4-4H108a4,4,0,0,0-4,4v52a8,8,0,0,1-8,8H40a8,8,0,0,1-8-8V120a16,16,0,0,1,4.69-11.31l80-80a16,16,0,0,1,22.62,0l80,80A16,16,0,0,1,224,120Z',
+chartR:'M224,200h-8V40a8,8,0,0,0-8-8H152a8,8,0,0,0-8,8V80H96a8,8,0,0,0-8,8v40H48a8,8,0,0,0-8,8v64H32a8,8,0,0,0,0,16H224a8,8,0,0,0,0-16ZM160,48h40V200H160ZM104,96h40V200H104ZM56,144H88v56H56Z',
+chartF:'M232,208a8,8,0,0,1-8,8H32a8,8,0,0,1,0-16h8V136a8,8,0,0,1,8-8H72a8,8,0,0,1,8,8v64H96V88a8,8,0,0,1,8-8h32a8,8,0,0,1,8,8V200h16V40a8,8,0,0,1,8-8h40a8,8,0,0,1,8,8V200h8A8,8,0,0,1,232,208Z',
+trophyR:'M232,64H208V48a8,8,0,0,0-8-8H56a8,8,0,0,0-8,8V64H24A16,16,0,0,0,8,80V96a40,40,0,0,0,40,40h3.65A80.13,80.13,0,0,0,120,191.61V216H96a8,8,0,0,0,0,16h64a8,8,0,0,0,0-16H136V191.58c31.94-3.23,58.44-25.64,68.08-55.58H208a40,40,0,0,0,40-40V80A16,16,0,0,0,232,64ZM48,120A24,24,0,0,1,24,96V80H48v32q0,4,.39,8Zm144-8.9c0,35.52-29,64.64-64,64.9a64,64,0,0,1-64-64V56H192ZM232,96a24,24,0,0,1-24,24h-.5a81.81,81.81,0,0,0,.5-8.9V80h24Z',
+trophyF:'M232,64H208V48a8,8,0,0,0-8-8H56a8,8,0,0,0-8,8V64H24A16,16,0,0,0,8,80V96a40,40,0,0,0,40,40h3.65A80.13,80.13,0,0,0,120,191.61V216H96a8,8,0,0,0,0,16h64a8,8,0,0,0,0-16H136V191.58c31.94-3.23,58.44-25.64,68.08-55.58H208a40,40,0,0,0,40-40V80A16,16,0,0,0,232,64ZM48,120A24,24,0,0,1,24,96V80H48v32q0,4,.39,8ZM232,96a24,24,0,0,1-24,24h-.5a81.81,81.81,0,0,0,.5-8.9V80h24Z',
+userR:'M230.92,212c-15.23-26.33-38.7-45.21-66.09-54.16a72,72,0,1,0-73.66,0C63.78,166.78,40.31,185.66,25.08,212a8,8,0,1,0,13.85,8c18.84-32.56,52.14-52,89.07-52s70.23,19.44,89.07,52a8,8,0,1,0,13.85-8ZM72,96a56,56,0,1,1,56,56A56.06,56.06,0,0,1,72,96Z',
+userF:'M230.93,220a8,8,0,0,1-6.93,4H32a8,8,0,0,1-6.92-12c15.23-26.33,38.7-45.21,66.09-54.16a72,72,0,1,1,73.66,0c27.39,8.95,50.86,27.83,66.09,54.16A8,8,0,0,1,230.93,220Z',
+plusB:'M228,128a12,12,0,0,1-12,12H140v76a12,12,0,0,1-24,0V140H40a12,12,0,0,1,0-24h76V40a12,12,0,0,1,24,0v76h76A12,12,0,0,1,228,128Z',
+fireF:'M143.38,17.85a8,8,0,0,0-12.63,3.41l-22,60.41L84.59,58.26a8,8,0,0,0-11.93.89C51,87.53,40,116.08,40,144a88,88,0,0,0,176,0C216,84.55,165.21,36,143.38,17.85Zm40.51,135.49a57.6,57.6,0,0,1-46.56,46.55A7.65,7.65,0,0,1,136,200a8,8,0,0,1-1.32-15.89c16.57-2.79,30.63-16.85,33.44-33.45a8,8,0,0,1,15.78,2.68Z',
+fireR:'M183.89,153.34a57.6,57.6,0,0,1-46.56,46.55A8.75,8.75,0,0,1,136,200a8,8,0,0,1-1.32-15.89c16.57-2.79,30.63-16.85,33.44-33.45a8,8,0,0,1,15.78,2.68ZM216,144a88,88,0,0,1-176,0c0-27.92,11-56.47,32.66-84.85a8,8,0,0,1,11.93-.89l24.12,23.41,22-60.41a8,8,0,0,1,12.63-3.41C165.21,36,216,84.55,216,144Zm-16,0c0-46.09-35.79-85.92-58.21-106.33L119.52,98.74a8,8,0,0,1-13.09,3L80.06,76.16C64.09,99.21,56,122,56,144a72,72,0,0,0,144,0Z',
+shieldR:'M208,40H48A16,16,0,0,0,32,56v56c0,52.72,25.52,84.67,46.93,102.19,23.06,18.86,46,25.26,47,25.53a8,8,0,0,0,4.2,0c1-.27,23.91-6.67,47-25.53C198.48,196.67,224,164.72,224,112V56A16,16,0,0,0,208,40Zm0,72c0,37.07-13.66,67.16-40.6,89.42A129.3,129.3,0,0,1,128,223.62a128.25,128.25,0,0,1-38.92-21.81C61.82,179.51,48,149.3,48,112l0-56,160,0ZM82.34,141.66a8,8,0,0,1,11.32-11.32L112,148.69l50.34-50.35a8,8,0,0,1,11.32,11.32l-56,56a8,8,0,0,1-11.32,0Z',
+lockF:'M208,80H176V56a48,48,0,0,0-96,0V80H48A16,16,0,0,0,32,96V208a16,16,0,0,0,16,16H208a16,16,0,0,0,16-16V96A16,16,0,0,0,208,80ZM96,56a32,32,0,0,1,64,0V80H96Z',
+medalR:'M216,96A88,88,0,1,0,72,163.83V240a8,8,0,0,0,11.58,7.16L128,225l44.43,22.21A8.07,8.07,0,0,0,176,248a8,8,0,0,0,8-8V163.83A87.85,87.85,0,0,0,216,96ZM56,96a72,72,0,1,1,72,72A72.08,72.08,0,0,1,56,96ZM168,227.06l-36.43-18.21a8,8,0,0,0-7.16,0L88,227.06V174.37a87.89,87.89,0,0,0,80,0ZM128,152A56,56,0,1,0,72,96,56.06,56.06,0,0,0,128,152Zm0-96A40,40,0,1,1,88,96,40,40,0,0,1,128,56Z',
+sunR:'M120,40V16a8,8,0,0,1,16,0V40a8,8,0,0,1-16,0Zm72,88a64,64,0,1,1-64-64A64.07,64.07,0,0,1,192,128Zm-16,0a48,48,0,1,0-48,48A48.05,48.05,0,0,0,176,128ZM58.34,69.66A8,8,0,0,0,69.66,58.34l-16-16A8,8,0,0,0,42.34,53.66Zm0,116.68-16,16a8,8,0,0,0,11.32,11.32l16-16a8,8,0,0,0-11.32-11.32ZM192,72a8,8,0,0,0,5.66-2.34l16-16a8,8,0,0,0-11.32-11.32l-16,16A8,8,0,0,0,192,72Zm5.66,114.34a8,8,0,0,0-11.32,11.32l16,16a8,8,0,0,0,11.32-11.32ZM48,128a8,8,0,0,0-8-8H16a8,8,0,0,0,0,16H40A8,8,0,0,0,48,128Zm80,80a8,8,0,0,0-8,8v24a8,8,0,0,0,16,0V216A8,8,0,0,0,128,208Zm112-88H216a8,8,0,0,0,0,16h24a8,8,0,0,0,0-16Z',
+bookR:'M232,48H160a40,40,0,0,0-32,16A40,40,0,0,0,96,48H24a8,8,0,0,0-8,8V200a8,8,0,0,0,8,8H96a24,24,0,0,1,24,24,8,8,0,0,0,16,0,24,24,0,0,1,24-24h72a8,8,0,0,0,8-8V56A8,8,0,0,0,232,48ZM96,192H32V64H96a24,24,0,0,1,24,24V200A39.81,39.81,0,0,0,96,192Zm128,0H160a39.81,39.81,0,0,0-24,8V88a24,24,0,0,1,24-24h64Z',
+dropR:'M174,47.75a254.19,254.19,0,0,0-41.45-38.3,8,8,0,0,0-9.18,0A254.19,254.19,0,0,0,82,47.75C54.51,79.32,40,112.6,40,144a88,88,0,0,0,176,0C216,112.6,201.49,79.32,174,47.75ZM128,216a72.08,72.08,0,0,1-72-72c0-57.23,55.47-105,72-118,16.53,13,72,60.75,72,118A72.08,72.08,0,0,1,128,216Zm55.89-62.66a57.6,57.6,0,0,1-46.56,46.55A8.75,8.75,0,0,1,136,200a8,8,0,0,1-1.32-15.89c16.57-2.79,30.63-16.85,33.44-33.45a8,8,0,0,1,15.78,2.68Z',
+barbellR:'M248,120h-8V88a16,16,0,0,0-16-16H208V64a16,16,0,0,0-16-16H168a16,16,0,0,0-16,16v56H104V64A16,16,0,0,0,88,48H64A16,16,0,0,0,48,64v8H32A16,16,0,0,0,16,88v32H8a8,8,0,0,0,0,16h8v32a16,16,0,0,0,16,16H48v8a16,16,0,0,0,16,16H88a16,16,0,0,0,16-16V136h48v56a16,16,0,0,0,16,16h24a16,16,0,0,0,16-16v-8h16a16,16,0,0,0,16-16V136h8a8,8,0,0,0,0-16ZM32,168V88H48v80Zm56,24H64V64H88V192Zm104,0H168V64h24V175.82c0,.06,0,.12,0,.18s0,.12,0,.18V192Zm32-24H208V88h16Z',
+targetR:'M221.87,83.16A104.1,104.1,0,1,1,195.67,49l22.67-22.68a8,8,0,0,1,11.32,11.32l-96,96a8,8,0,0,1-11.32-11.32l27.72-27.72a40,40,0,1,0,17.87,31.09,8,8,0,1,1,16-.9,56,56,0,1,1-22.38-41.65L184.3,60.39a87.88,87.88,0,1,0,23.13,29.67,8,8,0,0,1,14.44-6.9Z'};
+class Component extends DCLogic {
+  constructor(p) { super(p); this.state = { seg: 0 }; }
+  renderVals() {
+    const accent = this.props.accent ?? '#F0507F';
+    const S = ['Badges', 'Défis'];
+    const segs = S.map((label, i) => {
+      const sel = i === this.state.seg;
+      return { label, sel: sel ? 'true' : 'false',
+        bg: sel ? '#FFFFFF' : 'transparent',
+        sh: sel ? '0 2px 0 #F3D6E0, inset 0 0 0 2px #FFC9DA' : 'none',
+        fg: sel ? '#3B1730' : '#7A5670',
+        pick: () => this.setState({ seg: i }) };
+    });
+    const raw = [
+      { name: 'Premier pas', on: true, bg: '#FFCBA4', icon: IC.medalR },
+      { name: '7 jours', on: true, bg: '#FFE6D6', icon: IC.fireR },
+      { name: 'Lève-tôt', on: true, bg: '#FFF09A', icon: IC.sunR },
+      { name: 'Rat de biblio', on: true, bg: '#B6F0D2', icon: IC.bookR },
+      { name: '30 jours', on: false },
+      { name: 'Zen absolu', on: false }
+    ];
+    const badges = raw.map((b) => b.on
+      ? { name: b.name, bg: b.bg, icon: b.icon, fill: '#3B1730', fg: '#3B1730' }
+      : { name: b.name, bg: '#F6ECF0', icon: IC.lockF, fill: '#B9A0AF', fg: '#7A5670' });
+    const challengeSegs = [0,1,2,3,4,5,6].map((i) => i < 2 ? '#3B1730' : 'transparent');
+    const challenges = [
+      { name: 'Lire 7 jours d’affilée', xp: 150, bg: '#B6F0D2', icon: IC.bookR, w: '29%', bar: '#5CCB93', sub: '2 jours sur 7 · reste 5 jours' },
+      { name: '8 verres, 5 jours de suite', xp: 100, bg: '#BFE3FF', icon: IC.dropR, w: '60%', bar: '#6FB8F0', sub: '3 jours sur 5' },
+      { name: 'Sport 3 fois cette semaine', xp: 80, bg: '#FFB8CF', icon: IC.barbellR, w: '33%', bar: '#F27FA5', sub: '1 séance sur 3' },
+      { name: 'Une semaine parfaite', xp: 300, bg: '#FFF09A', icon: IC.medalR, w: '14%', bar: '#E8C930', sub: '1 journée parfaite sur 7' }
+    ];
+    const T = [
+      { label: 'Aujourd’hui', r: IC.houseR, f: IC.houseF, href: 'H2-SemaineBonbon.dc.html' },
+      { label: 'Progrès', r: IC.chartR, f: IC.chartF, href: 'F-Progres.dc.html' },
+      { label: 'Trophées', r: IC.trophyR, f: IC.trophyF, href: 'F-Trophees.dc.html' },
+      { label: 'Profil', r: IC.userR, f: IC.userF, href: 'F-Profil.dc.html' }
+    ];
+    const tabs = T.map((t, i) => {
+      const on = i === 2;
+      return { label: t.label, href: t.href, d: on ? t.f : t.r,
+        current: on ? 'page' : 'false',
+        bg: on ? '#EF6F9C' : 'transparent',
+        sh: on ? '0 3px 0 #D9527F' : 'none',
+        fg: on ? '#FFFFFF' : '#5E4A58' };
+    });
+    return { accent, ic: IC, segs, badges, challengeSegs, challenges,
+      showBadges: this.state.seg === 0, showChallenges: this.state.seg === 1,
+      tabsL: tabs.slice(0, 2), tabsR: tabs.slice(2) };
+  }
+}
+</script>
+</body>
+</html>

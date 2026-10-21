@@ -1,0 +1,71 @@
+import 'package:flutter/material.dart';
+
+import 'sorbet_colors.dart';
+
+const _font = 'SourGummy';
+
+/// Sour Gummy is bundled in 400/500/600 only: never go above w600.
+///
+/// Slots map to the size/weight pairs used in the mockups:
+/// display 64·48·40/600 (big goal numbers), headline 26·24·22/600
+/// (26 = screen title), title 20·18·17/600, body 16·15/500 and 14/400,
+/// label 14/500, 13/400, 12/500. Rarer pairs use `copyWith`.
+TextTheme _textTheme(Color ink) {
+  TextStyle s(double size, FontWeight w, {double? height}) => TextStyle(
+    fontFamily: _font,
+    fontSize: size,
+    fontWeight: w,
+    height: height,
+    color: ink,
+    fontFeatures: const [FontFeature.tabularFigures()],
+  );
+  const semi = FontWeight.w600, med = FontWeight.w500, reg = FontWeight.w400;
+  return TextTheme(
+    displayLarge: s(64, semi, height: 1),
+    displayMedium: s(48, semi, height: 1),
+    displaySmall: s(40, semi, height: 1),
+    headlineLarge: s(26, semi, height: 1.1),
+    headlineMedium: s(24, semi, height: 1.1),
+    headlineSmall: s(22, semi, height: 1.1),
+    titleLarge: s(20, semi, height: 1.1),
+    titleMedium: s(18, semi, height: 1.1),
+    titleSmall: s(17, semi, height: 1.1),
+    bodyLarge: s(16, med),
+    bodyMedium: s(15, med),
+    bodySmall: s(14, reg),
+    labelLarge: s(14, med),
+    labelMedium: s(13, reg),
+    labelSmall: s(12, med),
+  );
+}
+
+ThemeData buildSorbetTheme([SorbetColors c = SorbetColors.light]) {
+  final scheme = ColorScheme.fromSeed(seedColor: c.accent).copyWith(
+    primary: c.accent,
+    onPrimary: c.onAccent,
+    surface: c.surface,
+    onSurface: c.ink,
+    onSurfaceVariant: c.muted,
+    outlineVariant: c.divider,
+  );
+  return ThemeData(
+    useMaterial3: true,
+    colorScheme: scheme,
+    scaffoldBackgroundColor: c.bg,
+    fontFamily: _font,
+    textTheme: _textTheme(c.ink),
+    appBarTheme: AppBarTheme(
+      backgroundColor: c.bg,
+      foregroundColor: c.ink,
+      surfaceTintColor: c.bg,
+      elevation: 0,
+      scrolledUnderElevation: 0,
+    ),
+    dividerTheme: DividerThemeData(
+      color: c.divider,
+      thickness: 1.5,
+      space: 1.5,
+    ),
+    extensions: [c],
+  );
+}

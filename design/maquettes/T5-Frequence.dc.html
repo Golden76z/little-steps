@@ -1,0 +1,146 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<title>Type fréquence — Sport 3 fois par semaine</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Sour+Gummy:wght@400;500;600&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+a{color:#3B1730}a:hover{color:#000}
+button{font:inherit;cursor:pointer}
+</style>
+</helmet>
+<div style="width: 390px; height: 844px; box-sizing: border-box; position: relative; overflow: hidden; background: #FFF0F4; color: #3B1730; font-family: 'Sour Gummy', system-ui, sans-serif">
+
+  <header style="background: #FFFFFF; border-radius: 0 0 32px 32px; box-shadow: 0 6px 20px rgba(59,23,48,0.06); padding: 52px 20px 16px">
+    <div style="display: flex; align-items: center; gap: 10px">
+      <a href="H2-SemaineBonbon.dc.html" aria-label="Retour" style="width: 40px; height: 40px; flex: none; border-radius: 50%; background: #FFF0F4; display: flex; align-items: center; justify-content: center; color: #3B1730">
+        <svg width="18" height="18" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" style="display: block"><path d="{{ic.caretLB}}"/></svg>
+      </a>
+      <span style="width: 44px; height: 44px; flex: none; border-radius: 50%; background: #FFB8CF; display: flex; align-items: center; justify-content: center">
+        <svg width="22" height="22" viewBox="0 0 256 256" fill="#3B1730" aria-hidden="true" style="display: block"><path d="{{ic.barbellR}}"/></svg>
+      </span>
+      <div style="flex: 1; min-width: 0">
+        <h1 style="margin: 0; font-size: 24px; font-weight: 600; line-height: 1.1">Sport</h1>
+        <div style="font-size: 14px; font-weight: 400; color: #7A5670; margin-top: 2px">3 fois par semaine · 30 min</div>
+      </div>
+      <button aria-label="Modifier l'habitude" style="width: 40px; height: 40px; flex: none; padding: 0; border-radius: 50%; border: 0; background: #FFF0F4; display: flex; align-items: center; justify-content: center; color: #3B1730">
+        <svg width="19" height="19" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" style="display: block"><path d="{{ic.pencilR}}"/></svg>
+      </button>
+    </div>
+    <div aria-hidden="true" style="height: 1.5px; border-radius: 1px; background: #F6DCE6; margin: 16px 4px 0"></div>
+    <div role="tablist" aria-label="Période" style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); margin-top: 14px; background: #FFF4F7; border-radius: 22px; padding: 4px">
+      <sc-for list="{{periods}}" as="p" hint-placeholder-count="2">
+        <button role="tab" aria-selected="{{p.sel}}" onClick="{{p.pick}}" style="height: 40px; border: 0; border-radius: 18px; background: {{p.bg}}; box-shadow: {{p.sh}}; color: {{p.fg}}; font-size: 16px; font-weight: 500">{{p.label}}</button>
+      </sc-for>
+    </div>
+  </header>
+
+  <div style="padding: 16px 20px 0">
+    <section style="background: #FFFFFF; border-radius: 30px; padding: 16px; box-shadow: 0 4px 0 #F3D6E0">
+      <div style="display: flex; justify-content: space-between; align-items: baseline">
+        <h2 style="margin: 0; font-size: 18px; font-weight: 600">Cette semaine</h2>
+        <span style="font-size: 14px; font-weight: 500">{{count}} / 3 séances</span>
+      </div>
+      <div style="display: flex; justify-content: center; gap: 16px; margin-top: 14px">
+        <sc-for list="{{slots}}" as="t" hint-placeholder-count="3">
+          <span style="width: 64px; height: 64px; box-sizing: border-box; border-radius: 50%; background: {{t.bg}}; border: {{t.border}}; box-shadow: {{t.sh}}; display: flex; align-items: center; justify-content: center">
+            <svg width="28" height="28" viewBox="0 0 256 256" fill="{{t.fill}}" aria-hidden="true" style="display: block"><path d="{{t.d}}"/></svg>
+          </span>
+        </sc-for>
+      </div>
+      <p style="margin: 12px 0 0; text-align: center; font-size: 14px; font-weight: 400; color: #5E4A58">{{hint}}</p>
+      <div role="img" aria-label="Séances de la semaine, jour par jour" style="display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 1px; margin-top: 14px; border-radius: 14px; overflow: hidden">
+        <sc-for list="{{week}}" as="w" hint-placeholder-count="7">
+          <span style="height: 52px; border-radius: 3px; background: {{w.bg}}; box-shadow: {{w.ring}}; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; line-height: 1">
+            <span style="font-size: 12px; font-weight: 500; color: {{w.lc}}">{{w.l}}</span>
+            <svg width="16" height="16" viewBox="0 0 256 256" fill="{{w.fill}}" aria-hidden="true" style="display: block"><path d="{{w.d}}"/></svg>
+          </span>
+        </sc-for>
+      </div>
+    </section>
+
+    <section style="margin-top: 12px; background: #FFFFFF; border-radius: 28px; padding: 14px 16px; box-shadow: 0 3px 0 #F3D6E0">
+      <div style="display: flex; justify-content: space-between; align-items: baseline">
+        <h2 style="margin: 0; font-size: 17px; font-weight: 600">8 dernières semaines</h2>
+        <span style="font-size: 13px; font-weight: 400; color: #7A5670">objectif tenu 6 fois</span>
+      </div>
+      <div role="img" aria-label="Séances par semaine sur 8 semaines" style="display: grid; grid-template-columns: repeat(8, minmax(0, 1fr)); grid-template-rows: repeat(3, 22px); grid-auto-flow: column; gap: 1px; margin-top: 12px; border-radius: 12px; overflow: hidden">
+        <sc-for list="{{grid}}" as="g" hint-placeholder-count="24">
+          <span style="border-radius: 3px; background: {{g.bg}}; box-shadow: {{g.ring}}"></span>
+        </sc-for>
+      </div>
+      <div aria-hidden="true" style="display: grid; grid-template-columns: repeat(8, minmax(0, 1fr)); margin-top: 6px; text-align: center; font-size: 11px; font-weight: 500; color: #9A7A90">
+        <span>S36</span><span>S37</span><span>S38</span><span>S39</span><span>S40</span><span>S41</span><span>S42</span><span>S43</span>
+      </div>
+    </section>
+  </div>
+
+  <div style="position: absolute; left: 20px; right: 20px; bottom: 28px">
+    <button onClick="{{toggleToday}}" style="width: 100%; height: 60px; border-radius: 30px; border: 0; background: {{ctaBg}}; color: {{ctaFg}}; font-size: 19px; font-weight: 500; display: flex; align-items: center; justify-content: center; gap: 8px; box-shadow: {{ctaSh}}">
+      <svg width="18" height="18" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" style="display: block"><path d="{{ctaIcon}}"/></svg>
+      {{cta}}
+    </button>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"accent":{"editor":"color","default":"#F0507F","options":["#F0507F","#FF8A4C","#9B6BFF","#2FB48A"]},"$preview":{"width":390,"height":844}}'>
+const IC={caretLB:'M168.49,199.51a12,12,0,0,1-17,17l-80-80a12,12,0,0,1,0-17l80-80a12,12,0,0,1,17,17L97,128Z',
+pencilR:'M227.31,73.37,182.63,28.68a16,16,0,0,0-22.63,0L36.69,152A15.86,15.86,0,0,0,32,163.31V208a16,16,0,0,0,16,16H92.69A15.86,15.86,0,0,0,104,219.31L227.31,96a16,16,0,0,0,0-22.63ZM92.69,208H48V163.31l88-88L180.69,120ZM192,108.68,147.31,64l24-24L216,84.68Z',
+barbellR:'M248,120h-8V88a16,16,0,0,0-16-16H208V64a16,16,0,0,0-16-16H168a16,16,0,0,0-16,16v56H104V64A16,16,0,0,0,88,48H64A16,16,0,0,0,48,64v8H32A16,16,0,0,0,16,88v32H8a8,8,0,0,0,0,16h8v32a16,16,0,0,0,16,16H48v8a16,16,0,0,0,16,16H88a16,16,0,0,0,16-16V136h48v56a16,16,0,0,0,16,16h24a16,16,0,0,0,16-16v-8h16a16,16,0,0,0,16-16V136h8a8,8,0,0,0,0-16ZM32,168V88H48v80Zm56,24H64V64H88V192Zm104,0H168V64h24V175.82c0,.06,0,.12,0,.18s0,.12,0,.18V192Zm32-24H208V88h16Z',
+checkB:'M232.49,80.49l-128,128a12,12,0,0,1-17,0l-56-56a12,12,0,1,1,17-17L96,183,215.51,63.51a12,12,0,0,1,17,17Z',
+plusB:'M228,128a12,12,0,0,1-12,12H140v76a12,12,0,0,1-24,0V140H40a12,12,0,0,1,0-24h76V40a12,12,0,0,1,24,0v76h76A12,12,0,0,1,228,128Z',
+minusB:'M228,128a12,12,0,0,1-12,12H40a12,12,0,0,1,0-24H216A12,12,0,0,1,228,128Z'};
+class Component extends DCLogic {
+  constructor(p) { super(p); this.state = { today: false, period: 0 }; }
+  renderVals() {
+    const accent = this.props.accent ?? '#F0507F';
+    const s = this.state;
+    const periods = ['Semaine', 'Historique'].map((label, i) => {
+      const sel = i === s.period;
+      return { label, sel: sel ? 'true' : 'false',
+        bg: sel ? '#FFFFFF' : 'transparent',
+        sh: sel ? '0 2px 0 #F3D6E0, inset 0 0 0 2px #FFC9DA' : 'none',
+        fg: sel ? '#3B1730' : '#7A5670',
+        pick: () => this.setState({ period: i }) };
+    });
+    const count = 1 + (s.today ? 1 : 0);
+    const slots = [0, 1, 2].map((i) => i < count
+      ? { bg: '#FFB8CF', border: '0', sh: '0 3px 0 #F094B2', fill: '#3B1730', d: IC.checkB }
+      : { bg: '#FFFFFF', border: '3px dashed #F3C9D7', sh: 'none', fill: '#E2C6D3', d: IC.barbellR });
+    const L = ['Lun', 'Mar', 'Mer', 'Jeu', 'Ven', 'Sam', 'Dim'];
+    const week = L.map((l, i) => {
+      if (i === 0) return { l, bg: '#FFB8CF', ring: 'none', lc: '#3B1730', fill: '#3B1730', d: IC.barbellR };
+      if (i === 1) return { l, bg: s.today ? '#FFB8CF' : '#FFFFFF', ring: 'inset 0 0 0 2.5px #3B1730', lc: '#3B1730', fill: s.today ? '#3B1730' : '#E2C6D3', d: s.today ? IC.barbellR : IC.plusB };
+      return { l, bg: '#FBF4F7', ring: 'none', lc: '#B9A0AF', fill: 'transparent', d: IC.barbellR };
+    });
+    const hist = [3, 3, 2, 3, 3, 3, 3, count];
+    const grid = [];
+    hist.forEach((n, w) => {
+      for (let r = 0; r < 3; r++) {
+        const filled = (2 - r) < n;
+        grid.push({ bg: filled ? (n >= 3 ? '#F27FA5' : '#FFB8CF') : '#FBF4F7', ring: w === 7 ? 'inset 0 0 0 1.5px #3B1730' : 'none' });
+      }
+    });
+    const left = 3 - count;
+    return {
+      ic: IC, periods, count, slots, week, grid,
+      hint: left === 0 ? 'Objectif de la semaine atteint, bravo !' : 'Encore ' + left + ' séance' + (left > 1 ? 's' : '') + ' d’ici dimanche, il te reste 6 jours.',
+      cta: s.today ? 'Séance notée aujourd’hui' : 'Noter une séance aujourd’hui',
+      ctaIcon: s.today ? IC.checkB : IC.plusB,
+      ctaBg: s.today ? '#FFFFFF' : accent,
+      ctaFg: s.today ? '#3B1730' : '#FFFFFF',
+      ctaSh: s.today ? '0 3px 0 #F3D6E0' : '0 4px 0 rgba(59,23,48,0.2)',
+      toggleToday: () => this.setState({ today: !s.today })
+    };
+  }
+}
+</script>
+</body>
+</html>

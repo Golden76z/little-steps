@@ -1,0 +1,13 @@
+{
+  "@@locale": "en",
+  "appTitle": "Little Steps",
+  "tabToday": "Today",
+  "@tabToday": { "description": "Bottom bar tab and Today screen title" },
+  "tabProgress": "Progress",
+  "tabTrophies": "Trophies",
+  "tabProfile": "Profile",
+  "newHabit": "New habit",
+  "@newHabit": { "description": "Accessibility label of the round + button, and title of the creation flow" },
+  "mainNavigation": "Main navigation",
+  "@mainNavigation": { "description": "Accessibility label of the floating bottom bar" }
+}

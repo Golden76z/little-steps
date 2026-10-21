@@ -1,0 +1,126 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<title>Options de l'habitude — pause</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Sour+Gummy:wght@400;500;600&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+a{color:#3B1730}a:hover{color:#000}
+button{font:inherit;cursor:pointer}
+</style>
+</helmet>
+<div style="width: 390px; height: 844px; box-sizing: border-box; position: relative; overflow: hidden; background: #FFF0F4; color: #3B1730; font-family: 'Sour Gummy', system-ui, sans-serif">
+
+  <div aria-hidden="true">
+    <div style="background: #FFFFFF; border-radius: 0 0 32px 32px; padding: 52px 20px 16px">
+      <div style="display: flex; align-items: center; gap: 10px">
+        <span style="width: 40px; height: 40px; border-radius: 50%; background: #FFF0F4"></span>
+        <span style="width: 44px; height: 44px; border-radius: 50%; background: #FFB8CF"></span>
+        <div style="flex: 1"><div style="font-size: 24px; font-weight: 600">Sport</div><div style="font-size: 14px; color: #7A5670">3 fois par semaine · 30 min</div></div>
+        <span style="width: 40px; height: 40px; border-radius: 50%; background: #FFF0F4"></span>
+      </div>
+      <div style="height: 1.5px; background: #F6DCE6; margin: 16px 4px 0"></div>
+      <div style="height: 48px; margin-top: 14px; border-radius: 22px; background: #FFF4F7"></div>
+    </div>
+    <div style="padding: 16px 20px 0">
+      <div style="height: 230px; border-radius: 30px; background: #FFFFFF; box-shadow: 0 4px 0 #F3D6E0"></div>
+      <div style="height: 160px; margin-top: 12px; border-radius: 28px; background: #FFFFFF; box-shadow: 0 3px 0 #F3D6E0"></div>
+    </div>
+  </div>
+
+  <div aria-hidden="true" style="position: absolute; inset: 0; background: rgba(59,23,48,0.38)"></div>
+
+  <section role="dialog" aria-modal="true" aria-labelledby="op-title" style="position: absolute; left: 0; right: 0; bottom: 0; background: #FFFFFF; border-radius: 32px 32px 0 0; padding: 12px 20px 28px; box-shadow: 0 -10px 30px rgba(59,23,48,0.15)">
+    <div aria-hidden="true" style="width: 44px; height: 5px; border-radius: 3px; background: #EBDDE4; margin: 0 auto"></div>
+    <div style="display: flex; align-items: center; gap: 10px; margin-top: 14px">
+      <span style="width: 40px; height: 40px; flex: none; border-radius: 50%; background: #FFB8CF; display: flex; align-items: center; justify-content: center">
+        <svg width="20" height="20" viewBox="0 0 256 256" fill="#3B1730" aria-hidden="true" style="display: block"><path d="{{ic.barbellR}}"/></svg>
+      </span>
+      <h2 id="op-title" style="flex: 1; margin: 0; font-size: 22px; font-weight: 600">Sport</h2>
+      <a href="T5-Frequence.dc.html" aria-label="Fermer" style="width: 40px; height: 40px; border-radius: 50%; background: #FFF0F4; display: flex; align-items: center; justify-content: center; color: #3B1730">
+        <svg width="15" height="15" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" style="display: block"><path d="{{ic.xB}}"/></svg>
+      </a>
+    </div>
+
+    <div style="margin-top: 12px; background: #FFF8FA; border-radius: 24px; padding: 4px 14px">
+      <a href="P2-Reglages.dc.html" style="display: flex; align-items: center; gap: 12px; height: 56px; border-bottom: 1.5px solid #FBEAF0; text-decoration: none; color: #3B1730">
+        <svg width="20" height="20" viewBox="0 0 256 256" fill="#3B1730" aria-hidden="true" style="display: block"><path d="{{ic.pencilR}}"/></svg>
+        <span style="flex: 1; font-size: 16px; font-weight: 500">Modifier l'habitude</span>
+      </a>
+
+      <button onClick="{{togglePause}}" aria-expanded="{{pauseOpen}}" style="width: 100%; display: flex; align-items: center; gap: 12px; height: 56px; padding: 0; border: 0; background: transparent; color: #3B1730; text-align: left">
+        <svg width="20" height="20" viewBox="0 0 256 256" fill="#3B1730" aria-hidden="true" style="display: block"><path d="{{ic.pauseCR}}"/></svg>
+        <span style="flex: 1; font-size: 16px; font-weight: 500">Mettre en pause</span>
+        <span style="font-size: 13px; font-weight: 400; color: #7A5670">vacances, maladie…</span>
+      </button>
+      <sc-if value="{{showPause}}" hint-placeholder-val="{{ true }}">
+        <div style="padding: 0 0 14px">
+          <div role="radiogroup" aria-label="Durée de la pause" style="display: grid; grid-template-columns: repeat(4, minmax(0, 1fr)); background: #FFFFFF; border-radius: 20px; padding: 4px; box-shadow: inset 0 0 0 1.5px #FBEAF0">
+            <sc-for list="{{durations}}" as="d" hint-placeholder-count="4">
+              <button role="radio" aria-checked="{{d.sel}}" onClick="{{d.pick}}" style="height: 38px; border: 0; border-radius: 16px; background: {{d.bg}}; box-shadow: {{d.sh}}; color: {{d.fg}}; font-size: 14px; font-weight: 500">{{d.label}}</button>
+            </sc-for>
+          </div>
+          <p style="margin: 10px 0 0; font-size: 14px; font-weight: 400; line-height: 1.35; color: #5E4A58">Ta série de <strong style="font-weight: 600; color: #3B1730">12 jours</strong> est gelée. Elle reprend le <strong style="font-weight: 600; color: #3B1730">{{until}}</strong>, et aucun rappel ne sera envoyé d'ici là.</p>
+          <button onClick="{{confirm}}" style="width: 100%; margin-top: 12px; height: 50px; border-radius: 25px; border: 0; background: {{pauseBg}}; color: {{pauseFg}}; font-size: 16px; font-weight: 500">{{pauseCta}}</button>
+        </div>
+      </sc-if>
+      <div style="height: 1.5px; background: #FBEAF0"></div>
+
+      <button style="width: 100%; display: flex; align-items: center; gap: 12px; height: 60px; padding: 0; border: 0; border-bottom: 1.5px solid #FBEAF0; background: transparent; color: #3B1730; text-align: left">
+        <svg width="20" height="20" viewBox="0 0 256 256" fill="#3B1730" aria-hidden="true" style="display: block"><path d="{{ic.archiveR}}"/></svg>
+        <span style="flex: 1; display: flex; flex-direction: column">
+          <span style="font-size: 16px; font-weight: 500">Archiver</span>
+          <span style="font-size: 13px; font-weight: 400; color: #7A5670">disparaît de l'accueil, l'historique est gardé</span>
+        </span>
+      </button>
+      <button style="width: 100%; display: flex; align-items: center; gap: 12px; height: 56px; padding: 0; border: 0; background: transparent; color: #B4234F; text-align: left">
+        <svg width="20" height="20" viewBox="0 0 256 256" fill="#B4234F" aria-hidden="true" style="display: block"><path d="{{ic.trashR}}"/></svg>
+        <span style="flex: 1; font-size: 16px; font-weight: 500">Supprimer</span>
+      </button>
+    </div>
+  </section>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"accent":{"editor":"color","default":"#F0507F","options":["#F0507F","#FF8A4C","#9B6BFF","#2FB48A"]},"$preview":{"width":390,"height":844}}'>
+const IC={xB:'M208.49,191.51a12,12,0,0,1-17,17L128,145,64.49,208.49a12,12,0,0,1-17-17L111,128,47.51,64.49a12,12,0,0,1,17-17L128,111l63.51-63.52a12,12,0,0,1,17,17L145,128Z',
+barbellR:'M248,120h-8V88a16,16,0,0,0-16-16H208V64a16,16,0,0,0-16-16H168a16,16,0,0,0-16,16v56H104V64A16,16,0,0,0,88,48H64A16,16,0,0,0,48,64v8H32A16,16,0,0,0,16,88v32H8a8,8,0,0,0,0,16h8v32a16,16,0,0,0,16,16H48v8a16,16,0,0,0,16,16H88a16,16,0,0,0,16-16V136h48v56a16,16,0,0,0,16,16h24a16,16,0,0,0,16-16v-8h16a16,16,0,0,0,16-16V136h8a8,8,0,0,0,0-16ZM32,168V88H48v80Zm56,24H64V64H88V192Zm104,0H168V64h24V175.82c0,.06,0,.12,0,.18s0,.12,0,.18V192Zm32-24H208V88h16Z',
+pencilR:'M227.31,73.37,182.63,28.68a16,16,0,0,0-22.63,0L36.69,152A15.86,15.86,0,0,0,32,163.31V208a16,16,0,0,0,16,16H92.69A15.86,15.86,0,0,0,104,219.31L227.31,96a16,16,0,0,0,0-22.63ZM92.69,208H48V163.31l88-88L180.69,120ZM192,108.68,147.31,64l24-24L216,84.68Z',
+pauseCR:'M128,24A104,104,0,1,0,232,128,104.11,104.11,0,0,0,128,24Zm0,192a88,88,0,1,1,88-88A88.1,88.1,0,0,1,128,216ZM112,96v64a8,8,0,0,1-16,0V96a8,8,0,0,1,16,0Zm48,0v64a8,8,0,0,1-16,0V96a8,8,0,0,1,16,0Z',
+archiveR:'M224,48H32A16,16,0,0,0,16,64V88a16,16,0,0,0,16,16v88a16,16,0,0,0,16,16H208a16,16,0,0,0,16-16V104a16,16,0,0,0,16-16V64A16,16,0,0,0,224,48ZM208,192H48V104H208ZM224,88H32V64H224V88ZM96,136a8,8,0,0,1,8-8h48a8,8,0,0,1,0,16H104A8,8,0,0,1,96,136Z',
+trashR:'M216,48H176V40a24,24,0,0,0-24-24H104A24,24,0,0,0,80,40v8H40a8,8,0,0,0,0,16h8V208a16,16,0,0,0,16,16H192a16,16,0,0,0,16-16V64h8a8,8,0,0,0,0-16ZM96,40a8,8,0,0,1,8-8h48a8,8,0,0,1,8,8v8H96Zm96,168H64V64H192ZM112,104v64a8,8,0,0,1-16,0V104a8,8,0,0,1,16,0Zm48,0v64a8,8,0,0,1-16,0V104a8,8,0,0,1,16,0Z'};
+class Component extends DCLogic {
+  constructor(p) { super(p); this.state = { open: true, dur: 1, done: false }; }
+  renderVals() {
+    const accent = this.props.accent ?? '#F0507F';
+    const s = this.state;
+    const D = [{ label: '1 sem.', until: 'mardi 27 octobre' }, { label: '2 sem.', until: 'mardi 3 novembre' }, { label: '1 mois', until: 'jeudi 20 novembre' }, { label: 'Dates', until: 'jour de ton choix' }];
+    const durations = D.map((d, i) => {
+      const sel = i === s.dur;
+      return { label: d.label, sel: sel ? 'true' : 'false',
+        bg: sel ? '#FFF0F4' : 'transparent',
+        sh: sel ? 'inset 0 0 0 2px #FFC9DA' : 'none',
+        fg: sel ? '#3B1730' : '#7A5670',
+        pick: () => this.setState({ dur: i, done: false }) };
+    });
+    return {
+      accent, ic: IC, durations,
+      showPause: s.open, pauseOpen: s.open ? 'true' : 'false',
+      until: D[s.dur].until,
+      pauseCta: s.done ? 'Pause activée' : 'Mettre en pause',
+      pauseBg: s.done ? '#FFFFFF' : accent,
+      pauseFg: s.done ? '#3B1730' : '#FFFFFF',
+      togglePause: () => this.setState({ open: !s.open }),
+      confirm: () => this.setState({ done: true })
+    };
+  }
+}
+</script>
+</body>
+</html>

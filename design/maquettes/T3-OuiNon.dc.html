@@ -1,0 +1,145 @@
+<!doctype html>
+<html lang="fr">
+<head>
+<meta charset="utf-8">
+<title>Type oui / non — Pas d'écran au lit</title>
+<script src="./support.js"></script>
+</head>
+<body>
+<x-dc>
+<helmet>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link href="https://fonts.googleapis.com/css2?family=Sour+Gummy:wght@400;500;600&amp;display=swap" rel="stylesheet">
+<style>
+body{margin:0}
+a{color:#3B1730}a:hover{color:#000}
+button{font:inherit;cursor:pointer}
+</style>
+</helmet>
+<div style="width: 390px; height: 844px; box-sizing: border-box; position: relative; overflow: hidden; background: #FFF0F4; color: #3B1730; font-family: 'Sour Gummy', system-ui, sans-serif">
+
+  <header style="background: #FFFFFF; border-radius: 0 0 32px 32px; box-shadow: 0 6px 20px rgba(59,23,48,0.06); padding: 52px 20px 16px">
+    <div style="display: flex; align-items: center; gap: 10px">
+      <a href="H2-SemaineBonbon.dc.html" aria-label="Retour" style="width: 40px; height: 40px; flex: none; border-radius: 50%; background: #FFF0F4; display: flex; align-items: center; justify-content: center; color: #3B1730">
+        <svg width="18" height="18" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" style="display: block"><path d="{{ic.caretLB}}"/></svg>
+      </a>
+      <span style="width: 44px; height: 44px; flex: none; border-radius: 50%; background: #FFF09A; display: flex; align-items: center; justify-content: center">
+        <svg width="22" height="22" viewBox="0 0 256 256" fill="#3B1730" aria-hidden="true" style="display: block"><path d="{{ic.moonR}}"/></svg>
+      </span>
+      <div style="flex: 1; min-width: 0">
+        <h1 style="margin: 0; font-size: 24px; font-weight: 600; line-height: 1.1">Pas d'écran au lit</h1>
+        <div style="font-size: 14px; font-weight: 400; color: #7A5670; margin-top: 2px">dès 22:30 · chaque soir</div>
+      </div>
+      <button aria-label="Modifier l'habitude" style="width: 40px; height: 40px; flex: none; padding: 0; border-radius: 50%; border: 0; background: #FFF0F4; display: flex; align-items: center; justify-content: center; color: #3B1730">
+        <svg width="19" height="19" viewBox="0 0 256 256" fill="currentColor" aria-hidden="true" style="display: block"><path d="{{ic.pencilR}}"/></svg>
+      </button>
+    </div>
+    <div aria-hidden="true" style="height: 1.5px; border-radius: 1px; background: #F6DCE6; margin: 16px 4px 0"></div>
+    <div role="tablist" aria-label="Période" style="display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); margin-top: 14px; background: #FFF4F7; border-radius: 22px; padding: 4px">
+      <sc-for list="{{periods}}" as="p" hint-placeholder-count="2">
+        <button role="tab" aria-selected="{{p.sel}}" onClick="{{p.pick}}" style="height: 40px; border: 0; border-radius: 18px; background: {{p.bg}}; box-shadow: {{p.sh}}; color: {{p.fg}}; font-size: 16px; font-weight: 500">{{p.label}}</button>
+      </sc-for>
+    </div>
+  </header>
+
+  <div style="padding: 16px 20px 0">
+    <section style="background: #FFFFFF; border-radius: 32px; padding: 18px 18px 18px 22px; box-shadow: 0 4px 0 #F3D6E0; display: flex; align-items: center; gap: 14px">
+      <div style="flex: 1; min-width: 0">
+        <div style="display: flex; align-items: center; gap: 6px; font-size: 14px; font-weight: 500; color: #7A5670">
+          <svg width="16" height="16" viewBox="0 0 256 256" fill="#FF7A3D" aria-hidden="true" style="display: block"><path d="{{ic.fireF}}"/></svg>
+          Série en cours
+        </div>
+        <div style="font-size: 56px; font-weight: 600; line-height: 1; margin-top: 4px">{{streak}}</div>
+        <div style="font-size: 16px; font-weight: 500">soirs de suite</div>
+        <div style="font-size: 13px; font-weight: 400; color: #7A5670; margin-top: 4px">record : 21 · rappel à 22:15</div>
+      </div>
+      <button onClick="{{toggle}}" aria-pressed="{{pressed}}" style="width: 118px; height: 118px; flex: none; padding: 0; border-radius: 50%; border: {{btnBorder}}; background: {{btnBg}}; box-shadow: {{btnSh}}; display: flex; flex-direction: column; align-items: center; justify-content: center; gap: 4px; color: #3B1730; transition: background 0.2s">
+        <svg width="36" height="36" viewBox="0 0 256 256" fill="{{checkFill}}" aria-hidden="true" style="display: block"><path d="{{ic.checkB}}"/></svg>
+        <span style="font-size: 15px; font-weight: 500; line-height: 1.1; text-align: center">{{btnText}}</span>
+      </button>
+    </section>
+
+    <section style="margin-top: 12px; background: #FFFFFF; border-radius: 28px; padding: 14px 16px; box-shadow: 0 3px 0 #F3D6E0">
+      <div style="display: flex; justify-content: space-between; align-items: baseline">
+        <h2 style="margin: 0; font-size: 18px; font-weight: 600">Octobre</h2>
+        <span style="font-size: 13px; font-weight: 400; color: #7A5670">{{doneCount}} soirs sur 20</span>
+      </div>
+      <div aria-hidden="true" style="display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 1px; margin-top: 10px; text-align: center; font-size: 12px; font-weight: 500; color: #9A7A90">
+        <span>L</span><span>M</span><span>M</span><span>J</span><span>V</span><span>S</span><span>D</span>
+      </div>
+      <div role="img" aria-label="Soirs réussis en octobre" style="display: grid; grid-template-columns: repeat(7, minmax(0, 1fr)); gap: 1px; margin-top: 6px; border-radius: 16px; overflow: hidden">
+        <sc-for list="{{cal}}" as="c" hint-placeholder-count="35">
+          <span style="height: 30px; border-radius: 3px; background: {{c.bg}}; box-shadow: {{c.ring}}; color: {{c.fg}}; font-size: 12px; font-weight: 500; display: flex; align-items: center; justify-content: center; line-height: 1">
+            <sc-if value="{{c.icon}}" hint-placeholder-val="{{ false }}">
+              <svg width="14" height="14" viewBox="0 0 256 256" fill="{{c.iconFill}}" aria-hidden="true" style="display: block"><path d="{{c.iconD}}"/></svg>
+            </sc-if>
+            <sc-if value="{{c.num}}" hint-placeholder-val="{{ true }}">{{c.t}}</sc-if>
+          </span>
+        </sc-for>
+      </div>
+      <div style="display: flex; gap: 14px; margin-top: 12px; font-size: 13px; font-weight: 400; color: #5E4A58">
+        <span style="display: inline-flex; align-items: center; gap: 6px"><span aria-hidden="true" style="width: 12px; height: 12px; border-radius: 4px; background: #FFE27A"></span>Fait</span>
+        <span style="display: inline-flex; align-items: center; gap: 6px"><span aria-hidden="true" style="width: 12px; height: 12px; border-radius: 4px; background: #E3D6FF"></span>Joker</span>
+        <span style="display: inline-flex; align-items: center; gap: 6px"><span aria-hidden="true" style="width: 12px; height: 12px; border-radius: 4px; background: #F6ECF0"></span>Raté</span>
+      </div>
+    </section>
+
+    <section style="margin-top: 12px; background: #E9DDFF; border-radius: 24px; padding: 14px 16px; box-shadow: 0 3px 0 #D3C1F5; display: flex; align-items: center; gap: 12px">
+      <span style="width: 40px; height: 40px; flex: none; border-radius: 50%; background: #FFFFFF; display: flex; align-items: center; justify-content: center">
+        <svg width="20" height="20" viewBox="0 0 256 256" fill="#7A55D6" aria-hidden="true" style="display: block"><path d="{{ic.shieldF}}"/></svg>
+      </span>
+      <span style="flex: 1; font-size: 14px; font-weight: 400; line-height: 1.25">Un soir raté n'efface pas ta série si tu utilises un joker. Il t'en reste <strong style="font-weight: 600">2</strong>.</span>
+    </section>
+  </div>
+</div>
+</x-dc>
+<script type="text/x-dc" data-dc-script data-props='{"accent":{"editor":"color","default":"#F0507F","options":["#F0507F","#FF8A4C","#9B6BFF","#2FB48A"]},"$preview":{"width":390,"height":844}}'>
+const IC={caretLB:'M168.49,199.51a12,12,0,0,1-17,17l-80-80a12,12,0,0,1,0-17l80-80a12,12,0,0,1,17,17L97,128Z',
+pencilR:'M227.31,73.37,182.63,28.68a16,16,0,0,0-22.63,0L36.69,152A15.86,15.86,0,0,0,32,163.31V208a16,16,0,0,0,16,16H92.69A15.86,15.86,0,0,0,104,219.31L227.31,96a16,16,0,0,0,0-22.63ZM92.69,208H48V163.31l88-88L180.69,120ZM192,108.68,147.31,64l24-24L216,84.68Z',
+moonR:'M233.54,142.23a8,8,0,0,0-8-2,88.08,88.08,0,0,1-109.8-109.8,8,8,0,0,0-10-10,104.84,104.84,0,0,0-52.91,37A104,104,0,0,0,136,224a103.09,103.09,0,0,0,62.52-20.88,104.84,104.84,0,0,0,37-52.91A8,8,0,0,0,233.54,142.23ZM188.9,190.34A88,88,0,0,1,65.66,67.11a89,89,0,0,1,31.4-26A106,106,0,0,0,96,56,104.11,104.11,0,0,0,200,160a106,106,0,0,0,14.92-1.06A89,89,0,0,1,188.9,190.34Z',
+checkB:'M232.49,80.49l-128,128a12,12,0,0,1-17,0l-56-56a12,12,0,1,1,17-17L96,183,215.51,63.51a12,12,0,0,1,17,17Z',
+fireF:'M143.38,17.85a8,8,0,0,0-12.63,3.41l-22,60.41L84.59,58.26a8,8,0,0,0-11.93.89C51,87.53,40,116.08,40,144a88,88,0,0,0,176,0C216,84.55,165.21,36,143.38,17.85Zm40.51,135.49a57.6,57.6,0,0,1-46.56,46.55A7.65,7.65,0,0,1,136,200a8,8,0,0,1-1.32-15.89c16.57-2.79,30.63-16.85,33.44-33.45a8,8,0,0,1,15.78,2.68Z',
+shieldF:'M208,40H48A16,16,0,0,0,32,56v56c0,52.72,25.52,84.67,46.93,102.19,23.06,18.86,46,25.26,47,25.53a8,8,0,0,0,4.2,0c1-.27,23.91-6.67,47-25.53C198.48,196.67,224,164.72,224,112V56A16,16,0,0,0,208,40Zm-34.32,69.66-56,56a8,8,0,0,1-11.32,0l-24-24a8,8,0,0,1,11.32-11.32L112,148.69l50.34-50.35a8,8,0,0,1,11.32,11.32Z'};
+class Component extends DCLogic {
+  constructor(p) { super(p); this.state = { done: false, period: 0 }; }
+  renderVals() {
+    const s = this.state;
+    const periods = ['Mois', 'Année'].map((label, i) => {
+      const sel = i === s.period;
+      return { label, sel: sel ? 'true' : 'false',
+        bg: sel ? '#FFFFFF' : 'transparent',
+        sh: sel ? '0 2px 0 #F3D6E0, inset 0 0 0 2px #FFC9DA' : 'none',
+        fg: sel ? '#3B1730' : '#7A5670',
+        pick: () => this.setState({ period: i }) };
+    });
+    const hist = { 1:'d',2:'d',3:'m',4:'d',5:'d',6:'d',7:'m',8:'d',9:'d',10:'d',11:'d',12:'d',13:'j',14:'d',15:'d',16:'d',17:'d',18:'j',19:'d' };
+    const cal = [];
+    const blank = { t: '', bg: '#FBF4F7', ring: 'none', fg: 'transparent', icon: false, num: true, iconD: '', iconFill: '' };
+    for (let i = 0; i < 3; i++) cal.push(blank);
+    let doneCount = 0;
+    for (let d = 1; d <= 31; d++) {
+      const st = d < 20 ? hist[d] : (d === 20 ? (s.done ? 'd' : 't') : 'f');
+      if (st === 'd') doneCount++;
+      if (st === 'd') cal.push({ t: d, bg: '#FFE27A', ring: d === 20 ? 'inset 0 0 0 2.5px #3B1730' : 'none', fg: '#3B1730', icon: true, num: false, iconD: IC.checkB, iconFill: '#3B1730' });
+      else if (st === 'j') cal.push({ t: d, bg: '#E3D6FF', ring: 'none', fg: '#3B1730', icon: true, num: false, iconD: IC.shieldF, iconFill: '#7A55D6' });
+      else if (st === 'm') cal.push({ t: d, bg: '#F6ECF0', ring: 'none', fg: '#9A7A90', icon: false, num: true, iconD: '', iconFill: '' });
+      else if (st === 't') cal.push({ t: d, bg: '#FFFFFF', ring: 'inset 0 0 0 2.5px #3B1730', fg: '#3B1730', icon: false, num: true, iconD: '', iconFill: '' });
+      else cal.push({ t: d, bg: '#FBF4F7', ring: 'none', fg: '#B9A0AF', icon: false, num: true, iconD: '', iconFill: '' });
+    }
+    cal.push(blank);
+    return {
+      ic: IC, periods, cal, doneCount,
+      streak: s.done ? 13 : 12,
+      pressed: s.done ? 'true' : 'false',
+      btnBg: s.done ? '#FFE27A' : '#FFFFFF',
+      btnBorder: s.done ? '0' : '3px dashed #F3C9D7',
+      btnSh: s.done ? '0 5px 0 #E8C930' : 'none',
+      checkFill: s.done ? '#3B1730' : '#E2C6D3',
+      btnText: s.done ? 'C’est fait !' : 'Je l’ai fait',
+      toggle: () => this.setState({ done: !s.done })
+    };
+  }
+}
+</script>
+</body>
+</html>
