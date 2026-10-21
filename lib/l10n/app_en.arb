@@ -968,5 +968,251 @@
   },
   "okay": "OK",
   "yesterdayShort": "Yest.",
-  "todayShort": "Today"
+  "todayShort": "Today",
+  "previousPeriod": "Previous period",
+  "nextPeriod": "Next period",
+  "pillsOf": "{done} pills of {total}",
+  "@pillsOf": {
+    "placeholders": {
+      "done": {
+        "type": "String"
+      },
+      "total": {
+        "type": "String"
+      }
+    }
+  },
+  "vsLastWeek": "{delta} vs last week",
+  "@vsLastWeek": {
+    "placeholders": {
+      "delta": {
+        "type": "String"
+      }
+    }
+  },
+  "vsLastMonth": "{delta} vs last month",
+  "@vsLastMonth": {
+    "placeholders": {
+      "delta": {
+        "type": "String"
+      }
+    }
+  },
+  "vsLastYear": "{delta} vs last year",
+  "@vsLastYear": {
+    "placeholders": {
+      "delta": {
+        "type": "String"
+      }
+    }
+  },
+  "byHabit": "By habit",
+  "daysSucceeded": "days done",
+  "rateA11y": "Rate per period: {list}",
+  "@rateA11y": {
+    "placeholders": {
+      "list": {
+        "type": "String"
+      }
+    }
+  },
+  "xpOf": "{xp} / {next} XP",
+  "@xpOf": {
+    "placeholders": {
+      "xp": {
+        "type": "String"
+      },
+      "next": {
+        "type": "String"
+      }
+    }
+  },
+  "categoryLabel": "Category",
+  "badgesTab": "Badges",
+  "challengesTab": "Challenges",
+  "jokersLabel": "streak jokers",
+  "bestStreakLabel": "best streak",
+  "daysShort": "{count} d",
+  "@daysShort": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "countOf": "{count} of {total}",
+  "@countOf": {
+    "placeholders": {
+      "count": {
+        "type": "String"
+      },
+      "total": {
+        "type": "String"
+      }
+    }
+  },
+  "badgeFirstStep": "First step",
+  "badgeStreak7": "7 days",
+  "badgeEarlyBird": "Early bird",
+  "badgeBookworm": "Bookworm",
+  "badgeStreak30": "30 days",
+  "badgeZen": "Total zen",
+  "badgePerfectDay": "Perfect day",
+  "badgePerfectWeek": "Perfect week",
+  "badgeStreak100": "100 days",
+  "badgeNightOwl": "Night owl",
+  "badgeHydrated": "Hydrated",
+  "badgeRescue": "Rescue",
+  "badgeEarned": "{name}, earned",
+  "@badgeEarned": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "badgeLocked": "{name}, locked",
+  "@badgeLocked": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "weeklyChallenge": "Challenge of the week",
+  "xpReward": "+{xp} XP",
+  "@xpReward": {
+    "placeholders": {
+      "xp": {
+        "type": "String"
+      }
+    }
+  },
+  "challengeSevenDays": "{name} 7 days in a row",
+  "@challengeSevenDays": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "challengeGoalFive": "{goal}, 5 days this week",
+  "@challengeGoalFive": {
+    "placeholders": {
+      "goal": {
+        "type": "String"
+      }
+    }
+  },
+  "challengeTimes": "{name} {count} times this week",
+  "@challengeTimes": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      },
+      "count": {
+        "type": "String"
+      }
+    }
+  },
+  "challengePerfectWeek": "A perfect week",
+  "challengeDaysLeft": "{done} days of {target} · {left, plural, one{1 day left} other{{left} days left}}",
+  "@challengeDaysLeft": {
+    "placeholders": {
+      "done": {
+        "type": "String"
+      },
+      "target": {
+        "type": "String"
+      },
+      "left": {
+        "type": "int"
+      }
+    }
+  },
+  "challengeDays": "{done} days of {target}",
+  "@challengeDays": {
+    "placeholders": {
+      "done": {
+        "type": "String"
+      },
+      "target": {
+        "type": "String"
+      }
+    }
+  },
+  "challengeSessions": "{count, plural, one{{done} session of {target}} other{{done} sessions of {target}}}",
+  "@challengeSessions": {
+    "placeholders": {
+      "done": {
+        "type": "String"
+      },
+      "target": {
+        "type": "String"
+      },
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "challengePerfectDays": "{count, plural, one{{done} perfect day of {target}} other{{done} perfect days of {target}}}",
+  "@challengePerfectDays": {
+    "placeholders": {
+      "done": {
+        "type": "String"
+      },
+      "target": {
+        "type": "String"
+      },
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "challengeDone": "Completed!",
+  "yourName": "Your first name",
+  "memberSince": "Member since {date}",
+  "@memberSince": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "settingsLabel": "Settings",
+  "statSeries": "streak",
+  "pillsFilled": "pills filled",
+  "premiumCardTitle": "Go Premium",
+  "premiumCardBody": "Unlimited stats, themes and export",
+  "tryPremium": "Try",
+  "noReminders": "None",
+  "rowTheme": "Theme",
+  "themeSorbet": "Sorbet",
+  "rowDarkMode": "Dark mode",
+  "soon": "Soon",
+  "rowJokers": "Streak jokers",
+  "jokersLeft": "{count, plural, one{1 left} other{{count} left}}",
+  "@jokersLeft": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "rowExport": "Export my data",
+  "csv": "CSV",
+  "rowDayStart": "Day starts at",
+  "dayStartHint": "Until this hour, the night still counts for the day before.",
+  "noReminder": "No reminder",
+  "ratio": "{a} / {b}",
+  "@ratio": {
+    "placeholders": {
+      "a": {
+        "type": "String"
+      },
+      "b": {
+        "type": "String"
+      }
+    }
+  }
 }

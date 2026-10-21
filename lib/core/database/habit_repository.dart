@@ -150,6 +150,10 @@ class HabitRepository {
     _db.settings,
   )..where((s) => s.key.equals(key))).getSingleOrNull())?.value;
 
+  Stream<String?> watchSetting(String key) => (_db.select(
+    _db.settings,
+  )..where((s) => s.key.equals(key))).watchSingleOrNull().map((r) => r?.value);
+
   Future<void> setSetting(String key, String value) => _db
       .into(_db.settings)
       .insertOnConflictUpdate(SettingsCompanion.insert(key: key, value: value));

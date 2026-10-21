@@ -119,11 +119,35 @@ void main() {
     expect(fmt('en').weekdayLetters(DateTime.sunday).first, 'S');
   });
 
+  test('date ranges for the progress header', () {
+    expect(
+      fmt('fr').dayRange(Day(2026, 10, 14), Day(2026, 10, 20)),
+      '14 – 20 octobre',
+    );
+    expect(
+      fmt('fr').dayRange(Day(2026, 9, 28), Day(2026, 10, 4)),
+      '28 sept. – 4 oct.',
+    );
+    expect(
+      fmt('en').dayRange(Day(2026, 10, 14), Day(2026, 10, 20)),
+      'October 14 – 20',
+    );
+    expect(fmt('fr').monthYear(Day(2026, 8, 3)), 'août 2026');
+  });
+
   test('long date and short weekday follow the locale', () {
     expect(fmt('fr').longDate(Day(2026, 10, 27)), 'mardi 27 octobre');
     expect(fmt('en').longDate(Day(2026, 10, 27)), 'Tuesday, October 27');
     expect(fmt('fr').weekdayShort(Day(2026, 10, 19)), 'Lun');
     expect(fmt('en').weekdayShort(Day(2026, 10, 19)), 'Mon');
     expect(fmt('fr').month(Day(2026, 10, 19)), 'octobre');
+  });
+
+  test('French plurals print the real count for 0', () {
+    final l10n = lookupAppLocalizations(const Locale('fr'));
+    expect(l10n.jokersLeft(0), '0 restant');
+    expect(l10n.goalMetDays(0), 'objectif atteint 0 jour');
+    expect(l10n.linesCount(0), '0 ligne');
+    expect(l10n.challengeDaysLeft('7', '7', 0), '7 jours sur 7 · reste 0 jour');
   });
 }

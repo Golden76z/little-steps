@@ -640,7 +640,7 @@ class AppLocalizationsFr extends AppLocalizations {
       count,
       locale: localeName,
       other: '$count jours actifs',
-      one: '1 jour actif',
+      one: '$count jour actif',
     );
     return '$_temp0 · repos le $days. Ces jours-là ne comptent pas dans la série.';
   }
@@ -767,7 +767,7 @@ class AppLocalizationsFr extends AppLocalizations {
       count,
       locale: localeName,
       other: 'objectif atteint $count jours',
-      one: 'objectif atteint 1 jour',
+      one: 'objectif atteint $count jour',
     );
     return '$_temp0';
   }
@@ -1019,7 +1019,7 @@ class AppLocalizationsFr extends AppLocalizations {
       count,
       locale: localeName,
       other: 'Encore $count lignes',
-      one: 'Encore 1 ligne',
+      one: 'Encore $count ligne',
     );
     return '$_temp0';
   }
@@ -1030,7 +1030,7 @@ class AppLocalizationsFr extends AppLocalizations {
       count,
       locale: localeName,
       other: '$count lignes',
-      one: '1 ligne',
+      one: '$count ligne',
     );
     return '$_temp0';
   }
@@ -1052,13 +1052,13 @@ class AppLocalizationsFr extends AppLocalizations {
       count,
       locale: localeName,
       other: 'Encore $count séances',
-      one: 'Encore 1 séance',
+      one: 'Encore $count séance',
     );
     String _temp1 = intl.Intl.pluralLogic(
       days,
       locale: localeName,
       other: 'il te reste $days jours',
-      one: 'il te reste 1 jour',
+      one: 'il te reste $days jour',
     );
     return '$_temp0 d’ici $lastDay, $_temp1.';
   }
@@ -1106,7 +1106,7 @@ class AppLocalizationsFr extends AppLocalizations {
       count,
       locale: localeName,
       other: 'Utiliser un joker · $count restants',
-      one: 'Utiliser un joker · 1 restant',
+      one: 'Utiliser un joker · $count restant',
     );
     return '$_temp0';
   }
@@ -1126,7 +1126,7 @@ class AppLocalizationsFr extends AppLocalizations {
       jokers,
       locale: localeName,
       other: 'Il te reste $jokers jokers.',
-      one: 'Il te reste 1 joker.',
+      one: 'Il te reste $jokers joker.',
       zero: 'Il ne te reste plus de joker.',
     );
     return 'Toujours $streak de suite. $_temp0';
@@ -1151,4 +1151,260 @@ class AppLocalizationsFr extends AppLocalizations {
 
   @override
   String get todayShort => 'Auj.';
+
+  @override
+  String get previousPeriod => 'Période précédente';
+
+  @override
+  String get nextPeriod => 'Période suivante';
+
+  @override
+  String pillsOf(String done, String total) {
+    return '$done pilules sur $total';
+  }
+
+  @override
+  String vsLastWeek(String delta) {
+    return '$delta vs sem. dernière';
+  }
+
+  @override
+  String vsLastMonth(String delta) {
+    return '$delta vs mois dernier';
+  }
+
+  @override
+  String vsLastYear(String delta) {
+    return '$delta vs an dernier';
+  }
+
+  @override
+  String get byHabit => 'Par habitude';
+
+  @override
+  String get daysSucceeded => 'jours réussis';
+
+  @override
+  String rateA11y(String list) {
+    return 'Taux par période : $list';
+  }
+
+  @override
+  String xpOf(String xp, String next) {
+    return '$xp / $next XP';
+  }
+
+  @override
+  String get categoryLabel => 'Catégorie';
+
+  @override
+  String get badgesTab => 'Badges';
+
+  @override
+  String get challengesTab => 'Défis';
+
+  @override
+  String get jokersLabel => 'jokers de série';
+
+  @override
+  String get bestStreakLabel => 'meilleure série';
+
+  @override
+  String daysShort(String count) {
+    return '$count j';
+  }
+
+  @override
+  String countOf(String count, String total) {
+    return '$count sur $total';
+  }
+
+  @override
+  String get badgeFirstStep => 'Premier pas';
+
+  @override
+  String get badgeStreak7 => '7 jours';
+
+  @override
+  String get badgeEarlyBird => 'Lève-tôt';
+
+  @override
+  String get badgeBookworm => 'Rat de biblio';
+
+  @override
+  String get badgeStreak30 => '30 jours';
+
+  @override
+  String get badgeZen => 'Zen absolu';
+
+  @override
+  String get badgePerfectDay => 'Journée parfaite';
+
+  @override
+  String get badgePerfectWeek => 'Semaine parfaite';
+
+  @override
+  String get badgeStreak100 => '100 jours';
+
+  @override
+  String get badgeNightOwl => 'Oiseau de nuit';
+
+  @override
+  String get badgeHydrated => 'Hydraté';
+
+  @override
+  String get badgeRescue => 'Sauvetage';
+
+  @override
+  String badgeEarned(String name) {
+    return '$name, obtenu';
+  }
+
+  @override
+  String badgeLocked(String name) {
+    return '$name, verrouillé';
+  }
+
+  @override
+  String get weeklyChallenge => 'Défi de la semaine';
+
+  @override
+  String xpReward(String xp) {
+    return '+$xp XP';
+  }
+
+  @override
+  String challengeSevenDays(String name) {
+    return '$name 7 jours d’affilée';
+  }
+
+  @override
+  String challengeGoalFive(String goal) {
+    return '$goal, 5 jours cette semaine';
+  }
+
+  @override
+  String challengeTimes(String name, String count) {
+    return '$name $count fois cette semaine';
+  }
+
+  @override
+  String get challengePerfectWeek => 'Une semaine parfaite';
+
+  @override
+  String challengeDaysLeft(String done, String target, int left) {
+    String _temp0 = intl.Intl.pluralLogic(
+      left,
+      locale: localeName,
+      other: 'reste $left jours',
+      one: 'reste $left jour',
+    );
+    return '$done jours sur $target · $_temp0';
+  }
+
+  @override
+  String challengeDays(String done, String target) {
+    return '$done jours sur $target';
+  }
+
+  @override
+  String challengeSessions(String done, String target, int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$done séances sur $target',
+      one: '$done séance sur $target',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String challengePerfectDays(String done, String target, int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$done journées parfaites sur $target',
+      one: '$done journée parfaite sur $target',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get challengeDone => 'Réussi !';
+
+  @override
+  String get yourName => 'Ton prénom';
+
+  @override
+  String memberSince(String date) {
+    return 'Membre depuis $date';
+  }
+
+  @override
+  String get settingsLabel => 'Réglages';
+
+  @override
+  String get statSeries => 'série';
+
+  @override
+  String get pillsFilled => 'pilules remplies';
+
+  @override
+  String get premiumCardTitle => 'Passe à Premium';
+
+  @override
+  String get premiumCardBody => 'Stats illimitées, thèmes et export';
+
+  @override
+  String get tryPremium => 'Essayer';
+
+  @override
+  String get noReminders => 'Aucun';
+
+  @override
+  String get rowTheme => 'Thème';
+
+  @override
+  String get themeSorbet => 'Sorbet';
+
+  @override
+  String get rowDarkMode => 'Mode sombre';
+
+  @override
+  String get soon => 'Bientôt';
+
+  @override
+  String get rowJokers => 'Jokers de série';
+
+  @override
+  String jokersLeft(int count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count restants',
+      one: '$count restant',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get rowExport => 'Exporter mes données';
+
+  @override
+  String get csv => 'CSV';
+
+  @override
+  String get rowDayStart => 'Début de la journée';
+
+  @override
+  String get dayStartHint =>
+      'Jusqu’à cette heure, la nuit compte encore pour la veille.';
+
+  @override
+  String get noReminder => 'Aucun rappel';
+
+  @override
+  String ratio(String a, String b) {
+    return '$a / $b';
+  }
 }

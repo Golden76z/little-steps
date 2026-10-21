@@ -40,3 +40,8 @@ final historyProvider = FutureProvider<History>(
     jokerDays: await ref.watch(_jokerDaysProvider.future),
   ),
 );
+
+/// One stored preference, null until set.
+final settingProvider = StreamProvider.family<String?, String>(
+  (ref, key) => ref.watch(habitRepositoryProvider).watchSetting(key),
+);

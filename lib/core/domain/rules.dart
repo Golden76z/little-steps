@@ -34,7 +34,7 @@ final class History {
     return due.every((h) => isDone(h, d));
   }
 
-  Day? get _start => habits.isEmpty
+  Day? get firstDay => habits.isEmpty
       ? null
       : habits.map((h) => h.createdOn).reduce((a, b) => a < b ? a : b);
 }
@@ -146,7 +146,7 @@ Streak habitStreak(
 
 /// Perfect days in a row: the global flame.
 Streak globalStreak(History history, Day today) {
-  final start = history._start;
+  final start = history.firstDay;
   if (start == null) return const Streak(current: 0, best: 0);
   return _fold(
     _days(start, today).map((d) {
@@ -162,7 +162,7 @@ Streak globalStreak(History history, Day today) {
 }
 
 int totalXp(History history, Day today) {
-  final start = history._start;
+  final start = history.firstDay;
   if (start == null) return 0;
   var xp = 0;
   for (final d in _days(start, today)) {
@@ -190,7 +190,7 @@ int _levelCost(int level) => 50 * (level + 3);
 /// Jokers in reserve: one earned on every 7th perfect day, at most 2 held;
 /// one spent per joker day. Replayed day by day so the cap applies in order.
 int jokerBalance(History history, Day today) {
-  final start = history._start;
+  final start = history.firstDay;
   if (start == null) return 0;
   var balance = 0, perfect = 0;
   for (final d in _days(start, today)) {

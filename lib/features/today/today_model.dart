@@ -1,5 +1,6 @@
 import '../../core/domain/day.dart';
 import '../../core/domain/habit.dart';
+import '../../core/domain/rewards.dart';
 import '../../core/domain/rules.dart';
 
 /// One habit as shown on Today for the selected day.
@@ -95,6 +96,6 @@ TodayData buildToday({
         if (history.habits.any((h) => history.valueOf(h.id, d) > 0)) d,
     },
     streak: globalStreak(history, today),
-    level: levelFor(totalXp(history, today)),
+    level: levelFor(levelXp(history, today)),
   );
 }

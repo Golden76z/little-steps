@@ -1753,6 +1753,384 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Today'**
   String get todayShort;
+
+  /// No description provided for @previousPeriod.
+  ///
+  /// In en, this message translates to:
+  /// **'Previous period'**
+  String get previousPeriod;
+
+  /// No description provided for @nextPeriod.
+  ///
+  /// In en, this message translates to:
+  /// **'Next period'**
+  String get nextPeriod;
+
+  /// No description provided for @pillsOf.
+  ///
+  /// In en, this message translates to:
+  /// **'{done} pills of {total}'**
+  String pillsOf(String done, String total);
+
+  /// No description provided for @vsLastWeek.
+  ///
+  /// In en, this message translates to:
+  /// **'{delta} vs last week'**
+  String vsLastWeek(String delta);
+
+  /// No description provided for @vsLastMonth.
+  ///
+  /// In en, this message translates to:
+  /// **'{delta} vs last month'**
+  String vsLastMonth(String delta);
+
+  /// No description provided for @vsLastYear.
+  ///
+  /// In en, this message translates to:
+  /// **'{delta} vs last year'**
+  String vsLastYear(String delta);
+
+  /// No description provided for @byHabit.
+  ///
+  /// In en, this message translates to:
+  /// **'By habit'**
+  String get byHabit;
+
+  /// No description provided for @daysSucceeded.
+  ///
+  /// In en, this message translates to:
+  /// **'days done'**
+  String get daysSucceeded;
+
+  /// No description provided for @rateA11y.
+  ///
+  /// In en, this message translates to:
+  /// **'Rate per period: {list}'**
+  String rateA11y(String list);
+
+  /// No description provided for @xpOf.
+  ///
+  /// In en, this message translates to:
+  /// **'{xp} / {next} XP'**
+  String xpOf(String xp, String next);
+
+  /// No description provided for @categoryLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Category'**
+  String get categoryLabel;
+
+  /// No description provided for @badgesTab.
+  ///
+  /// In en, this message translates to:
+  /// **'Badges'**
+  String get badgesTab;
+
+  /// No description provided for @challengesTab.
+  ///
+  /// In en, this message translates to:
+  /// **'Challenges'**
+  String get challengesTab;
+
+  /// No description provided for @jokersLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'streak jokers'**
+  String get jokersLabel;
+
+  /// No description provided for @bestStreakLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'best streak'**
+  String get bestStreakLabel;
+
+  /// No description provided for @daysShort.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} d'**
+  String daysShort(String count);
+
+  /// No description provided for @countOf.
+  ///
+  /// In en, this message translates to:
+  /// **'{count} of {total}'**
+  String countOf(String count, String total);
+
+  /// No description provided for @badgeFirstStep.
+  ///
+  /// In en, this message translates to:
+  /// **'First step'**
+  String get badgeFirstStep;
+
+  /// No description provided for @badgeStreak7.
+  ///
+  /// In en, this message translates to:
+  /// **'7 days'**
+  String get badgeStreak7;
+
+  /// No description provided for @badgeEarlyBird.
+  ///
+  /// In en, this message translates to:
+  /// **'Early bird'**
+  String get badgeEarlyBird;
+
+  /// No description provided for @badgeBookworm.
+  ///
+  /// In en, this message translates to:
+  /// **'Bookworm'**
+  String get badgeBookworm;
+
+  /// No description provided for @badgeStreak30.
+  ///
+  /// In en, this message translates to:
+  /// **'30 days'**
+  String get badgeStreak30;
+
+  /// No description provided for @badgeZen.
+  ///
+  /// In en, this message translates to:
+  /// **'Total zen'**
+  String get badgeZen;
+
+  /// No description provided for @badgePerfectDay.
+  ///
+  /// In en, this message translates to:
+  /// **'Perfect day'**
+  String get badgePerfectDay;
+
+  /// No description provided for @badgePerfectWeek.
+  ///
+  /// In en, this message translates to:
+  /// **'Perfect week'**
+  String get badgePerfectWeek;
+
+  /// No description provided for @badgeStreak100.
+  ///
+  /// In en, this message translates to:
+  /// **'100 days'**
+  String get badgeStreak100;
+
+  /// No description provided for @badgeNightOwl.
+  ///
+  /// In en, this message translates to:
+  /// **'Night owl'**
+  String get badgeNightOwl;
+
+  /// No description provided for @badgeHydrated.
+  ///
+  /// In en, this message translates to:
+  /// **'Hydrated'**
+  String get badgeHydrated;
+
+  /// No description provided for @badgeRescue.
+  ///
+  /// In en, this message translates to:
+  /// **'Rescue'**
+  String get badgeRescue;
+
+  /// No description provided for @badgeEarned.
+  ///
+  /// In en, this message translates to:
+  /// **'{name}, earned'**
+  String badgeEarned(String name);
+
+  /// No description provided for @badgeLocked.
+  ///
+  /// In en, this message translates to:
+  /// **'{name}, locked'**
+  String badgeLocked(String name);
+
+  /// No description provided for @weeklyChallenge.
+  ///
+  /// In en, this message translates to:
+  /// **'Challenge of the week'**
+  String get weeklyChallenge;
+
+  /// No description provided for @xpReward.
+  ///
+  /// In en, this message translates to:
+  /// **'+{xp} XP'**
+  String xpReward(String xp);
+
+  /// No description provided for @challengeSevenDays.
+  ///
+  /// In en, this message translates to:
+  /// **'{name} 7 days in a row'**
+  String challengeSevenDays(String name);
+
+  /// No description provided for @challengeGoalFive.
+  ///
+  /// In en, this message translates to:
+  /// **'{goal}, 5 days this week'**
+  String challengeGoalFive(String goal);
+
+  /// No description provided for @challengeTimes.
+  ///
+  /// In en, this message translates to:
+  /// **'{name} {count} times this week'**
+  String challengeTimes(String name, String count);
+
+  /// No description provided for @challengePerfectWeek.
+  ///
+  /// In en, this message translates to:
+  /// **'A perfect week'**
+  String get challengePerfectWeek;
+
+  /// No description provided for @challengeDaysLeft.
+  ///
+  /// In en, this message translates to:
+  /// **'{done} days of {target} · {left, plural, one{1 day left} other{{left} days left}}'**
+  String challengeDaysLeft(String done, String target, int left);
+
+  /// No description provided for @challengeDays.
+  ///
+  /// In en, this message translates to:
+  /// **'{done} days of {target}'**
+  String challengeDays(String done, String target);
+
+  /// No description provided for @challengeSessions.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, one{{done} session of {target}} other{{done} sessions of {target}}}'**
+  String challengeSessions(String done, String target, int count);
+
+  /// No description provided for @challengePerfectDays.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, one{{done} perfect day of {target}} other{{done} perfect days of {target}}}'**
+  String challengePerfectDays(String done, String target, int count);
+
+  /// No description provided for @challengeDone.
+  ///
+  /// In en, this message translates to:
+  /// **'Completed!'**
+  String get challengeDone;
+
+  /// No description provided for @yourName.
+  ///
+  /// In en, this message translates to:
+  /// **'Your first name'**
+  String get yourName;
+
+  /// No description provided for @memberSince.
+  ///
+  /// In en, this message translates to:
+  /// **'Member since {date}'**
+  String memberSince(String date);
+
+  /// No description provided for @settingsLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Settings'**
+  String get settingsLabel;
+
+  /// No description provided for @statSeries.
+  ///
+  /// In en, this message translates to:
+  /// **'streak'**
+  String get statSeries;
+
+  /// No description provided for @pillsFilled.
+  ///
+  /// In en, this message translates to:
+  /// **'pills filled'**
+  String get pillsFilled;
+
+  /// No description provided for @premiumCardTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Go Premium'**
+  String get premiumCardTitle;
+
+  /// No description provided for @premiumCardBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Unlimited stats, themes and export'**
+  String get premiumCardBody;
+
+  /// No description provided for @tryPremium.
+  ///
+  /// In en, this message translates to:
+  /// **'Try'**
+  String get tryPremium;
+
+  /// No description provided for @noReminders.
+  ///
+  /// In en, this message translates to:
+  /// **'None'**
+  String get noReminders;
+
+  /// No description provided for @rowTheme.
+  ///
+  /// In en, this message translates to:
+  /// **'Theme'**
+  String get rowTheme;
+
+  /// No description provided for @themeSorbet.
+  ///
+  /// In en, this message translates to:
+  /// **'Sorbet'**
+  String get themeSorbet;
+
+  /// No description provided for @rowDarkMode.
+  ///
+  /// In en, this message translates to:
+  /// **'Dark mode'**
+  String get rowDarkMode;
+
+  /// No description provided for @soon.
+  ///
+  /// In en, this message translates to:
+  /// **'Soon'**
+  String get soon;
+
+  /// No description provided for @rowJokers.
+  ///
+  /// In en, this message translates to:
+  /// **'Streak jokers'**
+  String get rowJokers;
+
+  /// No description provided for @jokersLeft.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, one{1 left} other{{count} left}}'**
+  String jokersLeft(int count);
+
+  /// No description provided for @rowExport.
+  ///
+  /// In en, this message translates to:
+  /// **'Export my data'**
+  String get rowExport;
+
+  /// No description provided for @csv.
+  ///
+  /// In en, this message translates to:
+  /// **'CSV'**
+  String get csv;
+
+  /// No description provided for @rowDayStart.
+  ///
+  /// In en, this message translates to:
+  /// **'Day starts at'**
+  String get rowDayStart;
+
+  /// No description provided for @dayStartHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Until this hour, the night still counts for the day before.'**
+  String get dayStartHint;
+
+  /// No description provided for @noReminder.
+  ///
+  /// In en, this message translates to:
+  /// **'No reminder'**
+  String get noReminder;
+
+  /// No description provided for @ratio.
+  ///
+  /// In en, this message translates to:
+  /// **'{a} / {b}'**
+  String ratio(String a, String b);
 }
 
 class _AppLocalizationsDelegate

@@ -197,6 +197,13 @@ void main() {
     expect(await repo.getSetting('jokerPromptDay'), '20001');
   });
 
+  test('a setting can be watched', () async {
+    final stream = repo.watchSetting('rolloverHour');
+    expectLater(stream, emitsInOrder([null, '5']));
+    await pumpEventQueue();
+    await repo.setSetting('rolloverHour', '5');
+  });
+
   test('joker days are recorded once', () async {
     await repo.useJoker(day);
     await repo.useJoker(day);

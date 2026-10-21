@@ -2,12 +2,19 @@ import 'dart:async';
 
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../database/providers.dart';
 import '../domain/day.dart';
 
 final clockProvider = Provider<DateTime Function()>((_) => DateTime.now);
 
-// ponytail: fixed at 3 until the Profile settings (step 6) store it.
-final rolloverHourProvider = Provider<int>((_) => 3);
+/// Hour the logical day starts (0–6), set in Profile; 3 am by default.
+final rolloverHourProvider = Provider<int>(
+  (ref) =>
+      int.tryParse(ref.watch(settingProvider(rolloverHourKey)).value ?? '') ??
+      3,
+);
+
+const rolloverHourKey = 'rolloverHour';
 
 /// The current logical day; rebuilds itself at the next rollover.
 final todayProvider = NotifierProvider<TodayNotifier, Day>(TodayNotifier.new);

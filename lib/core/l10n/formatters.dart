@@ -139,6 +139,24 @@ class HabitFormat {
     return s[0].toUpperCase() + s.substring(1);
   }
 
+  /// "14 – 20 octobre", "28 sept. – 4 oct.", "October 14 – 20".
+  String dayRange(Day a, Day b) {
+    final from = a.toLocalDate(), to = b.toLocalDate();
+    if (a.month == b.month && a.year == b.year) {
+      final first = DateFormat.MMMMd(locale).format(from);
+      final last = DateFormat.MMMMd(locale).format(to);
+      // Keep the month once, on the side the locale puts it.
+      final monthFirst = first.startsWith(RegExp(r'\D'));
+      return monthFirst
+          ? '$first – ${DateFormat.d(locale).format(to)}'
+          : '${DateFormat.d(locale).format(from)} – $last';
+    }
+    return '${DateFormat.MMMd(locale).format(from)} – ${DateFormat.MMMd(locale).format(to)}';
+  }
+
+  /// "août 2026" / "August 2026".
+  String monthYear(Day d) => DateFormat.yMMMM(locale).format(d.toLocalDate());
+
   String dayOfMonth(Day d) => DateFormat.d(locale).format(d.toLocalDate());
 
   String month(Day d) => DateFormat.MMMM(locale).format(d.toLocalDate());

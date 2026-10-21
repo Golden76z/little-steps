@@ -56,6 +56,7 @@ class SorbetColors extends ThemeExtension<SorbetColors> {
     required this.joker,
     required this.jokerShadow,
     required this.todayOutline,
+    required this.trackOnColor,
     required this.habit,
     required this.tones,
   });
@@ -155,6 +156,9 @@ class SorbetColors extends ThemeExtension<SorbetColors> {
 
   /// Outline of today's empty cell in the joker strip.
   final Color todayOutline;
+
+  /// Progress track on a coloured card (white 55 %).
+  final Color trackOnColor;
   final Map<HabitColor, Color> habit;
   final Map<HabitColor, HabitTones> tones;
 
@@ -204,6 +208,7 @@ class SorbetColors extends ThemeExtension<SorbetColors> {
     joker: Color(0xFF7A55D6),
     jokerShadow: Color(0xFF5E3FB3),
     todayOutline: Color(0xFFF3E2EA),
+    trackOnColor: Color(0x8CFFFFFF),
     habit: {
       HabitColor.lilac: Color(0xFFDCC8FF),
       HabitColor.lavender: Color(0xFFC9D0FF),
@@ -268,6 +273,7 @@ class SorbetColors extends ThemeExtension<SorbetColors> {
     Color? joker,
     Color? jokerShadow,
     Color? todayOutline,
+    Color? trackOnColor,
     Map<HabitColor, Color>? habit,
     Map<HabitColor, HabitTones>? tones,
   }) {
@@ -317,6 +323,7 @@ class SorbetColors extends ThemeExtension<SorbetColors> {
       joker: joker ?? this.joker,
       jokerShadow: jokerShadow ?? this.jokerShadow,
       todayOutline: todayOutline ?? this.todayOutline,
+      trackOnColor: trackOnColor ?? this.trackOnColor,
       habit: habit ?? this.habit,
       tones: tones ?? this.tones,
     );
@@ -372,6 +379,7 @@ class SorbetColors extends ThemeExtension<SorbetColors> {
       joker: l(joker, other.joker),
       jokerShadow: l(jokerShadow, other.jokerShadow),
       todayOutline: l(todayOutline, other.todayOutline),
+      trackOnColor: l(trackOnColor, other.trackOnColor),
       habit: {
         for (final c in HabitColor.values) c: l(habit[c]!, other.habit[c]!),
       },
