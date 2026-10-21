@@ -56,6 +56,25 @@ class HabitRepository {
         ),
       );
 
+  /// Rewrites a habit's settings; its entries, pauses and dates stay.
+  Future<void> updateHabit(Habit h) =>
+      (_db.update(_db.habits)..where((r) => r.id.equals(h.id))).write(
+        HabitsCompanion(
+          name: Value(h.name),
+          color: Value(h.color),
+          icon: Value(h.icon),
+          goal: Value(h.goal),
+          step: Value(h.step),
+          unit: Value(h.unit),
+          scheduleMode: Value(h.scheduleMode),
+          activeDays: Value(h.activeDays),
+          timesPerWeek: Value(h.timesPerWeek),
+          moment: Value(h.moment),
+          reminders: Value(h.reminders),
+          streakDangerAlert: Value(h.streakDangerAlert),
+        ),
+      );
+
   Future<void> archiveHabit(int id, Day on) =>
       (_db.update(_db.habits)..where((h) => h.id.equals(id))).write(
         HabitsCompanion(archivedOn: Value(on)),

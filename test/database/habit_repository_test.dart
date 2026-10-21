@@ -88,6 +88,56 @@ void main() {
     );
   });
 
+  test('updating rewrites the settings but keeps history and pauses', () async {
+    final id = await repo.createHabit(water());
+    await repo.setEntry(HabitEntry(habitId: id, day: day, value: 250));
+    await repo.pauseHabit(id, Pause(day, day));
+    final h = (await repo.watchHabits().first).single;
+    await repo.updateHabit(
+      Habit(
+        id: id,
+        name: 'Eau',
+        type: h.type,
+        color: HabitColor.lagoon,
+        icon: 'drop',
+        goal: 1500,
+        step: 500,
+        unit: QuantityUnit.glasses,
+        scheduleMode: ScheduleMode.weekly,
+        timesPerWeek: 4,
+        moment: Moment.evening,
+        reminders: const [1200],
+        createdOn: h.createdOn,
+      ),
+    );
+    final u = (await repo.watchHabits().first).single;
+    expect(
+      (
+        u.name,
+        u.color,
+        u.goal,
+        u.step,
+        u.unit,
+        u.scheduleMode,
+        u.timesPerWeek,
+        u.moment,
+      ),
+      (
+        'Eau',
+        HabitColor.lagoon,
+        1500.0,
+        500.0,
+        QuantityUnit.glasses,
+        ScheduleMode.weekly,
+        4,
+        Moment.evening,
+      ),
+    );
+    expect(u.reminders, [1200]);
+    expect(u.pauses, hasLength(1));
+    expect(await repo.watchEntries().first, hasLength(1));
+  });
+
   test('unarchiving brings the habit back', () async {
     final id = await repo.createHabit(water());
     await repo.archiveHabit(id, day);

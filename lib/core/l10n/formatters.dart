@@ -33,6 +33,8 @@ class HabitFormat {
           (v, g) => l10n.valueGlasses(v, g, h.goal / 250),
         ),
         QuantityUnit.pages => pair(1, (v, g) => l10n.valuePages(v, g, h.goal)),
+        QuantityUnit.steps => pair(1, (v, g) => l10n.valueSteps(v, g)),
+        QuantityUnit.kilometers => pair(1000, (v, g) => l10n.valueKm(v, g)),
         QuantityUnit.times => pair(1, (v, g) => l10n.valueTimes(v, g, h.goal)),
       },
       HabitType.duration => l10n.valueMinutes(
@@ -65,6 +67,8 @@ class HabitFormat {
         QuantityUnit.milliliters => l10n.stepMl(number(s)),
         QuantityUnit.glasses => l10n.stepGlasses(number(s / 250), s / 250),
         QuantityUnit.pages => l10n.stepPages(number(s), s),
+        QuantityUnit.steps => l10n.stepSteps(number(s)),
+        QuantityUnit.kilometers => l10n.stepKm(number(s / 1000)),
         QuantityUnit.times => l10n.stepTimes(number(s), s),
       },
       HabitType.duration => l10n.stepMinutes(number(s ~/ 60)),

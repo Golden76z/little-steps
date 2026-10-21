@@ -337,5 +337,263 @@
         "type": "int"
       }
     }
-  }
+  },
+  "valueSteps": "{value} / {goal} steps",
+  "@valueSteps": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      },
+      "goal": {
+        "type": "String"
+      }
+    }
+  },
+  "valueKm": "{value} / {goal} km",
+  "@valueKm": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      },
+      "goal": {
+        "type": "String"
+      }
+    }
+  },
+  "stepSteps": "{value} steps",
+  "@stepSteps": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "stepKm": "{value} km",
+  "@stepKm": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "stepOf": "{step}/{total}",
+  "@stepOf": {
+    "placeholders": {
+      "step": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "stepProgress": "Step {step} of {total}",
+  "@stepProgress": {
+    "placeholders": {
+      "step": {
+        "type": "int"
+      },
+      "total": {
+        "type": "int"
+      }
+    }
+  },
+  "back": "Previous step",
+  "searchHint": "Search or name a habit",
+  "popular": "Popular",
+  "popularHint": "type picked for you",
+  "orPickType": "Or pick a type",
+  "habitType": "Habit type",
+  "typeQuantity": "Quantity",
+  "typeDuration": "Duration",
+  "typeYesNo": "Yes / no",
+  "typeJournal": "Journal",
+  "typeFrequency": "Frequency",
+  "typeQuantityEx": "water, pages, steps, kilometres",
+  "typeDurationEx": "meditate, draw, instrument",
+  "typeYesNoEx": "vitamins, no screen in bed",
+  "typeJournalEx": "write 3 lines, gratitude",
+  "typeFrequencyEx": "sport 3 times, call someone close",
+  "popWater": "Drink water",
+  "popRead": "Read",
+  "popDraw": "Draw",
+  "popRun": "Run",
+  "popVitamins": "Vitamins",
+  "popGratitude": "Gratitude",
+  "popMeditate": "Meditate",
+  "continueWith": "Continue · {name}",
+  "@continueWith": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "continueLabel": "Continue",
+  "settingsTitle": "Settings",
+  "previewLabel": "Preview on Today",
+  "nameHint": "Habit name",
+  "colorLabel": "Colour",
+  "colorLilac": "Lilac",
+  "colorLavender": "Lavender",
+  "colorSky": "Sky",
+  "colorLagoon": "Lagoon",
+  "colorMint": "Mint",
+  "colorPistachio": "Pistachio",
+  "colorLemon": "Lemon",
+  "colorApricot": "Apricot",
+  "colorPeach": "Peach",
+  "colorCoral": "Coral",
+  "colorPink": "Pink",
+  "colorRaspberry": "Raspberry",
+  "changeIcon": "Change icon",
+  "goalPerDay": "Daily goal",
+  "decreaseGoal": "Decrease the goal",
+  "increaseGoal": "Increase the goal",
+  "unitLabel": "Unit",
+  "unitGlasses": "Glasses",
+  "unitLiters": "Litres",
+  "unitMl": "ml",
+  "unitPages": "Pages",
+  "unitSteps": "Steps",
+  "unitKm": "Km",
+  "unitTimes": "Times",
+  "wordGlasses": "{count, plural, one{glass} other{glasses}}",
+  "@wordGlasses": {
+    "placeholders": {
+      "count": {
+        "type": "num"
+      }
+    }
+  },
+  "wordPages": "{count, plural, one{page} other{pages}}",
+  "@wordPages": {
+    "placeholders": {
+      "count": {
+        "type": "num"
+      }
+    }
+  },
+  "wordSteps": "steps",
+  "wordTimes": "{count, plural, one{time} other{times}}",
+  "@wordTimes": {
+    "placeholders": {
+      "count": {
+        "type": "num"
+      }
+    }
+  },
+  "wordLines": "{count, plural, one{line} other{lines}}",
+  "@wordLines": {
+    "placeholders": {
+      "count": {
+        "type": "num"
+      }
+    }
+  },
+  "goalSubGlasses": "of 25 cl, i.e. {liters} L",
+  "@goalSubGlasses": {
+    "placeholders": {
+      "liters": {
+        "type": "String"
+      }
+    }
+  },
+  "goalSubVolume": "{count, plural, one{i.e. {glasses} glass of 25 cl} other{i.e. {glasses} glasses of 25 cl}}",
+  "@goalSubVolume": {
+    "placeholders": {
+      "glasses": {
+        "type": "String"
+      },
+      "count": {
+        "type": "num"
+      }
+    }
+  },
+  "addBy": "Add by",
+  "addByHint": "quick button on Today",
+  "stepOther": "Other",
+  "stepOtherTitle": "Add how much per tap?",
+  "ok": "OK",
+  "scheduleTitle": "When?",
+  "rhythm": "Rhythm",
+  "rhythmDays": "Set days",
+  "rhythmWeekly": "X times / week",
+  "activeDaysLabel": "Active days",
+  "dayActive": "{day}, active",
+  "@dayActive": {
+    "placeholders": {
+      "day": {
+        "type": "String"
+      }
+    }
+  },
+  "dayRest": "{day}, rest",
+  "@dayRest": {
+    "placeholders": {
+      "day": {
+        "type": "String"
+      }
+    }
+  },
+  "daysHintAll": "Every day, no rest.",
+  "daysHint": "{count, plural, one{1 active day} other{{count} active days}} · rest on {days}. These days don’t count towards the streak.",
+  "@daysHint": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      },
+      "days": {
+        "type": "String"
+      }
+    }
+  },
+  "listAnd": "{head} and {last}",
+  "@listAnd": {
+    "placeholders": {
+      "head": {
+        "type": "String"
+      },
+      "last": {
+        "type": "String"
+      }
+    }
+  },
+  "fewer": "Fewer",
+  "more": "More",
+  "timesPerWeek": "times a week",
+  "weeklyHint": "Days without a session don’t break your streak.",
+  "momentTitle": "Time of day",
+  "momentLabel": "Moment",
+  "momentMorningShort": "Morning",
+  "momentNoonShort": "Noon",
+  "momentEveningShort": "Evening",
+  "momentAnytimeShort": "All day",
+  "remindersTitle": "Reminders",
+  "addReminder": "Add a reminder",
+  "removeReminder": "Remove the {time} reminder",
+  "@removeReminder": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "streakDanger": "If the streak is at risk",
+  "streakDangerHint": "a small reminder at {time}",
+  "@streakDangerHint": {
+    "placeholders": {
+      "time": {
+        "type": "String"
+      }
+    }
+  },
+  "streakDangerLabel": "Reminder when the streak is at risk",
+  "createHabit": "Create habit",
+  "saveHabit": "Save",
+  "toastCreated": "Habit created",
+  "toastSaved": "Changes saved",
+  "premiumTitle": "Little Steps Premium",
+  "premiumBody": "The free plan holds 5 habits. Premium unlocks unlimited habits, full stats, themes and export.",
+  "premiumSoon": "Coming soon"
 }

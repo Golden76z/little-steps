@@ -14,6 +14,10 @@ const habitIcons = <String, IconData>{
   'run': PhosphorIconsRegular.personSimpleRun,
   'pill': PhosphorIconsRegular.pill,
   'timer': PhosphorIconsRegular.timer,
+  'note': PhosphorIconsRegular.note,
+  'hash': PhosphorIconsRegular.hash,
+  'checkCircle': PhosphorIconsRegular.checkCircle,
+  'calendarCheck': PhosphorIconsRegular.calendarCheck,
 };
 
 IconData habitIcon(String key) =>

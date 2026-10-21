@@ -16,6 +16,8 @@ import '../../core/time/today_provider.dart';
 import '../../core/widgets/marked_text.dart';
 import '../../core/widgets/segmented_strip.dart';
 import '../../core/widgets/sorbet_sheet.dart';
+import '../create_habit/draft_provider.dart';
+import '../create_habit/habit_draft.dart';
 
 /// E3, opened by a long press on a habit.
 Future<void> showHabitOptions(BuildContext context, Habit habit) =>
@@ -88,10 +90,12 @@ class _HabitOptionsState extends ConsumerState<_HabitOptions> {
                 icon: PhosphorIconsRegular.pencilSimple,
                 label: l10n.editHabit,
                 border: rowDivider,
-                // ponytail: opens the blank creation flow until editing lands (step 4).
                 onTap: () {
+                  ref
+                      .read(draftProvider.notifier)
+                      .set(HabitDraft.fromHabit(_habit));
                   Navigator.pop(context);
-                  context.push(Routes.create);
+                  context.push(Routes.createSettings);
                 },
               ),
               _OptionRow(

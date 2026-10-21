@@ -41,6 +41,13 @@ class SorbetColors extends ThemeExtension<SorbetColors> {
     required this.ctaShadow,
     required this.barrier,
     required this.sheetShadow,
+    required this.radioOff,
+    required this.badge,
+    required this.dayOn,
+    required this.dayOnInk,
+    required this.cellOff,
+    required this.cellOffInk,
+    required this.knobShadow,
     required this.habit,
   });
 
@@ -110,6 +117,23 @@ class SorbetColors extends ThemeExtension<SorbetColors> {
 
   /// Shadow cast upwards by a bottom sheet, ink 15 %.
   final Color sheetShadow;
+
+  /// Unselected radio ring.
+  final Color radioOff;
+
+  /// Type badge on a popular tile (white 70 %).
+  final Color badge;
+
+  /// Active weekday cell in the planning.
+  final Color dayOn;
+  final Color dayOnInk;
+
+  /// Empty or inactive calendar cell.
+  final Color cellOff;
+  final Color cellOffInk;
+
+  /// Shadow under a switch knob, ink 25 %.
+  final Color knobShadow;
   final Map<HabitColor, Color> habit;
 
   static const light = SorbetColors(
@@ -145,6 +169,13 @@ class SorbetColors extends ThemeExtension<SorbetColors> {
     ctaShadow: Color(0x333B1730),
     barrier: Color(0x613B1730),
     sheetShadow: Color(0x263B1730),
+    radioOff: Color(0xFFE2C6D3),
+    badge: Color(0xB3FFFFFF),
+    dayOn: Color(0xFFBFE3FF),
+    dayOnInk: Color(0xFF1E4A6E),
+    cellOff: Color(0xFFFBF4F7),
+    cellOffInk: Color(0xFFB9A0AF),
+    knobShadow: Color(0x403B1730),
     habit: {
       HabitColor.lilac: Color(0xFFDCC8FF),
       HabitColor.lavender: Color(0xFFC9D0FF),
@@ -195,6 +226,13 @@ class SorbetColors extends ThemeExtension<SorbetColors> {
     Color? ctaShadow,
     Color? barrier,
     Color? sheetShadow,
+    Color? radioOff,
+    Color? badge,
+    Color? dayOn,
+    Color? dayOnInk,
+    Color? cellOff,
+    Color? cellOffInk,
+    Color? knobShadow,
     Map<HabitColor, Color>? habit,
   }) {
     return SorbetColors(
@@ -230,6 +268,13 @@ class SorbetColors extends ThemeExtension<SorbetColors> {
       ctaShadow: ctaShadow ?? this.ctaShadow,
       barrier: barrier ?? this.barrier,
       sheetShadow: sheetShadow ?? this.sheetShadow,
+      radioOff: radioOff ?? this.radioOff,
+      badge: badge ?? this.badge,
+      dayOn: dayOn ?? this.dayOn,
+      dayOnInk: dayOnInk ?? this.dayOnInk,
+      cellOff: cellOff ?? this.cellOff,
+      cellOffInk: cellOffInk ?? this.cellOffInk,
+      knobShadow: knobShadow ?? this.knobShadow,
       habit: habit ?? this.habit,
     );
   }
@@ -271,6 +316,13 @@ class SorbetColors extends ThemeExtension<SorbetColors> {
       ctaShadow: l(ctaShadow, other.ctaShadow),
       barrier: l(barrier, other.barrier),
       sheetShadow: l(sheetShadow, other.sheetShadow),
+      radioOff: l(radioOff, other.radioOff),
+      badge: l(badge, other.badge),
+      dayOn: l(dayOn, other.dayOn),
+      dayOnInk: l(dayOnInk, other.dayOnInk),
+      cellOff: l(cellOff, other.cellOff),
+      cellOffInk: l(cellOffInk, other.cellOffInk),
+      knobShadow: l(knobShadow, other.knobShadow),
       habit: {
         for (final c in HabitColor.values) c: l(habit[c]!, other.habit[c]!),
       },

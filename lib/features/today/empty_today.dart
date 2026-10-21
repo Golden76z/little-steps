@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../core/icons/phosphor_icons.dart';
@@ -6,23 +7,39 @@ import '../../core/l10n/l10n.dart';
 import '../../core/router/app_router.dart';
 import '../../core/theme/sorbet_colors.dart';
 import '../../core/widgets/dashed_border.dart';
+import '../create_habit/draft_provider.dart';
+import '../create_habit/habit_draft.dart';
 
 /// E1: first launch, no habit yet.
-class EmptyToday extends StatelessWidget {
+class EmptyToday extends ConsumerWidget {
   const EmptyToday({super.key, required this.header});
 
   final Widget header;
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final l10n = context.l10n;
     final c = context.sorbet;
     final text = Theme.of(context).textTheme;
-    // ponytail: ideas open the blank creation flow until P2 can be prefilled (step 4).
     final ideas = [
-      (l10n.ideaWater, HabitColor.sky, PhosphorIconsRegular.drop),
-      (l10n.ideaRead, HabitColor.mint, PhosphorIconsRegular.book),
-      (l10n.ideaMeditate, HabitColor.lilac, PhosphorIconsRegular.timer),
+      (
+        l10n.ideaWater,
+        HabitDraft.fromPreset(Preset.water, name: l10n.popWater),
+        PhosphorIconsRegular.drop,
+      ),
+      (
+        l10n.ideaRead,
+        HabitDraft.fromPreset(
+          Preset.read,
+          name: l10n.popRead,
+        ).copyWith(goal: 10),
+        PhosphorIconsRegular.book,
+      ),
+      (
+        l10n.ideaMeditate,
+        HabitDraft.fromPreset(Preset.meditate, name: l10n.popMeditate),
+        PhosphorIconsRegular.timer,
+      ),
     ];
     return SingleChildScrollView(
       padding: EdgeInsets.only(
@@ -86,11 +103,15 @@ class EmptyToday extends StatelessWidget {
                   alignment: WrapAlignment.center,
                   spacing: 8,
                   children: [
-                    for (final (label, color, icon) in ideas)
+                    for (final (label, draft, icon) in ideas)
                       _IdeaChip(
                         label: label,
-                        color: c.habit[color]!,
+                        color: c.habit[draft.color]!,
                         icon: icon,
+                        onTap: () {
+                          ref.read(draftProvider.notifier).set(draft);
+                          context.push(Routes.createSettings);
+                        },
                       ),
                   ],
                 ),
@@ -108,11 +129,13 @@ class _IdeaChip extends StatelessWidget {
     required this.label,
     required this.color,
     required this.icon,
+    required this.onTap,
   });
 
   final String label;
   final Color color;
   final IconData icon;
+  final VoidCallback onTap;
 
   @override
   Widget build(BuildContext context) {
@@ -123,7 +146,7 @@ class _IdeaChip extends StatelessWidget {
       type: MaterialType.transparency,
       child: InkWell(
         customBorder: const StadiumBorder(),
-        onTap: () => context.push(Routes.create),
+        onTap: onTap,
         child: Padding(
           padding: const EdgeInsets.symmetric(vertical: 5),
           child: DecoratedBox(

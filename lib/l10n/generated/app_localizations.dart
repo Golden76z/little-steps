@@ -559,6 +559,630 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'{count, plural, one{{count} week} other{{count} weeks}}'**
   String weeksCount(int count);
+
+  /// No description provided for @valueSteps.
+  ///
+  /// In en, this message translates to:
+  /// **'{value} / {goal} steps'**
+  String valueSteps(String value, String goal);
+
+  /// No description provided for @valueKm.
+  ///
+  /// In en, this message translates to:
+  /// **'{value} / {goal} km'**
+  String valueKm(String value, String goal);
+
+  /// No description provided for @stepSteps.
+  ///
+  /// In en, this message translates to:
+  /// **'{value} steps'**
+  String stepSteps(String value);
+
+  /// No description provided for @stepKm.
+  ///
+  /// In en, this message translates to:
+  /// **'{value} km'**
+  String stepKm(String value);
+
+  /// No description provided for @stepOf.
+  ///
+  /// In en, this message translates to:
+  /// **'{step}/{total}'**
+  String stepOf(int step, int total);
+
+  /// No description provided for @stepProgress.
+  ///
+  /// In en, this message translates to:
+  /// **'Step {step} of {total}'**
+  String stepProgress(int step, int total);
+
+  /// No description provided for @back.
+  ///
+  /// In en, this message translates to:
+  /// **'Previous step'**
+  String get back;
+
+  /// No description provided for @searchHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Search or name a habit'**
+  String get searchHint;
+
+  /// No description provided for @popular.
+  ///
+  /// In en, this message translates to:
+  /// **'Popular'**
+  String get popular;
+
+  /// No description provided for @popularHint.
+  ///
+  /// In en, this message translates to:
+  /// **'type picked for you'**
+  String get popularHint;
+
+  /// No description provided for @orPickType.
+  ///
+  /// In en, this message translates to:
+  /// **'Or pick a type'**
+  String get orPickType;
+
+  /// No description provided for @habitType.
+  ///
+  /// In en, this message translates to:
+  /// **'Habit type'**
+  String get habitType;
+
+  /// No description provided for @typeQuantity.
+  ///
+  /// In en, this message translates to:
+  /// **'Quantity'**
+  String get typeQuantity;
+
+  /// No description provided for @typeDuration.
+  ///
+  /// In en, this message translates to:
+  /// **'Duration'**
+  String get typeDuration;
+
+  /// No description provided for @typeYesNo.
+  ///
+  /// In en, this message translates to:
+  /// **'Yes / no'**
+  String get typeYesNo;
+
+  /// No description provided for @typeJournal.
+  ///
+  /// In en, this message translates to:
+  /// **'Journal'**
+  String get typeJournal;
+
+  /// No description provided for @typeFrequency.
+  ///
+  /// In en, this message translates to:
+  /// **'Frequency'**
+  String get typeFrequency;
+
+  /// No description provided for @typeQuantityEx.
+  ///
+  /// In en, this message translates to:
+  /// **'water, pages, steps, kilometres'**
+  String get typeQuantityEx;
+
+  /// No description provided for @typeDurationEx.
+  ///
+  /// In en, this message translates to:
+  /// **'meditate, draw, instrument'**
+  String get typeDurationEx;
+
+  /// No description provided for @typeYesNoEx.
+  ///
+  /// In en, this message translates to:
+  /// **'vitamins, no screen in bed'**
+  String get typeYesNoEx;
+
+  /// No description provided for @typeJournalEx.
+  ///
+  /// In en, this message translates to:
+  /// **'write 3 lines, gratitude'**
+  String get typeJournalEx;
+
+  /// No description provided for @typeFrequencyEx.
+  ///
+  /// In en, this message translates to:
+  /// **'sport 3 times, call someone close'**
+  String get typeFrequencyEx;
+
+  /// No description provided for @popWater.
+  ///
+  /// In en, this message translates to:
+  /// **'Drink water'**
+  String get popWater;
+
+  /// No description provided for @popRead.
+  ///
+  /// In en, this message translates to:
+  /// **'Read'**
+  String get popRead;
+
+  /// No description provided for @popDraw.
+  ///
+  /// In en, this message translates to:
+  /// **'Draw'**
+  String get popDraw;
+
+  /// No description provided for @popRun.
+  ///
+  /// In en, this message translates to:
+  /// **'Run'**
+  String get popRun;
+
+  /// No description provided for @popVitamins.
+  ///
+  /// In en, this message translates to:
+  /// **'Vitamins'**
+  String get popVitamins;
+
+  /// No description provided for @popGratitude.
+  ///
+  /// In en, this message translates to:
+  /// **'Gratitude'**
+  String get popGratitude;
+
+  /// No description provided for @popMeditate.
+  ///
+  /// In en, this message translates to:
+  /// **'Meditate'**
+  String get popMeditate;
+
+  /// No description provided for @continueWith.
+  ///
+  /// In en, this message translates to:
+  /// **'Continue · {name}'**
+  String continueWith(String name);
+
+  /// No description provided for @continueLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Continue'**
+  String get continueLabel;
+
+  /// No description provided for @settingsTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Settings'**
+  String get settingsTitle;
+
+  /// No description provided for @previewLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Preview on Today'**
+  String get previewLabel;
+
+  /// No description provided for @nameHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Habit name'**
+  String get nameHint;
+
+  /// No description provided for @colorLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Colour'**
+  String get colorLabel;
+
+  /// No description provided for @colorLilac.
+  ///
+  /// In en, this message translates to:
+  /// **'Lilac'**
+  String get colorLilac;
+
+  /// No description provided for @colorLavender.
+  ///
+  /// In en, this message translates to:
+  /// **'Lavender'**
+  String get colorLavender;
+
+  /// No description provided for @colorSky.
+  ///
+  /// In en, this message translates to:
+  /// **'Sky'**
+  String get colorSky;
+
+  /// No description provided for @colorLagoon.
+  ///
+  /// In en, this message translates to:
+  /// **'Lagoon'**
+  String get colorLagoon;
+
+  /// No description provided for @colorMint.
+  ///
+  /// In en, this message translates to:
+  /// **'Mint'**
+  String get colorMint;
+
+  /// No description provided for @colorPistachio.
+  ///
+  /// In en, this message translates to:
+  /// **'Pistachio'**
+  String get colorPistachio;
+
+  /// No description provided for @colorLemon.
+  ///
+  /// In en, this message translates to:
+  /// **'Lemon'**
+  String get colorLemon;
+
+  /// No description provided for @colorApricot.
+  ///
+  /// In en, this message translates to:
+  /// **'Apricot'**
+  String get colorApricot;
+
+  /// No description provided for @colorPeach.
+  ///
+  /// In en, this message translates to:
+  /// **'Peach'**
+  String get colorPeach;
+
+  /// No description provided for @colorCoral.
+  ///
+  /// In en, this message translates to:
+  /// **'Coral'**
+  String get colorCoral;
+
+  /// No description provided for @colorPink.
+  ///
+  /// In en, this message translates to:
+  /// **'Pink'**
+  String get colorPink;
+
+  /// No description provided for @colorRaspberry.
+  ///
+  /// In en, this message translates to:
+  /// **'Raspberry'**
+  String get colorRaspberry;
+
+  /// No description provided for @changeIcon.
+  ///
+  /// In en, this message translates to:
+  /// **'Change icon'**
+  String get changeIcon;
+
+  /// No description provided for @goalPerDay.
+  ///
+  /// In en, this message translates to:
+  /// **'Daily goal'**
+  String get goalPerDay;
+
+  /// No description provided for @decreaseGoal.
+  ///
+  /// In en, this message translates to:
+  /// **'Decrease the goal'**
+  String get decreaseGoal;
+
+  /// No description provided for @increaseGoal.
+  ///
+  /// In en, this message translates to:
+  /// **'Increase the goal'**
+  String get increaseGoal;
+
+  /// No description provided for @unitLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Unit'**
+  String get unitLabel;
+
+  /// No description provided for @unitGlasses.
+  ///
+  /// In en, this message translates to:
+  /// **'Glasses'**
+  String get unitGlasses;
+
+  /// No description provided for @unitLiters.
+  ///
+  /// In en, this message translates to:
+  /// **'Litres'**
+  String get unitLiters;
+
+  /// No description provided for @unitMl.
+  ///
+  /// In en, this message translates to:
+  /// **'ml'**
+  String get unitMl;
+
+  /// No description provided for @unitPages.
+  ///
+  /// In en, this message translates to:
+  /// **'Pages'**
+  String get unitPages;
+
+  /// No description provided for @unitSteps.
+  ///
+  /// In en, this message translates to:
+  /// **'Steps'**
+  String get unitSteps;
+
+  /// No description provided for @unitKm.
+  ///
+  /// In en, this message translates to:
+  /// **'Km'**
+  String get unitKm;
+
+  /// No description provided for @unitTimes.
+  ///
+  /// In en, this message translates to:
+  /// **'Times'**
+  String get unitTimes;
+
+  /// No description provided for @wordGlasses.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, one{glass} other{glasses}}'**
+  String wordGlasses(num count);
+
+  /// No description provided for @wordPages.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, one{page} other{pages}}'**
+  String wordPages(num count);
+
+  /// No description provided for @wordSteps.
+  ///
+  /// In en, this message translates to:
+  /// **'steps'**
+  String get wordSteps;
+
+  /// No description provided for @wordTimes.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, one{time} other{times}}'**
+  String wordTimes(num count);
+
+  /// No description provided for @wordLines.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, one{line} other{lines}}'**
+  String wordLines(num count);
+
+  /// No description provided for @goalSubGlasses.
+  ///
+  /// In en, this message translates to:
+  /// **'of 25 cl, i.e. {liters} L'**
+  String goalSubGlasses(String liters);
+
+  /// No description provided for @goalSubVolume.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, one{i.e. {glasses} glass of 25 cl} other{i.e. {glasses} glasses of 25 cl}}'**
+  String goalSubVolume(String glasses, num count);
+
+  /// No description provided for @addBy.
+  ///
+  /// In en, this message translates to:
+  /// **'Add by'**
+  String get addBy;
+
+  /// No description provided for @addByHint.
+  ///
+  /// In en, this message translates to:
+  /// **'quick button on Today'**
+  String get addByHint;
+
+  /// No description provided for @stepOther.
+  ///
+  /// In en, this message translates to:
+  /// **'Other'**
+  String get stepOther;
+
+  /// No description provided for @stepOtherTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Add how much per tap?'**
+  String get stepOtherTitle;
+
+  /// No description provided for @ok.
+  ///
+  /// In en, this message translates to:
+  /// **'OK'**
+  String get ok;
+
+  /// No description provided for @scheduleTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'When?'**
+  String get scheduleTitle;
+
+  /// No description provided for @rhythm.
+  ///
+  /// In en, this message translates to:
+  /// **'Rhythm'**
+  String get rhythm;
+
+  /// No description provided for @rhythmDays.
+  ///
+  /// In en, this message translates to:
+  /// **'Set days'**
+  String get rhythmDays;
+
+  /// No description provided for @rhythmWeekly.
+  ///
+  /// In en, this message translates to:
+  /// **'X times / week'**
+  String get rhythmWeekly;
+
+  /// No description provided for @activeDaysLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Active days'**
+  String get activeDaysLabel;
+
+  /// No description provided for @dayActive.
+  ///
+  /// In en, this message translates to:
+  /// **'{day}, active'**
+  String dayActive(String day);
+
+  /// No description provided for @dayRest.
+  ///
+  /// In en, this message translates to:
+  /// **'{day}, rest'**
+  String dayRest(String day);
+
+  /// No description provided for @daysHintAll.
+  ///
+  /// In en, this message translates to:
+  /// **'Every day, no rest.'**
+  String get daysHintAll;
+
+  /// No description provided for @daysHint.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, one{1 active day} other{{count} active days}} · rest on {days}. These days don’t count towards the streak.'**
+  String daysHint(int count, String days);
+
+  /// No description provided for @listAnd.
+  ///
+  /// In en, this message translates to:
+  /// **'{head} and {last}'**
+  String listAnd(String head, String last);
+
+  /// No description provided for @fewer.
+  ///
+  /// In en, this message translates to:
+  /// **'Fewer'**
+  String get fewer;
+
+  /// No description provided for @more.
+  ///
+  /// In en, this message translates to:
+  /// **'More'**
+  String get more;
+
+  /// No description provided for @timesPerWeek.
+  ///
+  /// In en, this message translates to:
+  /// **'times a week'**
+  String get timesPerWeek;
+
+  /// No description provided for @weeklyHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Days without a session don’t break your streak.'**
+  String get weeklyHint;
+
+  /// No description provided for @momentTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Time of day'**
+  String get momentTitle;
+
+  /// No description provided for @momentLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Moment'**
+  String get momentLabel;
+
+  /// No description provided for @momentMorningShort.
+  ///
+  /// In en, this message translates to:
+  /// **'Morning'**
+  String get momentMorningShort;
+
+  /// No description provided for @momentNoonShort.
+  ///
+  /// In en, this message translates to:
+  /// **'Noon'**
+  String get momentNoonShort;
+
+  /// No description provided for @momentEveningShort.
+  ///
+  /// In en, this message translates to:
+  /// **'Evening'**
+  String get momentEveningShort;
+
+  /// No description provided for @momentAnytimeShort.
+  ///
+  /// In en, this message translates to:
+  /// **'All day'**
+  String get momentAnytimeShort;
+
+  /// No description provided for @remindersTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Reminders'**
+  String get remindersTitle;
+
+  /// No description provided for @addReminder.
+  ///
+  /// In en, this message translates to:
+  /// **'Add a reminder'**
+  String get addReminder;
+
+  /// No description provided for @removeReminder.
+  ///
+  /// In en, this message translates to:
+  /// **'Remove the {time} reminder'**
+  String removeReminder(String time);
+
+  /// No description provided for @streakDanger.
+  ///
+  /// In en, this message translates to:
+  /// **'If the streak is at risk'**
+  String get streakDanger;
+
+  /// No description provided for @streakDangerHint.
+  ///
+  /// In en, this message translates to:
+  /// **'a small reminder at {time}'**
+  String streakDangerHint(String time);
+
+  /// No description provided for @streakDangerLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Reminder when the streak is at risk'**
+  String get streakDangerLabel;
+
+  /// No description provided for @createHabit.
+  ///
+  /// In en, this message translates to:
+  /// **'Create habit'**
+  String get createHabit;
+
+  /// No description provided for @saveHabit.
+  ///
+  /// In en, this message translates to:
+  /// **'Save'**
+  String get saveHabit;
+
+  /// No description provided for @toastCreated.
+  ///
+  /// In en, this message translates to:
+  /// **'Habit created'**
+  String get toastCreated;
+
+  /// No description provided for @toastSaved.
+  ///
+  /// In en, this message translates to:
+  /// **'Changes saved'**
+  String get toastSaved;
+
+  /// No description provided for @premiumTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Little Steps Premium'**
+  String get premiumTitle;
+
+  /// No description provided for @premiumBody.
+  ///
+  /// In en, this message translates to:
+  /// **'The free plan holds 5 habits. Premium unlocks unlimited habits, full stats, themes and export.'**
+  String get premiumBody;
+
+  /// No description provided for @premiumSoon.
+  ///
+  /// In en, this message translates to:
+  /// **'Coming soon'**
+  String get premiumSoon;
 }
 
 class _AppLocalizationsDelegate

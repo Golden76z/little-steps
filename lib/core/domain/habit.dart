@@ -19,17 +19,42 @@ enum HabitColor {
 }
 
 /// Display unit of a quantity habit. Values are stored in [baseFactor]
-/// multiples (ml for volumes), so glasses and litres stay interchangeable.
+/// multiples (ml for volumes, metres for km), so glasses and litres stay
+/// interchangeable.
 enum QuantityUnit {
-  glasses(250),
-  liters(1000),
-  milliliters(1),
-  pages(1),
-  times(1);
+  glasses(250, goalStep: 250, defaultGoal: 2000, stepPresets: [250, 500, 750]),
+  liters(1000, goalStep: 250, defaultGoal: 2000, stepPresets: [250, 330, 500]),
+  milliliters(
+    1,
+    goalStep: 250,
+    defaultGoal: 2000,
+    stepPresets: [250, 330, 500],
+  ),
+  pages(1, goalStep: 5, defaultGoal: 20, stepPresets: [1, 4, 10]),
+  steps(1, goalStep: 1000, defaultGoal: 8000, stepPresets: [500, 1000, 2000]),
+  kilometers(
+    1000,
+    goalStep: 500,
+    defaultGoal: 5000,
+    stepPresets: [500, 1000, 2000],
+  ),
+  times(1, goalStep: 1, defaultGoal: 3, stepPresets: [1, 2, 5]);
 
-  const QuantityUnit(this.baseFactor);
+  const QuantityUnit(
+    this.baseFactor, {
+    required this.goalStep,
+    required this.defaultGoal,
+    required this.stepPresets,
+  });
 
   final double baseFactor;
+
+  /// Goal +/− increment in the creation flow, base units.
+  final double goalStep;
+  final double defaultGoal;
+
+  /// Quick-add choices offered at creation, base units.
+  final List<double> stepPresets;
 
   bool get isVolume => this == glasses || this == liters || this == milliliters;
 }

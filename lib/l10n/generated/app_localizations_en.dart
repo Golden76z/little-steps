@@ -354,4 +354,391 @@ class AppLocalizationsEn extends AppLocalizations {
     );
     return '$_temp0';
   }
+
+  @override
+  String valueSteps(String value, String goal) {
+    return '$value / $goal steps';
+  }
+
+  @override
+  String valueKm(String value, String goal) {
+    return '$value / $goal km';
+  }
+
+  @override
+  String stepSteps(String value) {
+    return '$value steps';
+  }
+
+  @override
+  String stepKm(String value) {
+    return '$value km';
+  }
+
+  @override
+  String stepOf(int step, int total) {
+    return '$step/$total';
+  }
+
+  @override
+  String stepProgress(int step, int total) {
+    return 'Step $step of $total';
+  }
+
+  @override
+  String get back => 'Previous step';
+
+  @override
+  String get searchHint => 'Search or name a habit';
+
+  @override
+  String get popular => 'Popular';
+
+  @override
+  String get popularHint => 'type picked for you';
+
+  @override
+  String get orPickType => 'Or pick a type';
+
+  @override
+  String get habitType => 'Habit type';
+
+  @override
+  String get typeQuantity => 'Quantity';
+
+  @override
+  String get typeDuration => 'Duration';
+
+  @override
+  String get typeYesNo => 'Yes / no';
+
+  @override
+  String get typeJournal => 'Journal';
+
+  @override
+  String get typeFrequency => 'Frequency';
+
+  @override
+  String get typeQuantityEx => 'water, pages, steps, kilometres';
+
+  @override
+  String get typeDurationEx => 'meditate, draw, instrument';
+
+  @override
+  String get typeYesNoEx => 'vitamins, no screen in bed';
+
+  @override
+  String get typeJournalEx => 'write 3 lines, gratitude';
+
+  @override
+  String get typeFrequencyEx => 'sport 3 times, call someone close';
+
+  @override
+  String get popWater => 'Drink water';
+
+  @override
+  String get popRead => 'Read';
+
+  @override
+  String get popDraw => 'Draw';
+
+  @override
+  String get popRun => 'Run';
+
+  @override
+  String get popVitamins => 'Vitamins';
+
+  @override
+  String get popGratitude => 'Gratitude';
+
+  @override
+  String get popMeditate => 'Meditate';
+
+  @override
+  String continueWith(String name) {
+    return 'Continue · $name';
+  }
+
+  @override
+  String get continueLabel => 'Continue';
+
+  @override
+  String get settingsTitle => 'Settings';
+
+  @override
+  String get previewLabel => 'Preview on Today';
+
+  @override
+  String get nameHint => 'Habit name';
+
+  @override
+  String get colorLabel => 'Colour';
+
+  @override
+  String get colorLilac => 'Lilac';
+
+  @override
+  String get colorLavender => 'Lavender';
+
+  @override
+  String get colorSky => 'Sky';
+
+  @override
+  String get colorLagoon => 'Lagoon';
+
+  @override
+  String get colorMint => 'Mint';
+
+  @override
+  String get colorPistachio => 'Pistachio';
+
+  @override
+  String get colorLemon => 'Lemon';
+
+  @override
+  String get colorApricot => 'Apricot';
+
+  @override
+  String get colorPeach => 'Peach';
+
+  @override
+  String get colorCoral => 'Coral';
+
+  @override
+  String get colorPink => 'Pink';
+
+  @override
+  String get colorRaspberry => 'Raspberry';
+
+  @override
+  String get changeIcon => 'Change icon';
+
+  @override
+  String get goalPerDay => 'Daily goal';
+
+  @override
+  String get decreaseGoal => 'Decrease the goal';
+
+  @override
+  String get increaseGoal => 'Increase the goal';
+
+  @override
+  String get unitLabel => 'Unit';
+
+  @override
+  String get unitGlasses => 'Glasses';
+
+  @override
+  String get unitLiters => 'Litres';
+
+  @override
+  String get unitMl => 'ml';
+
+  @override
+  String get unitPages => 'Pages';
+
+  @override
+  String get unitSteps => 'Steps';
+
+  @override
+  String get unitKm => 'Km';
+
+  @override
+  String get unitTimes => 'Times';
+
+  @override
+  String wordGlasses(num count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'glasses',
+      one: 'glass',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String wordPages(num count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'pages',
+      one: 'page',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get wordSteps => 'steps';
+
+  @override
+  String wordTimes(num count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'times',
+      one: 'time',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String wordLines(num count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'lines',
+      one: 'line',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String goalSubGlasses(String liters) {
+    return 'of 25 cl, i.e. $liters L';
+  }
+
+  @override
+  String goalSubVolume(String glasses, num count) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: 'i.e. $glasses glasses of 25 cl',
+      one: 'i.e. $glasses glass of 25 cl',
+    );
+    return '$_temp0';
+  }
+
+  @override
+  String get addBy => 'Add by';
+
+  @override
+  String get addByHint => 'quick button on Today';
+
+  @override
+  String get stepOther => 'Other';
+
+  @override
+  String get stepOtherTitle => 'Add how much per tap?';
+
+  @override
+  String get ok => 'OK';
+
+  @override
+  String get scheduleTitle => 'When?';
+
+  @override
+  String get rhythm => 'Rhythm';
+
+  @override
+  String get rhythmDays => 'Set days';
+
+  @override
+  String get rhythmWeekly => 'X times / week';
+
+  @override
+  String get activeDaysLabel => 'Active days';
+
+  @override
+  String dayActive(String day) {
+    return '$day, active';
+  }
+
+  @override
+  String dayRest(String day) {
+    return '$day, rest';
+  }
+
+  @override
+  String get daysHintAll => 'Every day, no rest.';
+
+  @override
+  String daysHint(int count, String days) {
+    String _temp0 = intl.Intl.pluralLogic(
+      count,
+      locale: localeName,
+      other: '$count active days',
+      one: '1 active day',
+    );
+    return '$_temp0 · rest on $days. These days don’t count towards the streak.';
+  }
+
+  @override
+  String listAnd(String head, String last) {
+    return '$head and $last';
+  }
+
+  @override
+  String get fewer => 'Fewer';
+
+  @override
+  String get more => 'More';
+
+  @override
+  String get timesPerWeek => 'times a week';
+
+  @override
+  String get weeklyHint => 'Days without a session don’t break your streak.';
+
+  @override
+  String get momentTitle => 'Time of day';
+
+  @override
+  String get momentLabel => 'Moment';
+
+  @override
+  String get momentMorningShort => 'Morning';
+
+  @override
+  String get momentNoonShort => 'Noon';
+
+  @override
+  String get momentEveningShort => 'Evening';
+
+  @override
+  String get momentAnytimeShort => 'All day';
+
+  @override
+  String get remindersTitle => 'Reminders';
+
+  @override
+  String get addReminder => 'Add a reminder';
+
+  @override
+  String removeReminder(String time) {
+    return 'Remove the $time reminder';
+  }
+
+  @override
+  String get streakDanger => 'If the streak is at risk';
+
+  @override
+  String streakDangerHint(String time) {
+    return 'a small reminder at $time';
+  }
+
+  @override
+  String get streakDangerLabel => 'Reminder when the streak is at risk';
+
+  @override
+  String get createHabit => 'Create habit';
+
+  @override
+  String get saveHabit => 'Save';
+
+  @override
+  String get toastCreated => 'Habit created';
+
+  @override
+  String get toastSaved => 'Changes saved';
+
+  @override
+  String get premiumTitle => 'Little Steps Premium';
+
+  @override
+  String get premiumBody =>
+      'The free plan holds 5 habits. Premium unlocks unlimited habits, full stats, themes and export.';
+
+  @override
+  String get premiumSoon => 'Coming soon';
 }

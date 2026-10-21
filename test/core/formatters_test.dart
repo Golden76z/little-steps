@@ -44,6 +44,22 @@ void main() {
     expect(fmt('fr').value(qty(QuantityUnit.times, 3, 1), 2), '2 / 3 fois');
   });
 
+  test('steps and kilometres', () {
+    expect(
+      fmt('fr').value(qty(QuantityUnit.steps, 8000, 1000), 4500),
+      '4\u202f500 / 8\u202f000 pas',
+    );
+    expect(
+      fmt('fr').value(qty(QuantityUnit.kilometers, 5000, 500), 2500),
+      '2,5 / 5 km',
+    );
+    expect(fmt('en').step(qty(QuantityUnit.kilometers, 5000, 500)), '0.5 km');
+    expect(
+      fmt('fr').step(qty(QuantityUnit.steps, 8000, 1000)),
+      '1\u202f000 pas',
+    );
+  });
+
   test('duration in whole minutes, journal in lines', () {
     expect(
       fmt('fr').value(habit(type: HabitType.duration, goal: 600), 329),
