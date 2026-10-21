@@ -139,6 +139,426 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Main navigation'**
   String get mainNavigation;
+
+  /// No description provided for @levelMonth.
+  ///
+  /// In en, this message translates to:
+  /// **'Level {level} · {month}'**
+  String levelMonth(int level, String month);
+
+  /// No description provided for @levelProgress.
+  ///
+  /// In en, this message translates to:
+  /// **'Level {level}, {percent} to level {next}'**
+  String levelProgress(int level, String percent, int next);
+
+  /// No description provided for @streakDays.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, one{{count}-day streak} other{{count}-day streak}}'**
+  String streakDays(int count);
+
+  /// No description provided for @daysCount.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, one{{count} day} other{{count} days}}'**
+  String daysCount(int count);
+
+  /// No description provided for @calendar.
+  ///
+  /// In en, this message translates to:
+  /// **'Calendar'**
+  String get calendar;
+
+  /// No description provided for @weekDays.
+  ///
+  /// In en, this message translates to:
+  /// **'Days of the week'**
+  String get weekDays;
+
+  /// No description provided for @restToday.
+  ///
+  /// In en, this message translates to:
+  /// **'Resting today'**
+  String get restToday;
+
+  /// No description provided for @restOnDay.
+  ///
+  /// In en, this message translates to:
+  /// **'Resting'**
+  String get restOnDay;
+
+  /// No description provided for @restDay.
+  ///
+  /// In en, this message translates to:
+  /// **'Rest day'**
+  String get restDay;
+
+  /// No description provided for @pausedUntil.
+  ///
+  /// In en, this message translates to:
+  /// **'Paused until {date}'**
+  String pausedUntil(String date);
+
+  /// No description provided for @valueLiters.
+  ///
+  /// In en, this message translates to:
+  /// **'{value} / {goal} L'**
+  String valueLiters(String value, String goal);
+
+  /// No description provided for @valueGlasses.
+  ///
+  /// In en, this message translates to:
+  /// **'{value} / {goal} {count, plural, one{glass} other{glasses}}'**
+  String valueGlasses(String value, String goal, num count);
+
+  /// No description provided for @valueMl.
+  ///
+  /// In en, this message translates to:
+  /// **'{value} / {goal} ml'**
+  String valueMl(String value, String goal);
+
+  /// No description provided for @valuePages.
+  ///
+  /// In en, this message translates to:
+  /// **'{value} / {goal} {count, plural, one{page} other{pages}}'**
+  String valuePages(String value, String goal, num count);
+
+  /// No description provided for @valueTimes.
+  ///
+  /// In en, this message translates to:
+  /// **'{value} / {goal} {count, plural, one{time} other{times}}'**
+  String valueTimes(String value, String goal, num count);
+
+  /// No description provided for @valueMinutes.
+  ///
+  /// In en, this message translates to:
+  /// **'{value} / {goal} min'**
+  String valueMinutes(String value, String goal);
+
+  /// No description provided for @valueLines.
+  ///
+  /// In en, this message translates to:
+  /// **'{value} / {goal} {count, plural, one{line} other{lines}}'**
+  String valueLines(String value, String goal, num count);
+
+  /// No description provided for @valueThisWeek.
+  ///
+  /// In en, this message translates to:
+  /// **'{value} / {goal} this week'**
+  String valueThisWeek(String value, String goal);
+
+  /// No description provided for @doneLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'Done!'**
+  String get doneLabel;
+
+  /// No description provided for @momentMorning.
+  ///
+  /// In en, this message translates to:
+  /// **'This morning'**
+  String get momentMorning;
+
+  /// No description provided for @momentNoon.
+  ///
+  /// In en, this message translates to:
+  /// **'At noon'**
+  String get momentNoon;
+
+  /// No description provided for @momentEvening.
+  ///
+  /// In en, this message translates to:
+  /// **'Tonight'**
+  String get momentEvening;
+
+  /// No description provided for @momentAnytime.
+  ///
+  /// In en, this message translates to:
+  /// **'Today'**
+  String get momentAnytime;
+
+  /// No description provided for @stepCl.
+  ///
+  /// In en, this message translates to:
+  /// **'{value} cl'**
+  String stepCl(String value);
+
+  /// No description provided for @stepMl.
+  ///
+  /// In en, this message translates to:
+  /// **'{value} ml'**
+  String stepMl(String value);
+
+  /// No description provided for @stepGlasses.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, one{{value} glass} other{{value} glasses}}'**
+  String stepGlasses(String value, num count);
+
+  /// No description provided for @stepPages.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, one{{value} page} other{{value} pages}}'**
+  String stepPages(String value, num count);
+
+  /// No description provided for @stepTimes.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, one{{value} time} other{{value} times}}'**
+  String stepTimes(String value, num count);
+
+  /// No description provided for @stepMinutes.
+  ///
+  /// In en, this message translates to:
+  /// **'{value} min'**
+  String stepMinutes(String value);
+
+  /// No description provided for @pillLabel.
+  ///
+  /// In en, this message translates to:
+  /// **'{name}, {percent}'**
+  String pillLabel(String name, String percent);
+
+  /// No description provided for @pillDone.
+  ///
+  /// In en, this message translates to:
+  /// **'done'**
+  String get pillDone;
+
+  /// No description provided for @hintAdd.
+  ///
+  /// In en, this message translates to:
+  /// **'add {step}'**
+  String hintAdd(String step);
+
+  /// No description provided for @hintCheck.
+  ///
+  /// In en, this message translates to:
+  /// **'mark as done'**
+  String get hintCheck;
+
+  /// No description provided for @hintUncheck.
+  ///
+  /// In en, this message translates to:
+  /// **'unmark'**
+  String get hintUncheck;
+
+  /// No description provided for @hintStartTimer.
+  ///
+  /// In en, this message translates to:
+  /// **'start the timer'**
+  String get hintStartTimer;
+
+  /// No description provided for @hintWrite.
+  ///
+  /// In en, this message translates to:
+  /// **'write'**
+  String get hintWrite;
+
+  /// No description provided for @hintOpen.
+  ///
+  /// In en, this message translates to:
+  /// **'open'**
+  String get hintOpen;
+
+  /// No description provided for @hintOptions.
+  ///
+  /// In en, this message translates to:
+  /// **'options'**
+  String get hintOptions;
+
+  /// No description provided for @toastAdded.
+  ///
+  /// In en, this message translates to:
+  /// **'{name}: +{step}'**
+  String toastAdded(String name, String step);
+
+  /// No description provided for @toastChecked.
+  ///
+  /// In en, this message translates to:
+  /// **'{name}: done'**
+  String toastChecked(String name);
+
+  /// No description provided for @toastUnchecked.
+  ///
+  /// In en, this message translates to:
+  /// **'{name}: unmarked'**
+  String toastUnchecked(String name);
+
+  /// No description provided for @undo.
+  ///
+  /// In en, this message translates to:
+  /// **'Undo'**
+  String get undo;
+
+  /// No description provided for @toastArchived.
+  ///
+  /// In en, this message translates to:
+  /// **'Habit archived'**
+  String get toastArchived;
+
+  /// No description provided for @emptyTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Your day is wide open'**
+  String get emptyTitle;
+
+  /// No description provided for @emptyBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Start with one small, easy habit. We’ll take care of reminding you.'**
+  String get emptyBody;
+
+  /// No description provided for @emptyCta.
+  ///
+  /// In en, this message translates to:
+  /// **'Create my first habit'**
+  String get emptyCta;
+
+  /// No description provided for @emptyIdeas.
+  ///
+  /// In en, this message translates to:
+  /// **'or start with an idea'**
+  String get emptyIdeas;
+
+  /// No description provided for @ideaWater.
+  ///
+  /// In en, this message translates to:
+  /// **'Drink 2 L'**
+  String get ideaWater;
+
+  /// No description provided for @ideaRead.
+  ///
+  /// In en, this message translates to:
+  /// **'Read 10 pages'**
+  String get ideaRead;
+
+  /// No description provided for @ideaMeditate.
+  ///
+  /// In en, this message translates to:
+  /// **'Meditate 5 min'**
+  String get ideaMeditate;
+
+  /// No description provided for @close.
+  ///
+  /// In en, this message translates to:
+  /// **'Close'**
+  String get close;
+
+  /// No description provided for @editHabit.
+  ///
+  /// In en, this message translates to:
+  /// **'Edit habit'**
+  String get editHabit;
+
+  /// No description provided for @pauseHabit.
+  ///
+  /// In en, this message translates to:
+  /// **'Pause'**
+  String get pauseHabit;
+
+  /// No description provided for @pauseHint.
+  ///
+  /// In en, this message translates to:
+  /// **'holidays, illness…'**
+  String get pauseHint;
+
+  /// No description provided for @pauseLength.
+  ///
+  /// In en, this message translates to:
+  /// **'Pause length'**
+  String get pauseLength;
+
+  /// No description provided for @pause1Week.
+  ///
+  /// In en, this message translates to:
+  /// **'1 wk'**
+  String get pause1Week;
+
+  /// No description provided for @pause2Weeks.
+  ///
+  /// In en, this message translates to:
+  /// **'2 wk'**
+  String get pause2Weeks;
+
+  /// No description provided for @pause1Month.
+  ///
+  /// In en, this message translates to:
+  /// **'1 month'**
+  String get pause1Month;
+
+  /// No description provided for @pauseDates.
+  ///
+  /// In en, this message translates to:
+  /// **'Dates'**
+  String get pauseDates;
+
+  /// No description provided for @pauseChosenDay.
+  ///
+  /// In en, this message translates to:
+  /// **'the day you choose'**
+  String get pauseChosenDay;
+
+  /// No description provided for @pauseFrozen.
+  ///
+  /// In en, this message translates to:
+  /// **'Your **{streak}** streak is frozen. It resumes on **{date}**, and no reminder will be sent until then.'**
+  String pauseFrozen(String streak, String date);
+
+  /// No description provided for @pauseConfirm.
+  ///
+  /// In en, this message translates to:
+  /// **'Pause'**
+  String get pauseConfirm;
+
+  /// No description provided for @pauseActive.
+  ///
+  /// In en, this message translates to:
+  /// **'Pause on'**
+  String get pauseActive;
+
+  /// No description provided for @archive.
+  ///
+  /// In en, this message translates to:
+  /// **'Archive'**
+  String get archive;
+
+  /// No description provided for @archiveHint.
+  ///
+  /// In en, this message translates to:
+  /// **'leaves Today, history is kept'**
+  String get archiveHint;
+
+  /// No description provided for @delete.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete'**
+  String get delete;
+
+  /// No description provided for @deleteTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Delete {name} and its history?'**
+  String deleteTitle(String name);
+
+  /// No description provided for @deleteBody.
+  ///
+  /// In en, this message translates to:
+  /// **'This can’t be undone.'**
+  String get deleteBody;
+
+  /// No description provided for @cancel.
+  ///
+  /// In en, this message translates to:
+  /// **'Cancel'**
+  String get cancel;
+
+  /// No description provided for @weeksCount.
+  ///
+  /// In en, this message translates to:
+  /// **'{count, plural, one{{count} week} other{{count} weeks}}'**
+  String weeksCount(int count);
 }
 
 class _AppLocalizationsDelegate

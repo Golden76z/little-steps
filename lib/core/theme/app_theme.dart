@@ -61,6 +61,32 @@ ThemeData buildSorbetTheme([SorbetColors c = SorbetColors.light]) {
       elevation: 0,
       scrolledUnderElevation: 0,
     ),
+    snackBarTheme: SnackBarThemeData(
+      behavior: SnackBarBehavior.floating,
+      backgroundColor: c.ink,
+      contentTextStyle: TextStyle(
+        fontFamily: _font,
+        fontSize: 15,
+        fontWeight: FontWeight.w500,
+        color: c.onAccent,
+      ),
+      actionTextColor: c.selectedBorder,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(20)),
+      insetPadding: const EdgeInsets.symmetric(horizontal: 24, vertical: 8),
+    ),
+    dialogTheme: DialogThemeData(
+      backgroundColor: c.surface,
+      surfaceTintColor: c.surface,
+      barrierColor: c.barrier,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(28)),
+    ),
+    datePickerTheme: DatePickerThemeData(
+      backgroundColor: c.surface,
+      surfaceTintColor: c.surface,
+      headerBackgroundColor: c.surface,
+      headerForegroundColor: c.ink,
+      shape: RoundedRectangleBorder(borderRadius: BorderRadius.circular(28)),
+    ),
     dividerTheme: DividerThemeData(
       color: c.divider,
       thickness: 1.5,

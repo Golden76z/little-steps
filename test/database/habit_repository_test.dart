@@ -88,6 +88,13 @@ void main() {
     );
   });
 
+  test('unarchiving brings the habit back', () async {
+    final id = await repo.createHabit(water());
+    await repo.archiveHabit(id, day);
+    await repo.unarchiveHabit(id);
+    expect((await repo.watchHabits().first).single.id, id);
+  });
+
   test('one entry per habit and day: setting again replaces it', () async {
     final id = await repo.createHabit(water());
     await repo.setEntry(HabitEntry(habitId: id, day: day, value: 250));

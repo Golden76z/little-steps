@@ -61,6 +61,11 @@ class HabitRepository {
         HabitsCompanion(archivedOn: Value(on)),
       );
 
+  Future<void> unarchiveHabit(int id) =>
+      (_db.update(_db.habits)..where((h) => h.id.equals(id))).write(
+        const HabitsCompanion(archivedOn: Value(null)),
+      );
+
   /// Removes the habit and, by cascade, its entries and pauses.
   Future<void> deleteHabit(int id) =>
       (_db.delete(_db.habits)..where((h) => h.id.equals(id))).go();

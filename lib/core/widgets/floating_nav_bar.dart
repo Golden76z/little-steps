@@ -112,7 +112,7 @@ class _TabButton extends StatelessWidget {
       child: Icon(
         selected ? tab.activeIcon : tab.icon,
         size: 24,
-        color: selected ? c.onAccent : c.navIcon,
+        color: selected ? c.onAccent : c.inkSoft,
       ),
     );
   }

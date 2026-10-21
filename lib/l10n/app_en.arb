@@ -2,12 +2,340 @@
   "@@locale": "en",
   "appTitle": "Little Steps",
   "tabToday": "Today",
-  "@tabToday": { "description": "Bottom bar tab and Today screen title" },
+  "@tabToday": {
+    "description": "Bottom bar tab and Today screen title"
+  },
   "tabProgress": "Progress",
   "tabTrophies": "Trophies",
   "tabProfile": "Profile",
   "newHabit": "New habit",
-  "@newHabit": { "description": "Accessibility label of the round + button, and title of the creation flow" },
+  "@newHabit": {
+    "description": "Accessibility label of the round + button, and title of the creation flow"
+  },
   "mainNavigation": "Main navigation",
-  "@mainNavigation": { "description": "Accessibility label of the floating bottom bar" }
+  "@mainNavigation": {
+    "description": "Accessibility label of the floating bottom bar"
+  },
+  "levelMonth": "Level {level} · {month}",
+  "@levelMonth": {
+    "placeholders": {
+      "level": {
+        "type": "int"
+      },
+      "month": {
+        "type": "String"
+      }
+    }
+  },
+  "levelProgress": "Level {level}, {percent} to level {next}",
+  "@levelProgress": {
+    "placeholders": {
+      "level": {
+        "type": "int"
+      },
+      "percent": {
+        "type": "String"
+      },
+      "next": {
+        "type": "int"
+      }
+    }
+  },
+  "streakDays": "{count, plural, one{{count}-day streak} other{{count}-day streak}}",
+  "@streakDays": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "daysCount": "{count, plural, one{{count} day} other{{count} days}}",
+  "@daysCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  },
+  "calendar": "Calendar",
+  "weekDays": "Days of the week",
+  "restToday": "Resting today",
+  "restOnDay": "Resting",
+  "restDay": "Rest day",
+  "pausedUntil": "Paused until {date}",
+  "@pausedUntil": {
+    "placeholders": {
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "valueLiters": "{value} / {goal} L",
+  "@valueLiters": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      },
+      "goal": {
+        "type": "String"
+      }
+    }
+  },
+  "valueGlasses": "{value} / {goal} {count, plural, one{glass} other{glasses}}",
+  "@valueGlasses": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      },
+      "goal": {
+        "type": "String"
+      },
+      "count": {
+        "type": "num"
+      }
+    }
+  },
+  "valueMl": "{value} / {goal} ml",
+  "@valueMl": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      },
+      "goal": {
+        "type": "String"
+      }
+    }
+  },
+  "valuePages": "{value} / {goal} {count, plural, one{page} other{pages}}",
+  "@valuePages": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      },
+      "goal": {
+        "type": "String"
+      },
+      "count": {
+        "type": "num"
+      }
+    }
+  },
+  "valueTimes": "{value} / {goal} {count, plural, one{time} other{times}}",
+  "@valueTimes": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      },
+      "goal": {
+        "type": "String"
+      },
+      "count": {
+        "type": "num"
+      }
+    }
+  },
+  "valueMinutes": "{value} / {goal} min",
+  "@valueMinutes": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      },
+      "goal": {
+        "type": "String"
+      }
+    }
+  },
+  "valueLines": "{value} / {goal} {count, plural, one{line} other{lines}}",
+  "@valueLines": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      },
+      "goal": {
+        "type": "String"
+      },
+      "count": {
+        "type": "num"
+      }
+    }
+  },
+  "valueThisWeek": "{value} / {goal} this week",
+  "@valueThisWeek": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      },
+      "goal": {
+        "type": "String"
+      }
+    }
+  },
+  "doneLabel": "Done!",
+  "momentMorning": "This morning",
+  "momentNoon": "At noon",
+  "momentEvening": "Tonight",
+  "momentAnytime": "Today",
+  "stepCl": "{value} cl",
+  "@stepCl": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "stepMl": "{value} ml",
+  "@stepMl": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "stepGlasses": "{count, plural, one{{value} glass} other{{value} glasses}}",
+  "@stepGlasses": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      },
+      "count": {
+        "type": "num"
+      }
+    }
+  },
+  "stepPages": "{count, plural, one{{value} page} other{{value} pages}}",
+  "@stepPages": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      },
+      "count": {
+        "type": "num"
+      }
+    }
+  },
+  "stepTimes": "{count, plural, one{{value} time} other{{value} times}}",
+  "@stepTimes": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      },
+      "count": {
+        "type": "num"
+      }
+    }
+  },
+  "stepMinutes": "{value} min",
+  "@stepMinutes": {
+    "placeholders": {
+      "value": {
+        "type": "String"
+      }
+    }
+  },
+  "pillLabel": "{name}, {percent}",
+  "@pillLabel": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      },
+      "percent": {
+        "type": "String"
+      }
+    }
+  },
+  "pillDone": "done",
+  "hintAdd": "add {step}",
+  "@hintAdd": {
+    "placeholders": {
+      "step": {
+        "type": "String"
+      }
+    }
+  },
+  "hintCheck": "mark as done",
+  "hintUncheck": "unmark",
+  "hintStartTimer": "start the timer",
+  "hintWrite": "write",
+  "hintOpen": "open",
+  "hintOptions": "options",
+  "toastAdded": "{name}: +{step}",
+  "@toastAdded": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      },
+      "step": {
+        "type": "String"
+      }
+    }
+  },
+  "toastChecked": "{name}: done",
+  "@toastChecked": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "toastUnchecked": "{name}: unmarked",
+  "@toastUnchecked": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "undo": "Undo",
+  "toastArchived": "Habit archived",
+  "emptyTitle": "Your day is wide open",
+  "emptyBody": "Start with one small, easy habit. We’ll take care of reminding you.",
+  "emptyCta": "Create my first habit",
+  "emptyIdeas": "or start with an idea",
+  "ideaWater": "Drink 2 L",
+  "ideaRead": "Read 10 pages",
+  "ideaMeditate": "Meditate 5 min",
+  "close": "Close",
+  "editHabit": "Edit habit",
+  "pauseHabit": "Pause",
+  "pauseHint": "holidays, illness…",
+  "pauseLength": "Pause length",
+  "pause1Week": "1 wk",
+  "pause2Weeks": "2 wk",
+  "pause1Month": "1 month",
+  "pauseDates": "Dates",
+  "pauseChosenDay": "the day you choose",
+  "pauseFrozen": "Your **{streak}** streak is frozen. It resumes on **{date}**, and no reminder will be sent until then.",
+  "@pauseFrozen": {
+    "placeholders": {
+      "streak": {
+        "type": "String"
+      },
+      "date": {
+        "type": "String"
+      }
+    }
+  },
+  "pauseConfirm": "Pause",
+  "pauseActive": "Pause on",
+  "archive": "Archive",
+  "archiveHint": "leaves Today, history is kept",
+  "delete": "Delete",
+  "deleteTitle": "Delete {name} and its history?",
+  "@deleteTitle": {
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "deleteBody": "This can’t be undone.",
+  "cancel": "Cancel",
+  "weeksCount": "{count, plural, one{{count} week} other{{count} weeks}}",
+  "@weeksCount": {
+    "placeholders": {
+      "count": {
+        "type": "int"
+      }
+    }
+  }
 }

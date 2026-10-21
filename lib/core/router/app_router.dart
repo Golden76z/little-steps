@@ -2,6 +2,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../features/create_habit/create_habit_screen.dart';
+import '../../features/habit_detail/habit_detail_screen.dart';
 import '../../features/profile/profile_screen.dart';
 import '../../features/progress/progress_screen.dart';
 import '../../features/today/today_screen.dart';
@@ -14,6 +15,9 @@ abstract final class Routes {
   static const trophies = '/trophies';
   static const profile = '/profile';
   static const create = '/create';
+
+  static String habit(int id, {bool startTimer = false}) =>
+      '/habit/$id${startTimer ? '?timer=1' : ''}';
 }
 
 final routerProvider = Provider<GoRouter>((ref) {
@@ -60,6 +64,13 @@ final routerProvider = Provider<GoRouter>((ref) {
       GoRoute(
         path: Routes.create,
         builder: (_, _) => const CreateHabitScreen(),
+      ),
+      GoRoute(
+        path: '/habit/:id',
+        builder: (_, state) => HabitDetailScreen(
+          habitId: int.parse(state.pathParameters['id']!),
+          startTimer: state.uri.queryParameters['timer'] == '1',
+        ),
       ),
     ],
   );
