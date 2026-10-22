@@ -8,6 +8,7 @@ import '../../core/domain/day.dart';
 import '../../core/domain/habit.dart';
 import '../../core/icons/phosphor_icons.dart';
 import '../../core/l10n/formatters.dart';
+import '../../core/notifications/reminder_planner.dart';
 import '../../core/l10n/l10n.dart';
 import '../../core/router/app_router.dart';
 import '../../core/theme/sorbet_colors.dart';
@@ -22,9 +23,6 @@ import 'create_flow.dart';
 import 'draft_provider.dart';
 import 'habit_draft.dart';
 import 'labels.dart';
-
-/// Time of the "streak at risk" nudge, minutes after midnight.
-const streakDangerTime = 21 * 60;
 
 /// P3: rhythm, moment of the day, reminders.
 class ScheduleScreen extends ConsumerWidget {
@@ -179,7 +177,7 @@ class ScheduleScreen extends ConsumerWidget {
                       children: [
                         Text(l10n.streakDanger, style: text.bodyMedium),
                         Text(
-                          l10n.streakDangerHint(time(streakDangerTime)),
+                          l10n.streakDangerHint(time(streakDangerMinutes)),
                           style: text.labelMedium!.copyWith(color: c.muted),
                         ),
                       ],

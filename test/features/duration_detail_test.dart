@@ -7,6 +7,7 @@ import 'package:little_steps/core/database/habit_repository.dart';
 import 'package:little_steps/core/database/providers.dart';
 import 'package:little_steps/core/domain/day.dart';
 import 'package:little_steps/core/domain/habit.dart';
+import 'package:little_steps/core/notifications/reminder_scheduler.dart';
 import 'package:little_steps/core/time/today_provider.dart';
 
 import '../helpers.dart';
@@ -53,6 +54,7 @@ Future<void> openDetail(
       overrides: [
         databaseProvider.overrideWithValue(db),
         clockProvider.overrideWithValue(() => now),
+        reminderSchedulerProvider.overrideWithValue(FakeScheduler()),
       ],
       child: const LittleStepsApp(locale: Locale('fr')),
     ),

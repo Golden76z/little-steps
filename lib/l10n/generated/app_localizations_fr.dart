@@ -1407,4 +1407,19 @@ class AppLocalizationsFr extends AppLocalizations {
   String ratio(String a, String b) {
     return '$a / $b';
   }
+
+  @override
+  String get notifChannelName => 'Rappels';
+
+  @override
+  String get notifChannelDescription =>
+      'Rappels d’habitudes et alertes de série';
+
+  @override
+  String get reminderBody => 'Un petit pas maintenant ?';
+
+  @override
+  String dangerBody(String names) {
+    return 'Encore $names aujourd’hui pour garder ta flamme.';
+  }
 }

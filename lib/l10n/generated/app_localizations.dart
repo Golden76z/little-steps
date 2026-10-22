@@ -2131,6 +2131,30 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'{a} / {b}'**
   String ratio(String a, String b);
+
+  /// No description provided for @notifChannelName.
+  ///
+  /// In en, this message translates to:
+  /// **'Reminders'**
+  String get notifChannelName;
+
+  /// No description provided for @notifChannelDescription.
+  ///
+  /// In en, this message translates to:
+  /// **'Habit reminders and streak alerts'**
+  String get notifChannelDescription;
+
+  /// No description provided for @reminderBody.
+  ///
+  /// In en, this message translates to:
+  /// **'A little step now?'**
+  String get reminderBody;
+
+  /// No description provided for @dangerBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Still {names} today to keep your flame going.'**
+  String dangerBody(String names);
 }
 
 class _AppLocalizationsDelegate

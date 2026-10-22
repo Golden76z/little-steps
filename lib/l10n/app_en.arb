@@ -1214,5 +1214,16 @@
         "type": "String"
       }
     }
+  },
+  "notifChannelName": "Reminders",
+  "notifChannelDescription": "Habit reminders and streak alerts",
+  "reminderBody": "A little step now?",
+  "dangerBody": "Still {names} today to keep your flame going.",
+  "@dangerBody": {
+    "placeholders": {
+      "names": {
+        "type": "String"
+      }
+    }
   }
 }

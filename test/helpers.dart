@@ -5,10 +5,30 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:little_steps/app.dart';
 import 'package:little_steps/core/database/app_database.dart';
 import 'package:little_steps/core/database/providers.dart';
+import 'package:little_steps/core/notifications/reminder_scheduler.dart';
 import 'package:little_steps/core/time/today_provider.dart';
 
 /// Tuesday 20 October 2026, 10 am.
 final testNow = DateTime(2026, 10, 20, 10);
+
+/// Records what the app asks to schedule, instead of the real plugin.
+class FakeScheduler implements ReminderScheduler {
+  List<ScheduledNotification> scheduled = [];
+  int calls = 0;
+
+  @override
+  Future<void> replaceAll(
+    List<ScheduledNotification> notifications, {
+    required String channelName,
+    required String channelDescription,
+  }) async {
+    calls++;
+    scheduled = notifications;
+  }
+}
+
+/// The scheduler of the last [pumpApp].
+late FakeScheduler scheduler;
 
 /// The whole app on an in-memory database and a fixed clock.
 Future<void> pumpApp(
@@ -21,6 +41,9 @@ Future<void> pumpApp(
       overrides: [
         databaseProvider.overrideWithValue(db),
         clockProvider.overrideWithValue(() => testNow),
+        reminderSchedulerProvider.overrideWithValue(
+          scheduler = FakeScheduler(),
+        ),
       ],
       child: LittleStepsApp(locale: Locale(locale)),
     ),

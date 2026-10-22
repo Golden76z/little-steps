@@ -338,5 +338,9 @@
   "rowDayStart": "Début de la journée",
   "dayStartHint": "Jusqu’à cette heure, la nuit compte encore pour la veille.",
   "noReminder": "Aucun rappel",
-  "ratio": "{a} / {b}"
+  "ratio": "{a} / {b}",
+  "notifChannelName": "Rappels",
+  "notifChannelDescription": "Rappels d’habitudes et alertes de série",
+  "reminderBody": "Un petit pas maintenant ?",
+  "dangerBody": "Encore {names} aujourd’hui pour garder ta flamme."
 }
