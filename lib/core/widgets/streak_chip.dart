@@ -2,6 +2,7 @@ import 'package:flutter/material.dart';
 
 import '../icons/phosphor_icons.dart';
 import '../theme/sorbet_colors.dart';
+import 'rolling_text.dart';
 
 /// Flame chip with the global streak; greyed out at 0.
 class StreakChip extends StatelessWidget {
@@ -37,7 +38,7 @@ class StreakChip extends StatelessWidget {
               size: 18,
               color: on ? c.flame : c.flameOff,
             ),
-            Text(
+            RollingText(
               '$days',
               style: Theme.of(context).textTheme.titleSmall!
                   .copyWith(height: 1, color: on ? c.ink : c.faint),

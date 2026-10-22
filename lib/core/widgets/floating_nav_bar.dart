@@ -2,6 +2,8 @@ import 'package:flutter/material.dart';
 
 import '../icons/phosphor_icons.dart';
 import '../theme/sorbet_colors.dart';
+import '../theme/motion.dart';
+import 'press_scale.dart';
 
 class NavTab {
   const NavTab({
@@ -144,21 +146,26 @@ class _RoundButton extends StatelessWidget {
       selected: selected,
       label: semanticLabel,
       excludeSemantics: true,
-      child: DecoratedBox(
-        decoration: BoxDecoration(
-          shape: BoxShape.circle,
-          color: color,
-          boxShadow: [?shadow],
-        ),
-        child: Material(
-          type: MaterialType.transparency,
-          shape: const CircleBorder(),
-          clipBehavior: Clip.antiAlias,
-          child: InkWell(
-            onTap: onTap,
-            child: SizedBox.square(
-              dimension: size,
-              child: Center(child: child),
+      child: PressScale(
+        scale: 0.9,
+        child: AnimatedContainer(
+          duration: context.motion(Motion.medium),
+          curve: Motion.curve,
+          decoration: BoxDecoration(
+            shape: BoxShape.circle,
+            color: color,
+            boxShadow: [?shadow],
+          ),
+          child: Material(
+            type: MaterialType.transparency,
+            shape: const CircleBorder(),
+            clipBehavior: Clip.antiAlias,
+            child: InkWell(
+              onTap: onTap,
+              child: SizedBox.square(
+                dimension: size,
+                child: Center(child: child),
+              ),
             ),
           ),
         ),

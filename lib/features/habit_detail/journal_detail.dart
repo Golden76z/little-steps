@@ -14,6 +14,7 @@ import '../../core/widgets/primary_button.dart';
 import '../../core/widgets/segmented_strip.dart';
 import '../../core/widgets/sorbet_card.dart';
 import 'detail_scaffold.dart';
+import '../../core/theme/motion.dart';
 
 /// The habit's entries with their notes, which History leaves out.
 final _entriesProvider = StreamProvider.family<List<HabitEntry>, int>(
@@ -363,7 +364,8 @@ class _MoodCard extends StatelessWidget {
                         child: GestureDetector(
                           behavior: HitTestBehavior.opaque,
                           onTap: () => onPick(i),
-                          child: Container(
+                          child: AnimatedContainer(
+                            duration: context.motion(Motion.fast),
                             height: 48,
                             decoration: BoxDecoration(
                               color: i == mood ? tones.base : null,

@@ -4,6 +4,7 @@ import 'package:flutter/material.dart';
 
 import '../icons/phosphor_icons.dart';
 import '../theme/sorbet_colors.dart';
+import '../theme/motion.dart';
 
 /// Avatar inside the XP ring (accent arc over a pale track): 48 px on
 /// Today and Trophies, 56 px with a level pill on Profile.
@@ -50,11 +51,17 @@ class XpAvatar extends StatelessWidget {
             clipBehavior: Clip.none,
             children: [
               Positioned.fill(
-                child: CustomPaint(
-                  painter: _RingPainter(
-                    fraction: fraction,
-                    track: c.track,
-                    color: c.accent,
+                child: TweenAnimationBuilder<double>(
+                  tween: Tween(end: fraction),
+                  duration: context.motion(Motion.ring),
+                  curve: Motion.curve,
+                  builder: (context, f, child) => CustomPaint(
+                    painter: _RingPainter(
+                      fraction: f,
+                      track: c.track,
+                      color: c.accent,
+                    ),
+                    child: child,
                   ),
                   child: Padding(
                     // Mockup: inset 7 at 48 px, 8 at 56 px.

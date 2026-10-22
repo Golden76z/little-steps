@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:little_steps/core/icons/phosphor_icons.dart';
 
@@ -49,5 +50,18 @@ void main() {
     addTearDown(tester.platformDispatcher.clearTextScaleFactorTestValue);
     await pumpApp(tester, db, locale: 'fr');
     expect(tester.takeException(), isNull);
+  });
+
+  testApp('the new tab fades in', (tester, db) async {
+    await pumpApp(tester, db);
+    await tester.tap(find.bySemanticsLabel('Progress'));
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 60));
+    final fade = tester.widget<FadeTransition>(
+      find.ancestor(of: find.text('Progress'), matching: find.byKey(const ValueKey('branch-1'))),
+    );
+    expect(fade.opacity.value, inExclusiveRange(0, 1));
+    await tester.pumpAndSettle();
+    expect(fade.opacity.value, 1);
   });
 }

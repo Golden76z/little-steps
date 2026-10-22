@@ -13,6 +13,8 @@ import 'create_flow.dart';
 import 'draft_provider.dart';
 import 'habit_draft.dart';
 import 'labels.dart';
+import '../../core/theme/motion.dart';
+import '../../core/widgets/press_scale.dart';
 
 /// P1: pick a popular habit or a type.
 class ChooseTypeScreen extends ConsumerStatefulWidget {
@@ -202,71 +204,74 @@ class _PopularTile extends StatelessWidget {
     final draft = HabitDraft.fromPreset(preset, name: '');
     final label = presetLabel(l10n, preset);
     final radius = BorderRadius.circular(20);
-    return Semantics(
-      button: true,
-      selected: selected,
-      label: '$label, ${typeName(l10n, draft.type)}',
-      excludeSemantics: true,
-      child: Container(
-        decoration: BoxDecoration(
-          color: c.habit[draft.color],
-          borderRadius: radius,
-          boxShadow: selected
-              ? null
-              : [BoxShadow(color: c.floatShadow, offset: const Offset(0, 3))],
-        ),
-        // Inset ring drawn on top, so selecting does not shift the content.
-        foregroundDecoration: selected
-            ? BoxDecoration(
-                borderRadius: radius,
-                border: Border.all(color: c.ink, width: 2.5),
-              )
-            : null,
-        child: Material(
-          type: MaterialType.transparency,
-          child: InkWell(
+    return PressScale(
+      child: Semantics(
+        button: true,
+        selected: selected,
+        label: '$label, ${typeName(l10n, draft.type)}',
+        excludeSemantics: true,
+        child: AnimatedContainer(
+          duration: context.motion(Motion.fast),
+          decoration: BoxDecoration(
+            color: c.habit[draft.color],
             borderRadius: radius,
-            onTap: onTap,
-            child: ConstrainedBox(
-              constraints: const BoxConstraints(minHeight: 76),
-              child: Stack(
-                children: [
-                  Padding(
-                    padding: const EdgeInsets.fromLTRB(10, 10, 10, 8),
-                    child: Column(
-                      crossAxisAlignment: CrossAxisAlignment.start,
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Icon(habitIcon(draft.icon), size: 22, color: c.ink),
-                        const SizedBox(height: 14),
-                        Text(
-                          label,
-                          style: text.labelLarge!.copyWith(height: 1.1),
-                        ),
-                      ],
-                    ),
-                  ),
-                  PositionedDirectional(
-                    top: 9,
-                    end: 9,
-                    child: Container(
-                      height: 18,
-                      padding: const EdgeInsets.symmetric(horizontal: 6),
-                      alignment: Alignment.center,
-                      decoration: BoxDecoration(
-                        color: c.badge,
-                        borderRadius: BorderRadius.circular(9),
-                      ),
-                      child: Text(
-                        typeName(l10n, draft.type),
-                        style: text.labelSmall!.copyWith(
-                          fontSize: 10.5,
-                          height: 1,
-                        ),
+            boxShadow: selected
+                ? null
+                : [BoxShadow(color: c.floatShadow, offset: const Offset(0, 3))],
+          ),
+          // Inset ring drawn on top, so selecting does not shift the content.
+          foregroundDecoration: selected
+              ? BoxDecoration(
+                  borderRadius: radius,
+                  border: Border.all(color: c.ink, width: 2.5),
+                )
+              : null,
+          child: Material(
+            type: MaterialType.transparency,
+            child: InkWell(
+              borderRadius: radius,
+              onTap: onTap,
+              child: ConstrainedBox(
+                constraints: const BoxConstraints(minHeight: 76),
+                child: Stack(
+                  children: [
+                    Padding(
+                      padding: const EdgeInsets.fromLTRB(10, 10, 10, 8),
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        mainAxisSize: MainAxisSize.min,
+                        children: [
+                          Icon(habitIcon(draft.icon), size: 22, color: c.ink),
+                          const SizedBox(height: 14),
+                          Text(
+                            label,
+                            style: text.labelLarge!.copyWith(height: 1.1),
+                          ),
+                        ],
                       ),
                     ),
-                  ),
-                ],
+                    PositionedDirectional(
+                      top: 9,
+                      end: 9,
+                      child: Container(
+                        height: 18,
+                        padding: const EdgeInsets.symmetric(horizontal: 6),
+                        alignment: Alignment.center,
+                        decoration: BoxDecoration(
+                          color: c.badge,
+                          borderRadius: BorderRadius.circular(9),
+                        ),
+                        child: Text(
+                          typeName(l10n, draft.type),
+                          style: text.labelSmall!.copyWith(
+                            fontSize: 10.5,
+                            height: 1,
+                          ),
+                        ),
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
           ),
@@ -337,7 +342,8 @@ class _TypeRow extends StatelessWidget {
                   ],
                 ),
               ),
-              Container(
+              AnimatedContainer(
+                duration: context.motion(Motion.fast),
                 width: 22,
                 height: 22,
                 decoration: BoxDecoration(

@@ -2,6 +2,7 @@ import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
 
+import '../theme/motion.dart';
 import '../theme/sorbet_colors.dart';
 
 /// Glued segmented control: cells on one tinted band, the selected one
@@ -47,6 +48,9 @@ class SegmentedStrip extends StatelessWidget {
   /// Cells per row; more cells wrap onto further rows.
   final int? columns;
 
+  /// The sliding selection of a one-row strip (tests find it by this key).
+  static const indicatorKey = Key('segmented-strip-indicator');
+
   @override
   Widget build(BuildContext context) {
     final c = context.sorbet;
@@ -70,28 +74,88 @@ class SegmentedStrip extends StatelessWidget {
         ),
         Padding(
           padding: const EdgeInsets.symmetric(horizontal: 4),
-          child: Column(
-            children: [
-              for (var row = 0; row < count; row += columns ?? count)
-                Row(
+          child: (columns ?? count) >= count
+              // One row: a single selection slides from cell to cell.
+              ? LayoutBuilder(
+                  builder: (context, box) {
+                    final width = box.maxWidth / count;
+                    final at = selected;
+                    return Stack(
+                      children: [
+                        if (at != null && at >= 0)
+                          AnimatedPositioned(
+                            key: indicatorKey,
+                            duration: context.motion(Motion.medium),
+                            curve: Motion.curve,
+                            left: width * at,
+                            width: width,
+                            top: hitPad,
+                            bottom: hitPad,
+                            child: DecoratedBox(decoration: _selection(c)),
+                          ),
+                        Row(
+                          children: [
+                            for (var i = 0; i < count; i++)
+                              Expanded(
+                                child: _cell(
+                                  context,
+                                  c,
+                                  i,
+                                  hitPad,
+                                  paintsSelection: false,
+                                ),
+                              ),
+                          ],
+                        ),
+                      ],
+                    );
+                  },
+                )
+              : Column(
                   children: [
-                    for (
-                      var i = row;
-                      i < count && i < row + (columns ?? count);
-                      i++
-                    )
-                      Expanded(child: _cell(context, c, i, hitPad)),
+                    for (var row = 0; row < count; row += columns!)
+                      Row(
+                        children: [
+                          for (
+                            var i = row;
+                            i < count && i < row + columns!;
+                            i++
+                          )
+                            Expanded(
+                              child: _cell(
+                                context,
+                                c,
+                                i,
+                                hitPad,
+                                paintsSelection: true,
+                              ),
+                            ),
+                        ],
+                      ),
                   ],
                 ),
-            ],
-          ),
         ),
       ],
     );
     return onSelected == null ? ExcludeSemantics(child: strip) : strip;
   }
 
-  Widget _cell(BuildContext context, SorbetColors c, int i, double hitPad) {
+  BoxDecoration _selection(SorbetColors c) => BoxDecoration(
+    color: outlined ? c.bg : c.surface,
+    borderRadius: BorderRadius.circular(outlined ? 16 : 18),
+    border: Border.all(color: c.selectedBorder, width: 2),
+    boxShadow: outlined
+        ? null
+        : [BoxShadow(color: c.shadowPill, offset: const Offset(0, 2))],
+  );
+
+  Widget _cell(
+    BuildContext context,
+    SorbetColors c,
+    int i,
+    double hitPad, {
+    required bool paintsSelection,
+  }) {
     final on = i == selected;
     return Semantics(
       button: onSelected != null,
@@ -104,18 +168,19 @@ class SegmentedStrip extends StatelessWidget {
         onTap: onSelected == null ? null : () => onSelected!(i),
         child: Padding(
           padding: EdgeInsets.symmetric(vertical: hitPad),
-          child: Container(
+          // Several rows cannot share one sliding selection: each cell fades its own.
+          child: AnimatedContainer(
+            duration: context.motion(Motion.fast),
             constraints: BoxConstraints(minHeight: cellHeight),
-            decoration: BoxDecoration(
-              color: on ? (outlined ? c.bg : c.surface) : null,
-              borderRadius: BorderRadius.circular(outlined ? 16 : 18),
-              border: on ? Border.all(color: c.selectedBorder, width: 2) : null,
-              boxShadow: on && !outlined
-                  ? [BoxShadow(color: c.shadowPill, offset: const Offset(0, 2))]
-                  : null,
-            ),
-            child: DefaultTextStyle.merge(
-              style: TextStyle(color: on ? c.ink : c.muted),
+            decoration: paintsSelection && on
+                ? _selection(c)
+                : BoxDecoration(
+                    borderRadius: BorderRadius.circular(outlined ? 16 : 18),
+                  ),
+            child: AnimatedDefaultTextStyle(
+              duration: context.motion(Motion.fast),
+              style: DefaultTextStyle.of(context).style
+                  .copyWith(color: on ? c.ink : c.muted),
               child: Center(child: itemBuilder(context, i, on)),
             ),
           ),

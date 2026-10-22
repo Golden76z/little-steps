@@ -1,7 +1,10 @@
 import 'package:flutter/material.dart';
 
 import '../icons/phosphor_icons.dart';
+import '../theme/motion.dart';
 import '../theme/sorbet_colors.dart';
+import 'press_scale.dart';
+import 'rolling_text.dart';
 
 /// 64 px habit pill: pastel fill proportional to progress, icon, name,
 /// native value, percentage and a round +/✓ button.
@@ -50,155 +53,178 @@ class HabitPill extends StatelessWidget {
     return Semantics(
       container: true,
       explicitChildNodes: true,
-      child: DecoratedBox(
-        decoration: BoxDecoration(
-          color: c.surface,
-          borderRadius: radius,
-          boxShadow: [
-            BoxShadow(color: c.shadowPill, offset: const Offset(0, 3)),
-          ],
-        ),
-        child: Material(
-          type: MaterialType.transparency,
-          borderRadius: radius,
-          clipBehavior: Clip.antiAlias,
-          child: Stack(
-            children: [
-              Positioned.fill(
-                child: Align(
-                  alignment: AlignmentDirectional.centerStart,
-                  child: AnimatedFractionallySizedBox(
-                    duration: const Duration(milliseconds: 300),
-                    widthFactor: fillFactor,
-                    heightFactor: 1,
-                    child: DecoratedBox(
-                      decoration: BoxDecoration(
-                        color: fill,
-                        borderRadius: radius,
+      child: PressScale(
+        scale: 0.98,
+        child: DecoratedBox(
+          decoration: BoxDecoration(
+            color: c.surface,
+            borderRadius: radius,
+            boxShadow: [
+              BoxShadow(color: c.shadowPill, offset: const Offset(0, 3)),
+            ],
+          ),
+          child: Material(
+            type: MaterialType.transparency,
+            borderRadius: radius,
+            clipBehavior: Clip.antiAlias,
+            child: Stack(
+              children: [
+                Positioned.fill(
+                  child: Align(
+                    alignment: AlignmentDirectional.centerStart,
+                    child: AnimatedFractionallySizedBox(
+                      duration: const Duration(milliseconds: 300),
+                      widthFactor: fillFactor,
+                      heightFactor: 1,
+                      child: DecoratedBox(
+                        decoration: BoxDecoration(
+                          color: fill,
+                          borderRadius: radius,
+                        ),
                       ),
                     ),
                   ),
                 ),
-              ),
-              Semantics(
-                button: true,
-                label: semanticLabel,
-                hint: semanticHint,
-                excludeSemantics: true,
-                onTap: onTap,
-                onLongPress: onLongPress,
-                child: InkWell(
+                Semantics(
+                  button: true,
+                  label: semanticLabel,
+                  hint: semanticHint,
+                  excludeSemantics: true,
                   onTap: onTap,
                   onLongPress: onLongPress,
-                  child: ConstrainedBox(
-                    constraints: const BoxConstraints(minHeight: 64),
-                    child: Padding(
-                      padding: const EdgeInsetsDirectional.only(
-                        start: 8,
-                        end: 11,
-                      ),
-                      child: Row(
-                        children: [
-                          // 48 px target around the 42 px disc.
-                          const SizedBox(width: 48),
-                          const SizedBox(width: 9),
-                          Expanded(
-                            child: Padding(
-                              padding: const EdgeInsets.symmetric(vertical: 8),
-                              child: Column(
-                                crossAxisAlignment: CrossAxisAlignment.start,
-                                mainAxisSize: MainAxisSize.min,
-                                children: [
-                                  Text(
-                                    name,
-                                    maxLines: 1,
-                                    overflow: TextOverflow.ellipsis,
-                                    style: text.titleMedium!.copyWith(
-                                      fontWeight: FontWeight.w500,
+                  child: InkWell(
+                    onTap: onTap,
+                    onLongPress: onLongPress,
+                    child: ConstrainedBox(
+                      constraints: const BoxConstraints(minHeight: 64),
+                      child: Padding(
+                        padding: const EdgeInsetsDirectional.only(
+                          start: 8,
+                          end: 11,
+                        ),
+                        child: Row(
+                          children: [
+                            // 48 px target around the 42 px disc.
+                            const SizedBox(width: 48),
+                            const SizedBox(width: 9),
+                            Expanded(
+                              child: Padding(
+                                padding: const EdgeInsets.symmetric(
+                                  vertical: 8,
+                                ),
+                                child: Column(
+                                  crossAxisAlignment: CrossAxisAlignment.start,
+                                  mainAxisSize: MainAxisSize.min,
+                                  children: [
+                                    Text(
+                                      name,
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
+                                      style: text.titleMedium!.copyWith(
+                                        fontWeight: FontWeight.w500,
+                                      ),
                                     ),
-                                  ),
-                                  Text(
-                                    subtitle,
-                                    maxLines: 1,
-                                    overflow: TextOverflow.ellipsis,
-                                    style: text.bodySmall!.copyWith(
-                                      color: c.subtitle,
+                                    RollingText(
+                                      subtitle,
+                                      maxLines: 1,
+                                      overflow: TextOverflow.ellipsis,
+                                      style: text.bodySmall!.copyWith(
+                                        color: c.subtitle,
+                                      ),
                                     ),
-                                  ),
-                                ],
-                              ),
-                            ),
-                          ),
-                          if (percent != null) ...[
-                            const SizedBox(width: 12),
-                            ConstrainedBox(
-                              constraints: const BoxConstraints(minWidth: 42),
-                              child: Text(
-                                percent!,
-                                textAlign: TextAlign.end,
-                                style: text.bodyMedium!.copyWith(
-                                  fontWeight: FontWeight.w600,
+                                  ],
                                 ),
                               ),
                             ),
-                          ],
-                          if (showButton) ...[
-                            const SizedBox(width: 12),
-                            Container(
-                              width: 40,
-                              height: 40,
-                              decoration: BoxDecoration(
-                                shape: BoxShape.circle,
-                                color: done ? c.ink : c.track,
+                            if (percent != null) ...[
+                              const SizedBox(width: 12),
+                              ConstrainedBox(
+                                constraints: const BoxConstraints(minWidth: 42),
+                                child: RollingText(
+                                  percent!,
+                                  alignment: AlignmentDirectional.centerEnd,
+                                  textAlign: TextAlign.end,
+                                  style: text.bodyMedium!.copyWith(
+                                    fontWeight: FontWeight.w600,
+                                  ),
+                                ),
                               ),
-                              child: Icon(
-                                done
-                                    ? PhosphorIconsBold.check
-                                    : PhosphorIconsBold.plus,
-                                size: 16,
-                                color: done ? c.onAccent : c.ink,
+                            ],
+                            if (showButton) ...[
+                              const SizedBox(width: 12),
+                              AnimatedContainer(
+                                duration: context.motion(Motion.fast),
+                                width: 40,
+                                height: 40,
+                                decoration: BoxDecoration(
+                                  shape: BoxShape.circle,
+                                  color: done ? c.ink : c.track,
+                                ),
+                                // + turns into ✓ with a little pop.
+                                child: AnimatedSwitcher(
+                                  duration: context.motion(Motion.medium),
+                                  transitionBuilder: (child, a) =>
+                                      ScaleTransition(
+                                        scale: CurvedAnimation(
+                                          parent: a,
+                                          curve: Curves.easeOutBack,
+                                        ),
+                                        child: FadeTransition(
+                                          opacity: a,
+                                          child: child,
+                                        ),
+                                      ),
+                                  child: Icon(
+                                    done
+                                        ? PhosphorIconsBold.check
+                                        : PhosphorIconsBold.plus,
+                                    key: ValueKey(done),
+                                    size: 16,
+                                    color: done ? c.onAccent : c.ink,
+                                  ),
+                                ),
                               ),
-                            ),
+                            ],
                           ],
-                        ],
+                        ),
                       ),
                     ),
                   ),
                 ),
-              ),
-              PositionedDirectional(
-                start: 8,
-                top: 0,
-                bottom: 0,
-                child: Center(
-                  child: Semantics(
-                    button: true,
-                    label: iconSemanticLabel,
-                    excludeSemantics: true,
-                    onTap: onIconTap,
-                    child: InkResponse(
+                PositionedDirectional(
+                  start: 8,
+                  top: 0,
+                  bottom: 0,
+                  child: Center(
+                    child: Semantics(
+                      button: true,
+                      label: iconSemanticLabel,
+                      excludeSemantics: true,
                       onTap: onIconTap,
-                      onLongPress: onLongPress,
-                      radius: 24,
-                      child: SizedBox.square(
-                        dimension: 48,
-                        child: Center(
-                          child: Container(
-                            width: 42,
-                            height: 42,
-                            decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              color: c.iconHalo,
+                      child: InkResponse(
+                        onTap: onIconTap,
+                        onLongPress: onLongPress,
+                        radius: 24,
+                        child: SizedBox.square(
+                          dimension: 48,
+                          child: Center(
+                            child: Container(
+                              width: 42,
+                              height: 42,
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                color: c.iconHalo,
+                              ),
+                              child: Icon(icon, size: 22, color: c.ink),
                             ),
-                            child: Icon(icon, size: 22, color: c.ink),
                           ),
                         ),
                       ),
                     ),
                   ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),

@@ -14,6 +14,7 @@ import '../../core/time/today_provider.dart';
 import '../../core/widgets/app_header_card.dart';
 import '../../core/widgets/segmented_strip.dart';
 import 'progress_model.dart';
+import '../../core/widgets/rolling_text.dart';
 
 /// F-Progres: completion rate over a week, month or year.
 class ProgressScreen extends ConsumerStatefulWidget {
@@ -301,7 +302,7 @@ class _RateCard extends StatelessWidget {
                 child: Column(
                   crossAxisAlignment: CrossAxisAlignment.start,
                   children: [
-                    Text(
+                    RollingText(
                       fmt.percent(data.total.rate),
                       style: text.displaySmall!.copyWith(fontSize: 36),
                     ),

@@ -18,6 +18,7 @@ import '../create_habit/habit_draft.dart';
 import '../create_habit/labels.dart';
 import 'detail_model.dart';
 import 'detail_scaffold.dart';
+import '../../core/theme/motion.dart';
 
 /// T1: today's amount over a wave, quick step, stats (from F-Fiche) and
 /// the month calendar.
@@ -302,7 +303,8 @@ class _StepPicker extends StatelessWidget {
                         // 40 px pill in a 48 px target (the band's padding).
                         child: Padding(
                           padding: const EdgeInsets.symmetric(vertical: 4),
-                          child: Container(
+                          child: AnimatedContainer(
+                            duration: context.motion(Motion.fast),
                             constraints: const BoxConstraints(minHeight: 40),
                             alignment: Alignment.center,
                             decoration: BoxDecoration(

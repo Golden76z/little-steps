@@ -13,11 +13,13 @@ import '../../core/theme/sorbet_colors.dart';
 import '../../core/time/today_provider.dart';
 import '../../core/widgets/dashed_border.dart';
 import '../../core/widgets/marked_text.dart';
+import '../../core/widgets/press_scale.dart';
 import '../../core/widgets/month_mosaic.dart';
 import '../../core/widgets/segmented_strip.dart';
 import '../../core/widgets/sorbet_card.dart';
 import 'detail_model.dart';
 import 'detail_scaffold.dart';
+import '../../core/theme/motion.dart';
 
 /// T3: streak and the big check, month (or year) of done days, joker tip.
 class YesNoDetail extends ConsumerStatefulWidget {
@@ -147,7 +149,9 @@ class _StreakCard extends StatelessWidget {
     final c = context.sorbet;
     final tones = c.tones[habit.color]!;
     final text = Theme.of(context).textTheme;
-    final button = Container(
+    final button = AnimatedContainer(
+      // Fill fades in, as in the mockup (background 0.2 s).
+      duration: context.motion(const Duration(milliseconds: 200)),
       width: 118,
       height: 118,
       decoration: BoxDecoration(
@@ -227,16 +231,18 @@ class _StreakCard extends StatelessWidget {
             toggled: done,
             label: done ? l10n.doneLabel : l10n.iDidIt,
             excludeSemantics: true,
-            child: GestureDetector(
-              onTap: onToggle,
-              child: done
-                  ? button
-                  : DashedBorder(
-                      color: c.dashed,
-                      radius: 59,
-                      width: 3,
-                      child: button,
-                    ),
+            child: PressScale(
+              child: GestureDetector(
+                onTap: onToggle,
+                child: done
+                    ? button
+                    : DashedBorder(
+                        color: c.dashed,
+                        radius: 59,
+                        width: 3,
+                        child: button,
+                      ),
+              ),
             ),
           ),
         ],

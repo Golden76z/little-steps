@@ -23,6 +23,7 @@ import 'create_flow.dart';
 import 'draft_provider.dart';
 import 'habit_draft.dart';
 import 'labels.dart';
+import '../../core/theme/motion.dart';
 
 /// P3: rhythm, moment of the day, reminders.
 class ScheduleScreen extends ConsumerWidget {
@@ -300,7 +301,8 @@ class _ActiveDays extends StatelessWidget {
       excludeSemantics: true,
       child: GestureDetector(
         onTap: () => onChange((draft) => draft.toggleDay(d.weekday)),
-        child: Container(
+        child: AnimatedContainer(
+          duration: context.motion(Motion.fast),
           constraints: const BoxConstraints(minHeight: 58),
           decoration: BoxDecoration(
             color: on ? c.dayOn : c.cellOff,

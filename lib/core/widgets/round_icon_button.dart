@@ -1,6 +1,7 @@
 import 'package:flutter/material.dart';
 
 import '../theme/sorbet_colors.dart';
+import 'press_scale.dart';
 
 /// Pale round button (close, back, −/+), with at least a 48 px target.
 class RoundIconButton extends StatelessWidget {
@@ -28,20 +29,24 @@ class RoundIconButton extends StatelessWidget {
       enabled: onTap != null,
       label: label,
       excludeSemantics: true,
-      child: InkResponse(
-        onTap: onTap,
-        radius: target / 2,
-        child: SizedBox.square(
-          dimension: target,
-          child: Center(
-            child: Container(
-              width: size,
-              height: size,
-              decoration: BoxDecoration(shape: BoxShape.circle, color: c.bg),
-              child: Icon(
-                icon,
-                size: iconSize,
-                color: onTap == null ? c.faint : c.ink,
+      child: PressScale(
+        scale: 0.9,
+        enabled: onTap != null,
+        child: InkResponse(
+          onTap: onTap,
+          radius: target / 2,
+          child: SizedBox.square(
+            dimension: target,
+            child: Center(
+              child: Container(
+                width: size,
+                height: size,
+                decoration: BoxDecoration(shape: BoxShape.circle, color: c.bg),
+                child: Icon(
+                  icon,
+                  size: iconSize,
+                  color: onTap == null ? c.faint : c.ink,
+                ),
               ),
             ),
           ),

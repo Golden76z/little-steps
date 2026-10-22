@@ -14,6 +14,7 @@ import '../../features/today/today_screen.dart';
 import '../../features/trophies/trophies_screen.dart';
 import '../database/providers.dart';
 import 'app_shell.dart';
+import 'fading_branches.dart';
 
 abstract final class Routes {
   static const today = '/today';
@@ -34,8 +35,10 @@ final routerProvider = Provider<GoRouter>((ref) {
   final router = GoRouter(
     initialLocation: Routes.today,
     routes: [
-      StatefulShellRoute.indexedStack(
+      StatefulShellRoute(
         builder: (context, state, shell) => AppShell(shell: shell),
+        navigatorContainerBuilder: (context, shell, children) =>
+            FadingBranches(index: shell.currentIndex, children: children),
         branches: [
           StatefulShellBranch(
             routes: [

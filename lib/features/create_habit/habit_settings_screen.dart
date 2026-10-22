@@ -19,6 +19,7 @@ import 'create_flow.dart';
 import 'draft_provider.dart';
 import 'habit_draft.dart';
 import 'labels.dart';
+import '../../core/theme/motion.dart';
 
 /// P2: name, colour, icon, daily goal, unit and quick step.
 class HabitSettingsScreen extends ConsumerStatefulWidget {
@@ -294,7 +295,8 @@ class _ColorGrid extends StatelessWidget {
                       Expanded(
                         child: GestureDetector(
                           onTap: () => onSelected(color),
-                          child: Container(
+                          child: AnimatedContainer(
+                            duration: context.motion(Motion.fast),
                             height: 28,
                             decoration: BoxDecoration(
                               color: c.habit[color],

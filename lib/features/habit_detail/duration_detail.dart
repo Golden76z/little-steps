@@ -19,6 +19,7 @@ import '../../core/widgets/sorbet_card.dart';
 import '../create_habit/habit_draft.dart';
 import 'detail_scaffold.dart';
 import 'session_timer.dart';
+import '../../core/theme/motion.dart';
 
 /// T2: duration habit, with its session timer and the week in minutes.
 class DurationDetail extends ConsumerStatefulWidget {
@@ -189,13 +190,19 @@ class _TimerCard extends StatelessWidget {
             container: true,
             label: l10n.ringLabel(elapsed ~/ 60, goal ~/ 60),
             excludeSemantics: true,
-            child: CustomPaint(
-              size: const Size.square(210),
-              painter: _RingPainter(
-                progress: goal == 0 ? 0 : elapsed / goal,
-                face: tones.pale,
-                track: tones.light,
-                arc: tones.strong,
+            // The arc glides between the 1 s ticks, as in the mockup (0.9 s linear).
+            child: TweenAnimationBuilder<double>(
+              tween: Tween(end: goal == 0 ? 0 : elapsed / goal),
+              duration: context.motion(const Duration(milliseconds: 900)),
+              builder: (context, progress, child) => CustomPaint(
+                size: const Size.square(210),
+                painter: _RingPainter(
+                  progress: progress,
+                  face: tones.pale,
+                  track: tones.light,
+                  arc: tones.strong,
+                ),
+                child: child,
               ),
               child: SizedBox.square(
                 dimension: 210,
