@@ -150,4 +150,12 @@ void main() {
     expect(l10n.linesCount(0), '0 ligne');
     expect(l10n.challengeDaysLeft('7', '7', 0), '7 jours sur 7 · reste 0 jour');
   });
+
+  test('capitalized and joined lists', () {
+    expect(fmt('fr').capitalized('lundi 19 octobre'), 'Lundi 19 octobre');
+    expect(fmt('fr').capitalized(''), '');
+    expect(fmt('fr').list(['Sport']), 'Sport');
+    expect(fmt('fr').list(['Sport', 'Lire', 'Eau']), 'Sport, Lire et Eau');
+    expect(fmt('en').list(['Sport', 'Read']), 'Sport and Read');
+  });
 }

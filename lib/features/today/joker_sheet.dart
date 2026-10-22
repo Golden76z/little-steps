@@ -28,7 +28,11 @@ class JokerPromptGate extends ConsumerStatefulWidget {
 class _JokerPromptGateState extends ConsumerState<JokerPromptGate> {
   Day? _checked;
 
-  Future<void> _check(Day today) async {
+  Future<void> _check() async {
+    // The stored rollover hour decides which day "today" is: wait for it.
+    await ref.read(settingProvider(rolloverHourKey).future);
+    if (!mounted) return;
+    final today = ref.read(todayProvider);
     if (_checked == today) return;
     _checked = today;
     final repo = ref.read(habitRepositoryProvider);
@@ -48,8 +52,8 @@ class _JokerPromptGateState extends ConsumerState<JokerPromptGate> {
 
   @override
   Widget build(BuildContext context) {
-    final today = ref.watch(todayProvider);
-    WidgetsBinding.instance.addPostFrameCallback((_) => _check(today));
+    ref.watch(todayProvider); // a new day re-checks
+    WidgetsBinding.instance.addPostFrameCallback((_) => _check());
     return const SizedBox.shrink();
   }
 }
@@ -113,7 +117,10 @@ class _JokerSheetState extends ConsumerState<_JokerSheet> {
           title(l10n.streakAtRisk),
           const SizedBox(height: 8),
           MarkedText(
-            l10n.missedYesterday(_names(l10n), streak),
+            l10n.missedYesterday(
+              context.habitFormat.list([for (final h in p.missed) h.name]),
+              streak,
+            ),
             style: body,
             textAlign: TextAlign.center,
             strong: TextStyle(fontWeight: FontWeight.w600, color: c.ink),
@@ -183,15 +190,6 @@ class _JokerSheetState extends ConsumerState<_JokerSheet> {
         ],
       ),
     };
-  }
-
-  String _names(AppLocalizations l10n) {
-    final names = [for (final h in widget.prompt.missed) h.name];
-    if (names.length < 2) return names.join();
-    return l10n.listAnd(
-      names.sublist(0, names.length - 1).join(', '),
-      names.last,
-    );
   }
 }
 

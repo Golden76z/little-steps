@@ -56,4 +56,10 @@ void main() {
       expect(Day(2026, 10, 21).difference(Day(2026, 10, 1)), 20);
     });
   });
+
+  test('addMonths keeps the day, clamped to the end of the month', () {
+    expect(Day(2026, 10, 20).addMonths(1), Day(2026, 11, 20));
+    expect(Day(2027, 1, 31).addMonths(1), Day(2027, 2, 28));
+    expect(Day(2026, 12, 15).addMonths(1), Day(2027, 1, 15));
+  });
 }

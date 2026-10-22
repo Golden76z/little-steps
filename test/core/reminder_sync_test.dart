@@ -82,4 +82,15 @@ void main() {
     expect(scheduler.calls, greaterThan(0));
     expect(scheduler.scheduled, isEmpty);
   });
+
+  testApp('an unchanged plan is not sent again', (tester, db) async {
+    final id = (await tester.runAsync(() => HabitRepository(db).createHabit(reading())))!;
+    await pumpApp(tester, db, locale: 'fr');
+    await sync(tester);
+    final calls = scheduler.calls;
+    // A past entry changes the history but not the upcoming reminders.
+    await tester.runAsync(() => HabitRepository(db).setEntry(HabitEntry(habitId: id, day: Day(2026, 10, 5), value: 1)));
+    await sync(tester);
+    expect(scheduler.calls, calls);
+  });
 }

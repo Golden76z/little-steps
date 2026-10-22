@@ -238,9 +238,7 @@ class _TodayHeader extends ConsumerWidget {
     final level = data.level;
     final title = selected == today
         ? l10n.tabToday
-        : fmt
-              .longDate(selected)
-              .replaceRange(0, 1, fmt.longDate(selected)[0].toUpperCase());
+        : fmt.capitalized(fmt.longDate(selected));
     return AppHeaderCard(
       child: Column(
         children: [

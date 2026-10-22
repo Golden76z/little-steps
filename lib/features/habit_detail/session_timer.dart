@@ -63,6 +63,22 @@ class SessionTimers extends Notifier<Map<int, Session>> {
         t.cancel();
       }
     });
+    // A run still going at the rollover is banked on the day it started.
+    ref.listen(todayProvider, (_, today) {
+      for (final MapEntry(key: id, value: s) in state.entries) {
+        if (s.day == today || !s.running) continue;
+        _alarms.remove(id)?.cancel();
+        ref
+            .read(habitRepositoryProvider)
+            .setEntry(
+              HabitEntry(habitId: id, day: s.day, value: s.elapsed(_now) * 1.0),
+            );
+      }
+      state = {
+        for (final MapEntry(:key, :value) in state.entries)
+          if (value.day == today) key: value,
+      };
+    });
     return const {};
   }
 

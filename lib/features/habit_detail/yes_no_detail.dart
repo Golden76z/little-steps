@@ -15,6 +15,7 @@ import '../../core/widgets/dashed_border.dart';
 import '../../core/widgets/marked_text.dart';
 import '../../core/widgets/month_mosaic.dart';
 import '../../core/widgets/segmented_strip.dart';
+import '../../core/widgets/sorbet_card.dart';
 import 'detail_model.dart';
 import 'detail_scaffold.dart';
 
@@ -315,7 +316,7 @@ class _MonthCard extends StatelessWidget {
     return _Card(
       children: [
         DetailCardTitle(
-          month.replaceRange(0, 1, month[0].toUpperCase()),
+          fmt.capitalized(month),
           hint: l10n.doneOf(
             fmt.number(stats.monthDone),
             unit,
@@ -466,19 +467,11 @@ class _Card extends StatelessWidget {
   final List<Widget> children;
 
   @override
-  Widget build(BuildContext context) {
-    final c = context.sorbet;
-    return Container(
-      padding: const EdgeInsets.fromLTRB(16, 14, 16, 14),
-      decoration: BoxDecoration(
-        color: c.surface,
-        borderRadius: BorderRadius.circular(28),
-        boxShadow: [BoxShadow(color: c.shadowPill, offset: const Offset(0, 3))],
-      ),
-      child: Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: children,
-      ),
-    );
-  }
+  Widget build(BuildContext context) => SorbetCard(
+    radius: 28,
+    child: Column(
+      crossAxisAlignment: CrossAxisAlignment.stretch,
+      children: children,
+    ),
+  );
 }

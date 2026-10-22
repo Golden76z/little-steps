@@ -24,6 +24,12 @@ class ReminderSync extends ConsumerStatefulWidget {
 
 class _ReminderSyncState extends ConsumerState<ReminderSync> {
   Timer? _debounce;
+
+  /// Syncs run one after the other: an overlapping cancel-all would mix sets.
+  Future<void> _chain = Future.value();
+
+  /// What was last handed to the scheduler, to skip identical reschedules.
+  String? _lastSent;
   late final _lifecycle = AppLifecycleListener(onResume: _queue);
 
   @override
@@ -43,7 +49,10 @@ class _ReminderSyncState extends ConsumerState<ReminderSync> {
   /// Bursts of changes (a few taps) end in a single reschedule.
   void _queue() {
     _debounce?.cancel();
-    _debounce = Timer(const Duration(milliseconds: 500), _sync);
+    _debounce = Timer(
+      const Duration(milliseconds: 500),
+      () => _chain = _chain.then((_) => _sync()),
+    );
   }
 
   Future<void> _sync() async {
@@ -58,36 +67,46 @@ class _ReminderSyncState extends ConsumerState<ReminderSync> {
       rolloverHour: ref.read(rolloverHourProvider),
       firstWeekday: context.firstWeekday,
     );
-    String names(List<String> n) => n.length < 2
-        ? n.join()
-        : l10n.listAnd(n.sublist(0, n.length - 1).join(', '), n.last);
-    await ref
-        .read(reminderSchedulerProvider)
-        .replaceAll(
-          [
-            for (final p in plans)
-              switch (p.kind) {
-                ReminderKind.habit => ScheduledNotification(
-                  id: p.id,
-                  at: p.at,
-                  title: p.habits.single.name,
-                  body: l10n.reminderBody,
-                  payload: Routes.habit(p.habits.single.id),
-                ),
-                ReminderKind.streakDanger => ScheduledNotification(
-                  id: p.id,
-                  at: p.at,
-                  title: l10n.streakAtRisk,
-                  body: l10n.dangerBody(
-                    names([for (final h in p.habits) h.name]),
-                  ),
-                  payload: Routes.today,
-                ),
-              },
-          ],
-          channelName: l10n.notifChannelName,
-          channelDescription: l10n.notifChannelDescription,
-        );
+    final fmt = context.habitFormat;
+    final notifications = [
+      for (final p in plans)
+        switch (p.kind) {
+          ReminderKind.habit => ScheduledNotification(
+            id: p.id,
+            at: p.at,
+            title: p.habits.single.name,
+            body: l10n.reminderBody,
+            payload: Routes.habit(p.habits.single.id),
+          ),
+          ReminderKind.streakDanger => ScheduledNotification(
+            id: p.id,
+            at: p.at,
+            title: l10n.streakAtRisk,
+            body: l10n.dangerBody(fmt.list([for (final h in p.habits) h.name])),
+            payload: Routes.today,
+          ),
+        },
+    ];
+    final key = [
+      l10n.notifChannelName,
+      for (final n in notifications)
+        '${n.id}|${n.at}|${n.title}|${n.body}|${n.payload}',
+    ].join('\n');
+    if (key == _lastSent) return;
+    try {
+      await ref
+          .read(reminderSchedulerProvider)
+          .replaceAll(
+            notifications,
+            channelName: l10n.notifChannelName,
+            channelDescription: l10n.notifChannelDescription,
+          );
+      _lastSent = key;
+    } catch (e, stack) {
+      // Retried at the next change or resume; reminders must never crash the app.
+      _lastSent = null;
+      debugPrint('Little Steps: scheduling reminders failed: $e\n$stack');
+    }
   }
 
   @override

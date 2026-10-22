@@ -244,11 +244,7 @@ class _ActiveDays extends StatelessWidget {
       for (final d in week)
         if (!draft.activeDays.contains(d.weekday)) full(d),
     ];
-    final restText = rest.length == 1
-        ? rest.single
-        : rest.isEmpty
-        ? ''
-        : l10n.listAnd(rest.sublist(0, rest.length - 1).join(', '), rest.last);
+    final restText = context.habitFormat.list(rest);
     return Column(
       crossAxisAlignment: CrossAxisAlignment.stretch,
       children: [

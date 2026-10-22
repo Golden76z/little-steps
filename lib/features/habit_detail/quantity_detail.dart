@@ -13,6 +13,7 @@ import '../../core/time/today_provider.dart';
 import '../../core/widgets/month_mosaic.dart';
 import '../../core/widgets/primary_button.dart';
 import '../../core/widgets/segmented_strip.dart';
+import '../../core/widgets/sorbet_card.dart';
 import '../create_habit/habit_draft.dart';
 import '../create_habit/labels.dart';
 import 'detail_model.dart';
@@ -433,18 +434,13 @@ class _MonthCard extends StatelessWidget {
       };
     }
 
-    return Container(
-      padding: const EdgeInsets.fromLTRB(16, 14, 16, 14),
-      decoration: BoxDecoration(
-        color: c.surface,
-        borderRadius: BorderRadius.circular(28),
-        boxShadow: [BoxShadow(color: c.shadowPill, offset: const Offset(0, 3))],
-      ),
+    return SorbetCard(
+      radius: 28,
       child: Column(
         crossAxisAlignment: CrossAxisAlignment.stretch,
         children: [
           DetailCardTitle(
-            month.replaceRange(0, 1, month[0].toUpperCase()),
+            fmt.capitalized(month),
             hint: l10n.goalMetDays(stats.monthDone),
           ),
           const SizedBox(height: 10),

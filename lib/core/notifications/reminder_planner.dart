@@ -58,6 +58,7 @@ List<PlannedReminder> planReminders(
           habitStreak(h, history, today).current > 0)
         h,
   ];
+  final alive = {for (final h in atRisk) h.id};
   final plans =
       <({DateTime at, Day day, ReminderKind kind, List<Habit> habits})>[];
   for (var i = 0; i < reminderWindowDays; i++) {
@@ -82,10 +83,15 @@ List<PlannedReminder> planReminders(
         ));
       }
     }
-    final risky = [
-      for (final h in atRisk)
-        if (h.statusOn(day) == DayStatus.due && !history.isDone(h, day)) h,
-    ];
+    // A due day not done yet breaks the streak for every later day (logging
+    // needs the app, which replans), so later alerts would be false.
+    final risky = <Habit>[];
+    for (final h in atRisk) {
+      if (!alive.contains(h.id) || h.statusOn(day) != DayStatus.due) continue;
+      if (history.isDone(h, day)) continue;
+      risky.add(h);
+      alive.remove(h.id);
+    }
     if (risky.isNotEmpty) {
       plans.add((
         at: _wallClock(day, streakDangerMinutes, rolloverHour),

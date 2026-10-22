@@ -118,6 +118,17 @@ void main() {
       expect(timers().current(habit).finished, isTrue);
     });
 
+    test('a run going past the day rollover is saved on its own day', () async {
+      now = DateTime(2026, 10, 21, 2, 58); // still the 20th (3 am rollover)
+      timers().start(habit);
+      now = DateTime(2026, 10, 21, 3, 1);
+      container.invalidate(todayProvider);
+      container.read(todayProvider);
+      await pumpEventQueue();
+      expect(await stored(), 60 + 180);
+      expect(timers().current(habit).day, today.addDays(1));
+    });
+
     test('reset clears today’s entry', () async {
       timers().start(habit);
       await timers().reset(habit);

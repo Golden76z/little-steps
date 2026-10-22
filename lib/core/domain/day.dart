@@ -26,6 +26,12 @@ final class Day implements Comparable<Day> {
 
   Day addDays(int n) => Day.fromIndex(index + n);
 
+  /// Same day [n] months later, clamped to that month's last day (Jan 31 → Feb 28).
+  Day addMonths(int n) {
+    final last = Day(year, month + n + 1, 1).addDays(-1);
+    return Day(last.year, last.month, day < last.day ? day : last.day);
+  }
+
   /// Days from [other] to this one.
   int difference(Day other) => index - other.index;
 

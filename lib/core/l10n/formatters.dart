@@ -154,6 +154,15 @@ class HabitFormat {
     return '${DateFormat.MMMd(locale).format(from)} – ${DateFormat.MMMd(locale).format(to)}';
   }
 
+  /// First letter upper-cased: "lundi 19 octobre" → "Lundi 19 octobre".
+  String capitalized(String s) =>
+      s.isEmpty ? s : s[0].toUpperCase() + s.substring(1);
+
+  /// "Sport, Lire et Eau" / "Sport and Read".
+  String list(List<String> items) => items.length < 2
+      ? items.join()
+      : l10n.listAnd(items.sublist(0, items.length - 1).join(', '), items.last);
+
   /// "août 2026" / "August 2026".
   String monthYear(Day d) => DateFormat.yMMMM(locale).format(d.toLocalDate());
 

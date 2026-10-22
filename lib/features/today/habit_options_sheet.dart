@@ -44,7 +44,7 @@ class _HabitOptionsState extends ConsumerState<_HabitOptions> {
   Day? _resumeOn(Day today) => switch (_duration) {
     0 => today.addDays(7),
     1 => today.addDays(14),
-    2 => Day(today.year, today.month + 1, today.day),
+    2 => today.addMonths(1),
     _ => _chosenResume,
   };
 
