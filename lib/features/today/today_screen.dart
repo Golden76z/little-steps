@@ -238,130 +238,118 @@ class _TodayHeader extends ConsumerWidget {
     final level = data.level;
     final title = selected == today
         ? l10n.tabToday
-        : fmt.capitalized(fmt.longDate(selected));
+        : fmt.capitalized(fmt.weekdayDay(selected));
     return AppHeaderCard(
-      child: Column(
+      top: Row(
         children: [
-          Row(
-            children: [
-              XpAvatar(
-                fraction: level.fraction,
-                semanticLabel: l10n.levelProgress(
-                  level.level,
-                  fmt.percent(level.fraction),
-                  level.level + 1,
+          XpAvatar(
+            fraction: level.fraction,
+            semanticLabel: l10n.levelProgress(
+              level.level,
+              fmt.percent(level.fraction),
+              level.level + 1,
+            ),
+            onTap: interactive ? () => context.go(Routes.trophies) : null,
+          ),
+          const SizedBox(width: 10),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  l10n.levelMonth(level.level, fmt.month(selected)),
+                  style: text.bodySmall!.copyWith(color: c.muted),
                 ),
-                onTap: interactive ? () => context.go(Routes.trophies) : null,
-              ),
-              const SizedBox(width: 10),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      l10n.levelMonth(level.level, fmt.month(selected)),
-                      style: text.bodySmall!.copyWith(color: c.muted),
-                    ),
-                    Semantics(
-                      header: true,
-                      child: Text(title, style: text.headlineLarge),
-                    ),
-                  ],
-                ),
-              ),
-              const SizedBox(width: 10),
-              StreakChip(
-                days: data.streak.current,
-                semanticLabel: l10n.streakDays(data.streak.current),
-              ),
-              // 48 px target shifted 4 px outwards: the 40 px disc keeps the 20 px
-              // margin, and the 2 px gap makes 10 px visually.
-              const SizedBox(width: 2),
-              Transform.translate(
-                offset: const Offset(4, 0),
-                child: Semantics(
-                  button: true,
-                  label: l10n.calendar,
-                  excludeSemantics: true,
-                  child: InkResponse(
-                    radius: 24,
-                    onTap: interactive ? () => _pickDate(context, ref) : null,
-                    child: SizedBox.square(
-                      dimension: 48,
-                      child: Center(
-                        child: Container(
-                          width: 40,
-                          height: 40,
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            color: c.bg,
-                          ),
-                          child: Icon(
-                            PhosphorIconsRegular.calendarBlank,
-                            size: 20,
-                            color: c.ink,
-                          ),
-                        ),
-                      ),
-                    ),
+                Semantics(
+                  header: true,
+                  child: FittedBox(
+                    // Always one line: shrinks rather than wraps.
+                    fit: BoxFit.scaleDown,
+                    alignment: AlignmentDirectional.centerStart,
+                    child: Text(title, maxLines: 1, style: text.headlineLarge),
                   ),
                 ),
-              ),
-            ],
-          ),
-          Container(
-            height: 1.5,
-            margin: const EdgeInsets.fromLTRB(4, 16, 4, 0),
-            decoration: BoxDecoration(
-              color: c.divider,
-              borderRadius: BorderRadius.circular(1),
+              ],
             ),
           ),
-          const SizedBox(height: 14),
-          SegmentedStrip(
-            count: 7,
-            cellHeight: 58,
-            selected: data.weekDays.indexOf(selected),
-            semanticLabels: interactive
-                ? [for (final d in data.weekDays) fmt.longDate(d)]
-                : null,
-            onSelected: interactive
-                ? (i) => ref
-                      .read(selectedDayProvider.notifier)
-                      .select(
-                        data.weekDays[i] == today ? null : data.weekDays[i],
-                      )
-                : null,
-            itemBuilder: (context, i, on) {
-              final d = data.weekDays[i];
-              return Column(
-                mainAxisSize: MainAxisSize.min,
-                spacing: 2,
-                children: [
-                  Text(
-                    fmt.weekdayShort(d),
-                    style: text.labelMedium!.copyWith(
-                      color: on ? c.ink : c.muted,
-                    ),
-                  ),
-                  Text(
-                    fmt.dayOfMonth(d),
-                    style: text.titleMedium!.copyWith(height: 1),
-                  ),
-                  if (interactive)
-                    Container(
-                      width: 5,
-                      height: 5,
+          const SizedBox(width: 10),
+          StreakChip(
+            days: data.streak.current,
+            semanticLabel: l10n.streakDays(data.streak.current),
+          ),
+          // 48 px target shifted 4 px outwards: the 40 px disc keeps the 20 px
+          // margin, and the 2 px gap makes 10 px visually.
+          const SizedBox(width: 2),
+          Transform.translate(
+            offset: const Offset(4, 0),
+            child: Semantics(
+              button: true,
+              label: l10n.calendar,
+              excludeSemantics: true,
+              child: InkResponse(
+                radius: 24,
+                onTap: interactive ? () => _pickDate(context, ref) : null,
+                child: SizedBox.square(
+                  dimension: 48,
+                  child: Center(
+                    child: Container(
+                      width: 40,
+                      height: 40,
                       decoration: BoxDecoration(
                         shape: BoxShape.circle,
-                        color: data.loggedDays.contains(d) ? c.accent : null,
+                        color: c.bg,
+                      ),
+                      child: Icon(
+                        PhosphorIconsRegular.calendarBlank,
+                        size: 20,
+                        color: c.ink,
                       ),
                     ),
-                ],
-              );
-            },
+                  ),
+                ),
+              ),
+            ),
           ),
         ],
+      ),
+      band: SegmentedStrip(
+        count: 7,
+        cellHeight: 58,
+        selected: data.weekDays.indexOf(selected),
+        semanticLabels: interactive
+            ? [for (final d in data.weekDays) fmt.longDate(d)]
+            : null,
+        onSelected: interactive
+            ? (i) => ref
+                  .read(selectedDayProvider.notifier)
+                  .select(data.weekDays[i] == today ? null : data.weekDays[i])
+            : null,
+        itemBuilder: (context, i, on) {
+          final d = data.weekDays[i];
+          return Column(
+            mainAxisSize: MainAxisSize.min,
+            spacing: 2,
+            children: [
+              Text(
+                fmt.weekdayShort(d),
+                style: text.labelMedium!.copyWith(color: on ? c.ink : c.muted),
+              ),
+              Text(
+                fmt.dayOfMonth(d),
+                style: text.titleMedium!.copyWith(height: 1),
+              ),
+              if (interactive)
+                Container(
+                  width: 5,
+                  height: 5,
+                  decoration: BoxDecoration(
+                    shape: BoxShape.circle,
+                    color: data.loggedDays.contains(d) ? c.accent : null,
+                  ),
+                ),
+            ],
+          );
+        },
       ),
     );
   }

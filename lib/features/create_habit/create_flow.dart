@@ -40,90 +40,77 @@ class CreateFlowScaffold extends StatelessWidget {
           Column(
             children: [
               AppHeaderCard(
-                child: Column(
+                top: Row(
                   children: [
-                    Row(
-                      children: [
-                        // 48 px target shifted 4 px outwards: the 40 px disc keeps the
-                        // 20 px margin, and the 2 px gap makes 10 px visually.
-                        Transform.translate(
-                          offset: const Offset(-4, 0),
-                          child: RoundIconButton(
-                            icon: closes
-                                ? PhosphorIconsBold.x
-                                : PhosphorIconsBold.caretLeft,
-                            iconSize: closes ? 16 : 18,
-                            label: closes ? l10n.close : l10n.back,
-                            onTap: () => Navigator.pop(context),
-                          ),
-                        ),
-                        const SizedBox(width: 2),
-                        Expanded(
-                          child: Semantics(
-                            header: true,
-                            child: Text(
-                              title,
-                              textAlign: TextAlign.center,
-                              style: text.headlineSmall,
-                            ),
-                          ),
-                        ),
-                        const SizedBox(width: 10),
-                        Container(
-                          width: 40,
-                          constraints: const BoxConstraints(minHeight: 28),
-                          alignment: Alignment.center,
-                          decoration: BoxDecoration(
-                            color: c.bg,
-                            borderRadius: BorderRadius.circular(14),
-                          ),
-                          child: Text(
-                            l10n.stepOf(step, 3),
-                            style: text.labelMedium!.copyWith(
-                              fontWeight: FontWeight.w500,
-                              color: c.inkSoft,
-                              height: 1,
-                            ),
-                          ),
-                        ),
-                      ],
-                    ),
-                    Container(
-                      height: 1.5,
-                      margin: const EdgeInsets.fromLTRB(4, 16, 4, 0),
-                      decoration: BoxDecoration(
-                        color: c.divider,
-                        borderRadius: BorderRadius.circular(1),
+                    // 48 px target shifted 4 px outwards: the 40 px disc keeps the
+                    // 20 px margin, and the 2 px gap makes 10 px visually.
+                    Transform.translate(
+                      offset: const Offset(-4, 0),
+                      child: RoundIconButton(
+                        icon: closes
+                            ? PhosphorIconsBold.x
+                            : PhosphorIconsBold.caretLeft,
+                        iconSize: closes ? 16 : 18,
+                        label: closes ? l10n.close : l10n.back,
+                        onTap: () => Navigator.pop(context),
                       ),
                     ),
-                    const SizedBox(height: 14),
-                    Semantics(
-                      label: l10n.stepProgress(step, 3),
-                      excludeSemantics: true,
-                      child: Container(
-                        padding: const EdgeInsets.all(3),
-                        decoration: BoxDecoration(
-                          color: c.strip,
-                          borderRadius: BorderRadius.circular(8),
+                    const SizedBox(width: 2),
+                    Expanded(
+                      child: Semantics(
+                        header: true,
+                        child: Text(
+                          title,
+                          textAlign: TextAlign.center,
+                          style: text.headlineSmall,
                         ),
-                        child: Row(
-                          spacing: 3,
-                          children: [
-                            for (var i = 1; i <= 3; i++)
-                              Expanded(
-                                child: Container(
-                                  height: 8,
-                                  decoration: BoxDecoration(
-                                    color: i <= step ? c.accent : null,
-                                    borderRadius: BorderRadius.circular(5),
-                                  ),
-                                ),
-                              ),
-                          ],
+                      ),
+                    ),
+                    const SizedBox(width: 10),
+                    Container(
+                      width: 40,
+                      constraints: const BoxConstraints(minHeight: 28),
+                      alignment: Alignment.center,
+                      decoration: BoxDecoration(
+                        color: c.bg,
+                        borderRadius: BorderRadius.circular(14),
+                      ),
+                      child: Text(
+                        l10n.stepOf(step, 3),
+                        style: text.labelMedium!.copyWith(
+                          fontWeight: FontWeight.w500,
+                          color: c.inkSoft,
+                          height: 1,
                         ),
                       ),
                     ),
                   ],
+                ),
+                band: Semantics(
+                  label: l10n.stepProgress(step, 3),
+                  excludeSemantics: true,
+                  child: Container(
+                    padding: const EdgeInsets.all(3),
+                    decoration: BoxDecoration(
+                      color: c.strip,
+                      borderRadius: BorderRadius.circular(8),
+                    ),
+                    child: Row(
+                      spacing: 3,
+                      children: [
+                        for (var i = 1; i <= 3; i++)
+                          Expanded(
+                            child: Container(
+                              height: 8,
+                              decoration: BoxDecoration(
+                                color: i <= step ? c.accent : null,
+                                borderRadius: BorderRadius.circular(5),
+                              ),
+                            ),
+                          ),
+                      ],
+                    ),
+                  ),
                 ),
               ),
               Expanded(
@@ -160,10 +147,14 @@ class CardTitle extends StatelessWidget {
       textBaseline: TextBaseline.alphabetic,
       children: [
         Expanded(child: Text(title, style: text.bodyMedium)),
+        // Flexible: with large text the hint wraps instead of overflowing.
         if (hint != null)
-          Text(
-            hint!,
-            style: text.labelMedium!.copyWith(color: context.sorbet.muted),
+          Flexible(
+            child: Text(
+              hint!,
+              textAlign: TextAlign.end,
+              style: text.labelMedium!.copyWith(color: context.sorbet.muted),
+            ),
           ),
       ],
     );

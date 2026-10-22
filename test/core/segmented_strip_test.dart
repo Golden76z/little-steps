@@ -25,7 +25,8 @@ void main() {
         ),
       ),
     );
-    double left() => tester.getTopLeft(find.byKey(SegmentedStrip.indicatorKey)).dx;
+    double left() =>
+        tester.getTopLeft(find.byKey(SegmentedStrip.indicatorKey)).dx;
     final start = left();
     await tester.tap(find.text('2'));
     await tester.pump();

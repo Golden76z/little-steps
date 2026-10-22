@@ -58,7 +58,10 @@ void main() {
     await tester.pump();
     await tester.pump(const Duration(milliseconds: 60));
     final fade = tester.widget<FadeTransition>(
-      find.ancestor(of: find.text('Progress'), matching: find.byKey(const ValueKey('branch-1'))),
+      find.ancestor(
+        of: find.text('Progress'),
+        matching: find.byKey(const ValueKey('branch-1')),
+      ),
     );
     expect(fade.opacity.value, inExclusiveRange(0, 1));
     await tester.pumpAndSettle();

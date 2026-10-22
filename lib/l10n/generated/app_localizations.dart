@@ -2155,6 +2155,12 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'Still {names} today to keep your flame going.'**
   String dangerBody(String names);
+
+  /// No description provided for @remindersSummary.
+  ///
+  /// In en, this message translates to:
+  /// **'{habits, plural, one{{habits} habit} other{{habits} habits}} · {reminders, plural, one{{reminders} reminder} other{{reminders} reminders}}'**
+  String remindersSummary(int habits, int reminders);
 }
 
 class _AppLocalizationsDelegate

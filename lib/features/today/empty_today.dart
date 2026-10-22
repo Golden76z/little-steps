@@ -172,7 +172,12 @@ class _IdeaChip extends StatelessWidget {
                     ),
                     child: Icon(icon, size: 16, color: c.ink),
                   ),
-                  Text(label, style: Theme.of(context).textTheme.bodyMedium),
+                  Flexible(
+                    child: Text(
+                      label,
+                      style: Theme.of(context).textTheme.bodyMedium,
+                    ),
+                  ),
                 ],
               ),
             ),

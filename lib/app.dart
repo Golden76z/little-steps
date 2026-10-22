@@ -5,6 +5,7 @@ import 'core/l10n/l10n.dart';
 import 'core/notifications/reminder_sync.dart';
 import 'core/router/app_router.dart';
 import 'core/theme/app_theme.dart';
+import 'core/widgets/perfect_day_confetti.dart';
 
 class LittleStepsApp extends ConsumerWidget {
   const LittleStepsApp({super.key, this.locale});
@@ -23,7 +24,12 @@ class LittleStepsApp extends ConsumerWidget {
       routerConfig: ref.watch(routerProvider),
       builder: (context, child) => AnnotatedRegion(
         value: sorbetSystemUi,
-        child: ReminderSync(child: child!),
+        child: Stack(
+          children: [
+            ReminderSync(child: child!),
+            const Positioned.fill(child: PerfectDayConfetti()),
+          ],
+        ),
       ),
       debugShowCheckedModeBanner: false,
     );

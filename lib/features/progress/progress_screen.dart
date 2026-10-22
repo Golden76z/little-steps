@@ -82,9 +82,12 @@ class _ProgressScreenState extends ConsumerState<ProgressScreen> {
                         child: Text(l10n.byHabit, style: text.titleMedium),
                       ),
                     ),
-                    Text(
-                      l10n.daysSucceeded,
-                      style: text.bodySmall!.copyWith(color: c.muted),
+                    Flexible(
+                      child: Text(
+                        l10n.daysSucceeded,
+                        textAlign: TextAlign.end,
+                        style: text.bodySmall!.copyWith(color: c.muted),
+                      ),
                     ),
                   ],
                 ),
@@ -134,70 +137,54 @@ class _Header extends StatelessWidget {
     };
     final labels = [l10n.periodWeek, l10n.periodMonth, l10n.periodYear];
     return AppHeaderCard(
-      child: Column(
+      top: Row(
         children: [
-          Row(
-            children: [
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      overline,
-                      style: text.bodySmall!.copyWith(color: c.muted),
-                    ),
-                    Semantics(
-                      header: true,
-                      child: Text(l10n.tabProgress, style: text.headlineLarge),
-                    ),
-                  ],
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(overline, style: text.bodySmall!.copyWith(color: c.muted)),
+                Semantics(
+                  header: true,
+                  child: Text(l10n.tabProgress, style: text.headlineLarge),
                 ),
-              ),
-              // 48 px targets shifted 4 px outwards: the 40 px discs keep the
-              // 20 px margin, and the 2 px gaps make 10 px visually.
-              const SizedBox(width: 2),
-              Transform.translate(
-                offset: const Offset(4, 0),
-                child: Row(
-                  spacing: 2,
-                  children: [
-                    _ArrowButton(
-                      icon: PhosphorIconsBold.caretLeft,
-                      label: l10n.previousPeriod,
-                      onTap: () => onShift(-1),
-                    ),
-                    _ArrowButton(
-                      icon: PhosphorIconsBold.caretRight,
-                      label: l10n.nextPeriod,
-                      onTap: canGoNext ? () => onShift(1) : null,
-                    ),
-                  ],
-                ),
-              ),
-            ],
-          ),
-          Container(
-            height: 1.5,
-            margin: const EdgeInsets.fromLTRB(4, 16, 4, 0),
-            decoration: BoxDecoration(
-              color: c.divider,
-              borderRadius: BorderRadius.circular(1),
+              ],
             ),
           ),
-          const SizedBox(height: 14),
-          Semantics(
-            container: true,
-            label: l10n.periodLabel,
-            child: SegmentedStrip(
-              count: 3,
-              cellHeight: 40,
-              selected: period.index,
-              onSelected: (i) => onPeriod(Period.values[i]),
-              itemBuilder: (context, i, on) =>
-                  Text(labels[i], style: text.bodyLarge),
+          // 48 px targets shifted 4 px outwards: the 40 px discs keep the
+          // 20 px margin, and the 2 px gaps make 10 px visually.
+          const SizedBox(width: 2),
+          Transform.translate(
+            offset: const Offset(4, 0),
+            child: Row(
+              spacing: 2,
+              children: [
+                _ArrowButton(
+                  icon: PhosphorIconsBold.caretLeft,
+                  label: l10n.previousPeriod,
+                  onTap: () => onShift(-1),
+                ),
+                _ArrowButton(
+                  icon: PhosphorIconsBold.caretRight,
+                  label: l10n.nextPeriod,
+                  onTap: canGoNext ? () => onShift(1) : null,
+                ),
+              ],
             ),
           ),
         ],
+      ),
+      band: Semantics(
+        container: true,
+        label: l10n.periodLabel,
+        child: SegmentedStrip(
+          count: 3,
+          cellHeight: 58,
+          selected: period.index,
+          onSelected: (i) => onPeriod(Period.values[i]),
+          itemBuilder: (context, i, on) =>
+              Text(labels[i], style: text.bodyLarge),
+        ),
       ),
     );
   }

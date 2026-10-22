@@ -27,7 +27,25 @@ class RemindersScreen extends ConsumerWidget {
       body: Column(
         children: [
           AppHeaderCard(
-            child: Row(
+            band: Container(
+              constraints: const BoxConstraints(
+                minHeight: AppHeaderCard.bandHeight,
+              ),
+              alignment: Alignment.center,
+              decoration: BoxDecoration(
+                color: context.sorbet.strip,
+                borderRadius: BorderRadius.circular(22),
+              ),
+              child: Text(
+                l10n.remindersSummary(
+                  habits.length,
+                  habits.fold(0, (n, h) => n + h.reminders.length),
+                ),
+                style: Theme.of(context).textTheme.bodyMedium!
+                    .copyWith(color: context.sorbet.muted),
+              ),
+            ),
+            top: Row(
               children: [
                 // 48 px target shifted 4 px outwards: the 40 px disc keeps the
                 // 20 px margin, and the 6 px gap makes 10 px visually.

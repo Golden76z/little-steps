@@ -1422,4 +1422,21 @@ class AppLocalizationsFr extends AppLocalizations {
   String dangerBody(String names) {
     return 'Encore $names aujourd’hui pour garder ta flamme.';
   }
+
+  @override
+  String remindersSummary(int habits, int reminders) {
+    String _temp0 = intl.Intl.pluralLogic(
+      habits,
+      locale: localeName,
+      other: '$habits habitudes',
+      one: '$habits habitude',
+    );
+    String _temp1 = intl.Intl.pluralLogic(
+      reminders,
+      locale: localeName,
+      other: '$reminders rappels',
+      one: '$reminders rappel',
+    );
+    return '$_temp0 · $_temp1';
+  }
 }

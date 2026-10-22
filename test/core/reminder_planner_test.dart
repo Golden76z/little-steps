@@ -144,11 +144,25 @@ void main() {
   });
 
   test('a streak alert for a later day only while the streak still holds', () {
-    final a = withReminders(habit(id: 1, activeDays: {1, 3, 4, 5, 6, 7}, createdOn: monday.addDays(-10)), [], danger: true);
-    final alerts = plan([a], entries: done(a, [-2, -1])).where((x) => x.kind == ReminderKind.streakDanger);
+    final a = withReminders(
+      habit(
+        id: 1,
+        activeDays: {1, 3, 4, 5, 6, 7},
+        createdOn: monday.addDays(-10),
+      ),
+      [],
+      danger: true,
+    );
+    final alerts = plan(
+      [a],
+      entries: done(a, [-2, -1]),
+    ).where((x) => x.kind == ReminderKind.streakDanger);
     // Not done today: today's alert only; past today the streak is already gone.
     expect(alerts.map((x) => x.at.day), [19]);
-    final afterDone = plan([a], entries: done(a, [-2, -1, 0])).where((x) => x.kind == ReminderKind.streakDanger);
+    final afterDone = plan(
+      [a],
+      entries: done(a, [-2, -1, 0]),
+    ).where((x) => x.kind == ReminderKind.streakDanger);
     // Done today, Tuesday is a rest day: the next due day, Wednesday, is still at stake.
     expect(afterDone.map((x) => x.at.day), [21]);
   });

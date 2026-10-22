@@ -209,7 +209,7 @@ void main() {
     expect(find.text('Aujourd’hui'), findsWidgets);
     await tester.tap(find.text('19'));
     await tester.pumpAndSettle();
-    expect(find.text('Lundi 19 octobre'), findsOneWidget);
+    expect(find.text('Lundi 19'), findsOneWidget);
     expect(find.text('C’est fait !'), findsOneWidget);
   });
 

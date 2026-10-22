@@ -106,7 +106,7 @@ class _DurationDetailState extends ConsumerState<DurationDetail> {
         label: l10n.sessionLength,
         child: SegmentedStrip(
           count: _presets.length,
-          cellHeight: 40,
+          cellHeight: 58,
           selected: preset < 0 ? null : preset,
           onSelected: (i) => _setGoal(_presets[i] * 60),
           itemBuilder: (context, i, on) => Text(

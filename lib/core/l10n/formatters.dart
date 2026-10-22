@@ -133,6 +133,10 @@ class HabitFormat {
   String longDate(Day d) =>
       DateFormat.MMMMEEEEd(locale).format(d.toLocalDate());
 
+  /// "lundi 19" / "Monday 19": short enough for a one-line title.
+  String weekdayDay(Day d) =>
+      DateFormat('EEEE d', locale).format(d.toLocalDate());
+
   /// "Lun" / "Mon": the locale abbreviation, capitalised, without its dot.
   String weekdayShort(Day d) {
     final s = DateFormat.E(locale).format(d.toLocalDate()).replaceAll('.', '');

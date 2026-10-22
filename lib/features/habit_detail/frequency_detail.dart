@@ -67,7 +67,7 @@ class _FrequencyDetailState extends ConsumerState<FrequencyDetail> {
         container: true,
         child: SegmentedStrip(
           count: 2,
-          cellHeight: 40,
+          cellHeight: 58,
           selected: _tab,
           onSelected: (i) => setState(() => _tab = i),
           itemBuilder: (context, i, on) => Text(
@@ -134,7 +134,13 @@ class _ThisWeek extends ConsumerWidget {
             textBaseline: TextBaseline.alphabetic,
             children: [
               Expanded(child: Text(l10n.thisWeek, style: text.titleMedium)),
-              Text(l10n.sessionsOf(count, target), style: text.labelLarge),
+              Flexible(
+                child: Text(
+                  l10n.sessionsOf(count, target),
+                  textAlign: TextAlign.end,
+                  style: text.labelLarge,
+                ),
+              ),
             ],
           ),
           const SizedBox(height: 14),

@@ -153,6 +153,8 @@ void main() {
 
   test('capitalized and joined lists', () {
     expect(fmt('fr').capitalized('lundi 19 octobre'), 'Lundi 19 octobre');
+    expect(fmt('fr').weekdayDay(Day(2026, 10, 19)), 'lundi 19');
+    expect(fmt('en').weekdayDay(Day(2026, 10, 19)), 'Monday 19');
     expect(fmt('fr').capitalized(''), '');
     expect(fmt('fr').list(['Sport']), 'Sport');
     expect(fmt('fr').list(['Sport', 'Lire', 'Eau']), 'Sport, Lire et Eau');

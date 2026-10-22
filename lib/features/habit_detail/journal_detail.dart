@@ -113,7 +113,7 @@ class _JournalDetailState extends ConsumerState<JournalDetail> {
         container: true,
         child: SegmentedStrip(
           count: 2,
-          cellHeight: 40,
+          cellHeight: 58,
           selected: _tab,
           onSelected: (i) => setState(() => _tab = i),
           itemBuilder: (context, i, on) => Text(
@@ -226,26 +226,29 @@ class _JournalDetailState extends ConsumerState<JournalDetail> {
                 ),
               ),
               const SizedBox(width: 10),
-              Semantics(
-                button: true,
-                child: GestureDetector(
-                  behavior: HitTestBehavior.opaque,
-                  onTap: () => setState(() => _prompt = (_prompt + 1) % 3),
-                  child: Padding(
-                    padding: const EdgeInsets.symmetric(vertical: 8),
-                    child: Container(
-                      constraints: const BoxConstraints(minHeight: 32),
-                      alignment: Alignment.center,
-                      padding: const EdgeInsets.symmetric(horizontal: 12),
-                      decoration: BoxDecoration(
-                        color: c.bg,
-                        borderRadius: BorderRadius.circular(16),
-                      ),
-                      child: Text(
-                        l10n.otherQuestion,
-                        style: text.labelMedium!.copyWith(
-                          fontWeight: FontWeight.w500,
-                          color: c.inkSoft,
+              Flexible(
+                child: Semantics(
+                  button: true,
+                  child: GestureDetector(
+                    behavior: HitTestBehavior.opaque,
+                    onTap: () => setState(() => _prompt = (_prompt + 1) % 3),
+                    child: Padding(
+                      padding: const EdgeInsets.symmetric(vertical: 8),
+                      child: Container(
+                        constraints: const BoxConstraints(minHeight: 32),
+                        alignment: Alignment.center,
+                        padding: const EdgeInsets.symmetric(horizontal: 12),
+                        decoration: BoxDecoration(
+                          color: c.bg,
+                          borderRadius: BorderRadius.circular(16),
+                        ),
+                        child: Text(
+                          l10n.otherQuestion,
+                          textAlign: TextAlign.center,
+                          style: text.labelMedium!.copyWith(
+                            fontWeight: FontWeight.w500,
+                            color: c.inkSoft,
+                          ),
                         ),
                       ),
                     ),
@@ -305,13 +308,16 @@ class _JournalDetailState extends ConsumerState<JournalDetail> {
                   ),
                 ),
               ),
-              Text(
-                l10n.valueLines(
-                  context.habitFormat.number(lines),
-                  context.habitFormat.number(_goal),
-                  _goal,
+              Flexible(
+                child: Text(
+                  l10n.valueLines(
+                    context.habitFormat.number(lines),
+                    context.habitFormat.number(_goal),
+                    _goal,
+                  ),
+                  textAlign: TextAlign.end,
+                  style: text.labelLarge!.copyWith(color: c.inkSoft),
                 ),
-                style: text.labelLarge!.copyWith(color: c.inkSoft),
               ),
             ],
           ),

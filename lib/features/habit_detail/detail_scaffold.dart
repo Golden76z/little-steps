@@ -23,15 +23,15 @@ class DetailScaffold extends ConsumerWidget {
     required this.habit,
     required this.subtitle,
     required this.children,
-    this.strip,
+    required this.strip,
     this.bottom,
   });
 
   final Habit habit;
   final String subtitle;
 
-  /// Segmented strip under the header divider; none drops the divider too.
-  final Widget? strip;
+  /// Segmented strip under the header divider (58 px cells).
+  final Widget strip;
   final List<Widget> children;
 
   /// 60 px action bar; the content scrolls clear of it.
@@ -49,84 +49,65 @@ class DetailScaffold extends ConsumerWidget {
           Column(
             children: [
               AppHeaderCard(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                band: strip,
+                top: Row(
                   children: [
-                    Row(
-                      children: [
-                        // 48 px targets shifted 4 px outwards: the 40 px discs keep the
-                        // 20 px margin, and the 2 px gaps make 10 px visually.
-                        Transform.translate(
-                          offset: const Offset(-4, 0),
-                          child: RoundIconButton(
-                            icon: PhosphorIconsBold.caretLeft,
-                            label: l10n.backLabel,
-                            onTap: () => Navigator.pop(context),
-                          ),
-                        ),
-                        const SizedBox(width: 2),
-                        Container(
-                          width: 44,
-                          height: 44,
-                          decoration: BoxDecoration(
-                            shape: BoxShape.circle,
-                            color: c.habit[habit.color],
-                          ),
-                          child: Icon(
-                            habitIcon(habit.icon),
-                            size: 22,
-                            color: c.ink,
-                          ),
-                        ),
-                        const SizedBox(width: 10),
-                        Expanded(
-                          child: Column(
-                            crossAxisAlignment: CrossAxisAlignment.start,
-                            children: [
-                              Semantics(
-                                header: true,
-                                child: Text(
-                                  habit.name,
-                                  style: text.headlineMedium,
-                                ),
-                              ),
-                              const SizedBox(height: 2),
-                              Text(
-                                subtitle,
-                                style: text.bodySmall!.copyWith(color: c.muted),
-                              ),
-                            ],
-                          ),
-                        ),
-                        const SizedBox(width: 2),
-                        Transform.translate(
-                          offset: const Offset(4, 0),
-                          child: RoundIconButton(
-                            icon: PhosphorIconsRegular.pencilSimple,
-                            iconSize: 19,
-                            label: l10n.editHabit,
-                            onTap: () {
-                              ref
-                                  .read(draftProvider.notifier)
-                                  .set(HabitDraft.fromHabit(habit));
-                              context.push(Routes.createSettings);
-                            },
-                          ),
-                        ),
-                      ],
-                    ),
-                    if (strip case final strip?) ...[
-                      Container(
-                        height: 1.5,
-                        margin: const EdgeInsets.fromLTRB(4, 16, 4, 0),
-                        decoration: BoxDecoration(
-                          color: c.divider,
-                          borderRadius: BorderRadius.circular(1),
-                        ),
+                    // 48 px targets shifted 4 px outwards: the 40 px discs keep the
+                    // 20 px margin, and the 2 px gaps make 10 px visually.
+                    Transform.translate(
+                      offset: const Offset(-4, 0),
+                      child: RoundIconButton(
+                        icon: PhosphorIconsBold.caretLeft,
+                        label: l10n.backLabel,
+                        onTap: () => Navigator.pop(context),
                       ),
-                      const SizedBox(height: 14),
-                      strip,
-                    ],
+                    ),
+                    const SizedBox(width: 2),
+                    Container(
+                      width: 44,
+                      height: 44,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: c.habit[habit.color],
+                      ),
+                      child: Icon(
+                        habitIcon(habit.icon),
+                        size: 22,
+                        color: c.ink,
+                      ),
+                    ),
+                    const SizedBox(width: 10),
+                    Expanded(
+                      child: Column(
+                        crossAxisAlignment: CrossAxisAlignment.start,
+                        children: [
+                          Semantics(
+                            header: true,
+                            child: Text(habit.name, style: text.headlineMedium),
+                          ),
+                          const SizedBox(height: 2),
+                          Text(
+                            subtitle,
+                            style: text.bodySmall!.copyWith(color: c.muted),
+                          ),
+                        ],
+                      ),
+                    ),
+                    const SizedBox(width: 2),
+                    Transform.translate(
+                      offset: const Offset(4, 0),
+                      child: RoundIconButton(
+                        icon: PhosphorIconsRegular.pencilSimple,
+                        iconSize: 19,
+                        label: l10n.editHabit,
+                        onTap: () {
+                          ref
+                              .read(draftProvider.notifier)
+                              .set(HabitDraft.fromHabit(habit));
+                          context.push(Routes.createSettings);
+                        },
+                      ),
+                    ),
                   ],
                 ),
               ),
@@ -174,10 +155,14 @@ class DetailCardTitle extends StatelessWidget {
         Expanded(
           child: Text(title, style: small ? text.titleSmall : text.titleMedium),
         ),
+        // Flexible: with large text the hint wraps instead of overflowing.
         if (hint != null)
-          Text(
-            hint!,
-            style: text.labelMedium!.copyWith(color: context.sorbet.muted),
+          Flexible(
+            child: Text(
+              hint!,
+              textAlign: TextAlign.end,
+              style: text.labelMedium!.copyWith(color: context.sorbet.muted),
+            ),
           ),
       ],
     );

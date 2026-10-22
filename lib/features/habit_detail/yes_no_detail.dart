@@ -76,7 +76,7 @@ class _YesNoDetailState extends ConsumerState<YesNoDetail> {
         container: true,
         child: SegmentedStrip(
           count: 2,
-          cellHeight: 40,
+          cellHeight: 58,
           selected: _year ? 1 : 0,
           onSelected: (i) => setState(() => _year = i == 1),
           itemBuilder: (context, i, on) => Text(

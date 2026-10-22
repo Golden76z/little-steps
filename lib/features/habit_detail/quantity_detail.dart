@@ -63,7 +63,7 @@ class QuantityDetail extends ConsumerWidget {
               container: true,
               child: SegmentedStrip(
                 count: units.length,
-                cellHeight: 40,
+                cellHeight: 58,
                 selected: units.indexOf(_unit),
                 onSelected: (i) => edit((d) => d.copyWith(unit: units[i])),
                 itemBuilder: (context, i, on) => Text(
@@ -74,7 +74,24 @@ class QuantityDetail extends ConsumerWidget {
                 ),
               ),
             )
-          : null,
+          // No unit to switch: the quick steps take the band instead.
+          : Semantics(
+              label: l10n.amountAdded,
+              container: true,
+              child: SegmentedStrip(
+                count: _unit.stepPresets.length,
+                cellHeight: 58,
+                selected: _unit.stepPresets.indexOf(habit.step),
+                onSelected: (i) =>
+                    edit((d) => d.copyWith(step: _unit.stepPresets[i])),
+                itemBuilder: (context, i, on) => Text(
+                  '+${fmt.step(HabitDraft.fromHabit(habit).copyWith(step: _unit.stepPresets[i]).build(habit.createdOn))}',
+                  style: Theme.of(context).textTheme.bodyLarge!.copyWith(
+                    color: on ? context.sorbet.ink : context.sorbet.muted,
+                  ),
+                ),
+              ),
+            ),
       bottom: Row(
         spacing: 10,
         children: [
@@ -93,11 +110,13 @@ class QuantityDetail extends ConsumerWidget {
       ),
       children: [
         _WaveCard(habit: habit, value: value),
-        const SizedBox(height: 14),
-        _StepPicker(
-          habit: habit,
-          onSelected: (s) => edit((d) => d.copyWith(step: s)),
-        ),
+        if (_unit.isVolume) ...[
+          const SizedBox(height: 14),
+          _StepPicker(
+            habit: habit,
+            onSelected: (s) => edit((d) => d.copyWith(step: s)),
+          ),
+        ],
         const SizedBox(height: 12),
         _StatsPanel(
           stats: habitStats(
@@ -269,9 +288,12 @@ class _StepPicker extends StatelessWidget {
             textBaseline: TextBaseline.alphabetic,
             children: [
               Expanded(child: Text(l10n.addBy, style: text.bodyMedium)),
-              Text(
-                l10n.addByDetailHint,
-                style: text.labelMedium!.copyWith(color: c.muted),
+              Flexible(
+                child: Text(
+                  l10n.addByDetailHint,
+                  textAlign: TextAlign.end,
+                  style: text.labelMedium!.copyWith(color: c.muted),
+                ),
               ),
             ],
           ),

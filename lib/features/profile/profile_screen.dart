@@ -253,109 +253,94 @@ class _ProfileHeader extends ConsumerWidget {
     final level = levelFor(levelXp(history, today));
     final streak = globalStreak(history, today);
     return AppHeaderCard(
-      child: Column(
+      top: Row(
         children: [
-          Row(
-            children: [
-              XpAvatar(
-                size: 56,
-                fraction: level.fraction,
-                badge: '${level.level}',
-                semanticLabel: l10n.levelProgress(
-                  level.level,
-                  fmt.percent(level.fraction),
-                  level.level + 1,
-                ),
-              ),
-              const SizedBox(width: 12),
-              Expanded(
-                child: Semantics(
-                  button: true,
-                  child: InkWell(
-                    borderRadius: BorderRadius.circular(12),
-                    onTap: () => _editName(context, ref, name),
-                    child: ConstrainedBox(
-                      constraints: const BoxConstraints(minHeight: 48),
-                      child: Column(
-                        mainAxisAlignment: MainAxisAlignment.center,
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        children: [
-                          Semantics(
-                            header: true,
-                            child: Text(
-                              name.isEmpty ? l10n.yourName : name,
-                              style: name.isEmpty
-                                  ? text.headlineMedium!.copyWith(
-                                      color: c.muted,
-                                    )
-                                  : text.headlineMedium,
-                            ),
-                          ),
-                          const SizedBox(height: 2),
-                          Text(
-                            l10n.memberSince(
-                              fmt.monthYear(history.firstDay ?? today),
-                            ),
-                            style: text.bodySmall!.copyWith(color: c.muted),
-                          ),
-                        ],
+          XpAvatar(
+            size: 56,
+            fraction: level.fraction,
+            badge: '${level.level}',
+            semanticLabel: l10n.levelProgress(
+              level.level,
+              fmt.percent(level.fraction),
+              level.level + 1,
+            ),
+          ),
+          const SizedBox(width: 12),
+          Expanded(
+            child: Semantics(
+              button: true,
+              child: InkWell(
+                borderRadius: BorderRadius.circular(12),
+                onTap: () => _editName(context, ref, name),
+                child: ConstrainedBox(
+                  constraints: const BoxConstraints(minHeight: 48),
+                  child: Column(
+                    mainAxisAlignment: MainAxisAlignment.center,
+                    crossAxisAlignment: CrossAxisAlignment.start,
+                    children: [
+                      Semantics(
+                        header: true,
+                        child: Text(
+                          name.isEmpty ? l10n.yourName : name,
+                          style: name.isEmpty
+                              ? text.headlineMedium!.copyWith(color: c.muted)
+                              : text.headlineMedium,
+                        ),
                       ),
-                    ),
+                      const SizedBox(height: 2),
+                      Text(
+                        l10n.memberSince(
+                          fmt.monthYear(history.firstDay ?? today),
+                        ),
+                        style: text.bodySmall!.copyWith(color: c.muted),
+                      ),
+                    ],
                   ),
                 ),
               ),
-              // 48 px target shifted 4 px outwards: the 40 px disc keeps the 20 px
-              // margin, and the 4 px gap makes 12 px visually.
-              const SizedBox(width: 4),
-              Transform.translate(
-                offset: const Offset(4, 0),
-                child: RoundIconButton(
-                  icon: PhosphorIconsRegular.gear,
-                  iconSize: 20,
-                  label: l10n.settingsLabel,
-                  onTap: () => _editName(context, ref, name),
-                ),
-              ),
-            ],
-          ),
-          Container(
-            height: 1.5,
-            margin: const EdgeInsets.fromLTRB(4, 16, 4, 0),
-            decoration: BoxDecoration(
-              color: c.divider,
-              borderRadius: BorderRadius.circular(1),
             ),
           ),
-          const SizedBox(height: 14),
-          Container(
-            padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 10),
-            decoration: BoxDecoration(
-              color: c.strip,
-              borderRadius: BorderRadius.circular(22),
-            ),
-            child: IntrinsicHeight(
-              child: Row(
-                crossAxisAlignment: CrossAxisAlignment.stretch,
-                children: [
-                  _Stat(
-                    value: l10n.daysShort(fmt.number(streak.current)),
-                    label: l10n.statSeries,
-                  ),
-                  Container(width: 1.5, color: c.divider),
-                  _Stat(
-                    value: l10n.daysShort(fmt.number(streak.best)),
-                    label: l10n.statBest,
-                  ),
-                  Container(width: 1.5, color: c.divider),
-                  _Stat(
-                    value: fmt.number(_pillsFilled(history, today)),
-                    label: l10n.pillsFilled,
-                  ),
-                ],
-              ),
+          // 48 px target shifted 4 px outwards: the 40 px disc keeps the 20 px
+          // margin, and the 4 px gap makes 12 px visually.
+          const SizedBox(width: 4),
+          Transform.translate(
+            offset: const Offset(4, 0),
+            child: RoundIconButton(
+              icon: PhosphorIconsRegular.gear,
+              iconSize: 20,
+              label: l10n.settingsLabel,
+              onTap: () => _editName(context, ref, name),
             ),
           ),
         ],
+      ),
+      band: Container(
+        padding: const EdgeInsets.symmetric(horizontal: 4, vertical: 10),
+        decoration: BoxDecoration(
+          color: c.strip,
+          borderRadius: BorderRadius.circular(22),
+        ),
+        child: IntrinsicHeight(
+          child: Row(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              _Stat(
+                value: l10n.daysShort(fmt.number(streak.current)),
+                label: l10n.statSeries,
+              ),
+              Container(width: 1.5, color: c.divider),
+              _Stat(
+                value: l10n.daysShort(fmt.number(streak.best)),
+                label: l10n.statBest,
+              ),
+              Container(width: 1.5, color: c.divider),
+              _Stat(
+                value: fmt.number(_pillsFilled(history, today)),
+                label: l10n.pillsFilled,
+              ),
+            ],
+          ),
+        ),
       ),
     );
   }

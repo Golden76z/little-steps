@@ -93,74 +93,61 @@ class _Header extends StatelessWidget {
     final text = Theme.of(context).textTheme;
     final tabs = [l10n.badgesTab, l10n.challengesTab];
     return AppHeaderCard(
-      child: Column(
+      top: Row(
         children: [
-          Row(
-            children: [
-              XpAvatar(
-                fraction: level.fraction,
-                color: c.habit[HabitColor.lemon],
-                semanticLabel: l10n.levelProgress(
-                  level.level,
-                  fmt.percent(level.fraction),
-                  level.level + 1,
-                ),
-                child: Text(
-                  fmt.number(level.level),
-                  // The disc is fixed: cap the scale so the number stays inside.
-                  textScaler: MediaQuery.textScalerOf(context)
-                      .clamp(maxScaleFactor: 1.3),
-                  style: text.bodyLarge!.copyWith(
-                    fontWeight: FontWeight.w600,
-                    height: 1,
-                  ),
-                ),
-              ),
-              const SizedBox(width: 10),
-              Expanded(
-                child: Column(
-                  crossAxisAlignment: CrossAxisAlignment.start,
-                  children: [
-                    Text(
-                      l10n.xpOf(fmt.number(level.xp), fmt.number(level.toNext)),
-                      style: text.bodySmall!.copyWith(color: c.muted),
-                    ),
-                    Semantics(
-                      header: true,
-                      child: Text(l10n.tabTrophies, style: text.headlineLarge),
-                    ),
-                  ],
-                ),
-              ),
-              const SizedBox(width: 10),
-              StreakChip(days: streak, semanticLabel: l10n.streakDays(streak)),
-            ],
-          ),
-          Container(
-            height: 1.5,
-            margin: const EdgeInsets.fromLTRB(4, 16, 4, 0),
-            decoration: BoxDecoration(
-              color: c.divider,
-              borderRadius: BorderRadius.circular(1),
+          XpAvatar(
+            fraction: level.fraction,
+            color: c.habit[HabitColor.lemon],
+            semanticLabel: l10n.levelProgress(
+              level.level,
+              fmt.percent(level.fraction),
+              level.level + 1,
             ),
-          ),
-          const SizedBox(height: 14),
-          Semantics(
-            container: true,
-            label: l10n.categoryLabel,
-            child: SegmentedStrip(
-              count: tabs.length,
-              cellHeight: 40,
-              selected: tab,
-              onSelected: onTab,
-              itemBuilder: (context, i, on) => Text(
-                tabs[i],
-                textAlign: TextAlign.center,
-                style: text.bodyLarge!.copyWith(color: on ? c.ink : c.muted),
+            child: Text(
+              fmt.number(level.level),
+              // The disc is fixed: cap the scale so the number stays inside.
+              textScaler: MediaQuery.textScalerOf(context)
+                  .clamp(maxScaleFactor: 1.3),
+              style: text.bodyLarge!.copyWith(
+                fontWeight: FontWeight.w600,
+                height: 1,
               ),
             ),
           ),
+          const SizedBox(width: 10),
+          Expanded(
+            child: Column(
+              crossAxisAlignment: CrossAxisAlignment.start,
+              children: [
+                Text(
+                  l10n.xpOf(fmt.number(level.xp), fmt.number(level.toNext)),
+                  style: text.bodySmall!.copyWith(color: c.muted),
+                ),
+                Semantics(
+                  header: true,
+                  child: Text(l10n.tabTrophies, style: text.headlineLarge),
+                ),
+              ],
+            ),
+          ),
+          const SizedBox(width: 10),
+          StreakChip(days: streak, semanticLabel: l10n.streakDays(streak)),
         ],
+      ),
+      band: Semantics(
+        container: true,
+        label: l10n.categoryLabel,
+        child: SegmentedStrip(
+          count: tabs.length,
+          cellHeight: 58,
+          selected: tab,
+          onSelected: onTab,
+          itemBuilder: (context, i, on) => Text(
+            tabs[i],
+            textAlign: TextAlign.center,
+            style: text.bodyLarge!.copyWith(color: on ? c.ink : c.muted),
+          ),
+        ),
       ),
     );
   }

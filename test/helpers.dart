@@ -36,6 +36,10 @@ Future<void> pumpApp(
   AppDatabase db, {
   String locale = 'en',
 }) async {
+  // A common Android phone (412 × 915 dp) rather than the 800 × 600 default.
+  tester.view.physicalSize = const Size(412, 915);
+  tester.view.devicePixelRatio = 1;
+  addTearDown(tester.view.reset);
   await tester.pumpWidget(
     ProviderScope(
       overrides: [
