@@ -21,7 +21,10 @@ class LittleStepsApp extends ConsumerWidget {
       localizationsDelegates: AppLocalizations.localizationsDelegates,
       supportedLocales: AppLocalizations.supportedLocales,
       routerConfig: ref.watch(routerProvider),
-      builder: (context, child) => ReminderSync(child: child!),
+      builder: (context, child) => AnnotatedRegion(
+        value: sorbetSystemUi,
+        child: ReminderSync(child: child!),
+      ),
       debugShowCheckedModeBanner: false,
     );
   }

@@ -1,4 +1,5 @@
 import 'package:flutter/material.dart';
+import 'package:flutter/services.dart';
 
 import 'sorbet_colors.dart';
 
@@ -95,3 +96,15 @@ ThemeData buildSorbetTheme([SorbetColors c = SorbetColors.light]) {
     extensions: [c],
   );
 }
+
+/// Edge to edge: transparent status and navigation bars with dark icons,
+/// so the app's background runs under them.
+const sorbetSystemUi = SystemUiOverlayStyle(
+  statusBarColor: Colors.transparent,
+  statusBarIconBrightness: Brightness.dark,
+  statusBarBrightness: Brightness.light,
+  systemNavigationBarColor: Colors.transparent,
+  systemNavigationBarDividerColor: Colors.transparent,
+  systemNavigationBarIconBrightness: Brightness.dark,
+  systemNavigationBarContrastEnforced: false,
+);
