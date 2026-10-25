@@ -116,6 +116,8 @@ class CreateFlowScaffold extends StatelessWidget {
               Expanded(
                 // Short form: a plain scroll view keeps every section built.
                 child: SingleChildScrollView(
+                  keyboardDismissBehavior:
+                      ScrollViewKeyboardDismissBehavior.onDrag,
                   padding: EdgeInsets.fromLTRB(20, 14, 20, bottom + 60 + 16),
                   child: Column(
                     crossAxisAlignment: CrossAxisAlignment.stretch,

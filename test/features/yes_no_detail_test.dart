@@ -1,8 +1,10 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:little_steps/core/database/app_database.dart';
 import 'package:little_steps/core/database/habit_repository.dart';
 import 'package:little_steps/core/domain/day.dart';
 import 'package:little_steps/core/domain/habit.dart';
+import 'package:little_steps/core/feedback/feedback.dart';
 
 import '../helpers.dart';
 
@@ -65,6 +67,44 @@ void main() {
     await tester.tap(find.text('C’est fait !'));
     await settle(tester);
     expect(find.text('Je l’ai fait'), findsOneWidget);
+  });
+
+  testApp('checking keeps the button element (no remount)', (tester, db) async {
+    await open(tester, db);
+    Element button(String label) => tester.element(
+      find
+          .ancestor(
+            of: find.text(label),
+            matching: find.byType(AnimatedContainer),
+          )
+          .first,
+    );
+    final before = button('Je l’ai fait');
+    await tester.tap(find.text('Je l’ai fait'));
+    await settle(tester);
+    expect(identical(button('C’est fait !'), before), isTrue);
+  });
+
+  testApp('the first check celebrates, later ones only tap lightly', (
+    tester,
+    db,
+  ) async {
+    await open(tester, db);
+    await addOtherHabit(tester, db);
+    final haptics = recordHaptics(tester);
+    await tester.tap(find.text('Je l’ai fait'));
+    await settle(tester);
+    expect(haptics, ['HapticFeedbackType.mediumImpact']);
+    expect(sounds.played, [Sound.done]);
+    await tester.tap(find.text('C’est fait !'));
+    await settle(tester);
+    await tester.tap(find.text('Je l’ai fait'));
+    await settle(tester);
+    expect(haptics.skip(1), [
+      'HapticFeedbackType.lightImpact',
+      'HapticFeedbackType.lightImpact',
+    ]);
+    expect(sounds.played, [Sound.done]);
   });
 
   testApp('month count and legend', (tester, db) async {

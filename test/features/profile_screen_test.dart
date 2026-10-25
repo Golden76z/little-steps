@@ -1,9 +1,12 @@
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:little_steps/core/database/app_database.dart';
 import 'package:little_steps/core/database/habit_repository.dart';
 import 'package:little_steps/core/domain/day.dart';
 import 'package:little_steps/core/domain/habit.dart';
+import 'package:little_steps/core/feedback/feedback.dart';
+import 'package:little_steps/features/profile/profile_screen.dart';
 import 'package:little_steps/core/time/today_provider.dart';
 
 import '../helpers.dart';
@@ -120,8 +123,56 @@ void main() {
     );
   });
 
+  for (final (label, key) in [
+    ('Vibrations', hapticsKey),
+    ('Sons', soundsKey),
+  ]) {
+    testApp('the $label switch is on by default and persists', (
+      tester,
+      db,
+    ) async {
+      await openProfile(tester, db);
+      expect(
+        tester.getSemantics(find.bySemanticsLabel(label)),
+        isSemantics(hasToggledState: true, isToggled: true),
+      );
+      await tester.tap(find.bySemanticsLabel(label));
+      await settle(tester);
+      expect(
+        await tester.runAsync(() => HabitRepository(db).getSetting(key)),
+        '0',
+      );
+      expect(
+        tester.getSemantics(find.bySemanticsLabel(label)),
+        isSemantics(hasToggledState: true, isToggled: false),
+      );
+    });
+  }
+
+  testApp('once sounds are off, a completion plays nothing', (
+    tester,
+    db,
+  ) async {
+    await openProfile(tester, db);
+    final container = ProviderScope.containerOf(
+      tester.element(find.byType(ProfileScreen)),
+    );
+    container.read(feedbackProvider).sound(Sound.done);
+    await tester.pump();
+    expect(sounds.played, [Sound.done]);
+    sounds.played.clear();
+    await tester.tap(find.bySemanticsLabel('Sons'));
+    await settle(tester);
+    container.read(feedbackProvider).sound(Sound.done);
+    await tester.pump();
+    expect(sounds.played, isEmpty);
+  });
+
   testApp('the day start moves to 5 am', (tester, db) async {
     await openProfile(tester, db);
+    // Scroll the last row clear of the floating bar.
+    await tester.drag(find.text('Sorbet'), const Offset(0, -300));
+    await tester.pumpAndSettle();
     await tester.tap(find.text('Début de la journée'));
     await tester.pumpAndSettle();
     expect(

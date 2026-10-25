@@ -6,11 +6,16 @@ import '../../core/database/providers.dart';
 import '../../core/domain/day.dart';
 import '../../core/domain/habit.dart';
 import '../../core/domain/quick_action.dart';
+import '../../core/domain/rewards.dart';
+import '../../core/domain/rules.dart';
+import '../../core/feedback/celebrated.dart';
+import '../../core/feedback/feedback.dart';
 import '../../core/icons/habit_icons.dart';
 import '../../core/icons/phosphor_icons.dart';
 import '../../core/l10n/formatters.dart';
 import '../../core/l10n/l10n.dart';
 import '../../core/router/app_router.dart';
+import '../../core/theme/motion.dart';
 import '../../core/theme/sorbet_colors.dart';
 import '../../core/time/today_provider.dart';
 import '../../core/widgets/app_header_card.dart';
@@ -18,10 +23,14 @@ import '../../core/widgets/habit_pill.dart';
 import '../../core/widgets/segmented_strip.dart';
 import '../../core/widgets/streak_chip.dart';
 import '../../core/widgets/xp_avatar.dart';
+import '../habit_detail/session_timer.dart';
 import 'empty_today.dart';
 import 'habit_options_sheet.dart';
 import 'joker_sheet.dart';
+import 'pending_entries.dart';
+import 'pill_entrance.dart';
 import 'today_model.dart';
+import 'xp_flight.dart';
 
 /// Day picked in the week strip or the calendar; null follows today.
 final selectedDayProvider = NotifierProvider<SelectedDay, Day?>(
@@ -35,14 +44,54 @@ class SelectedDay extends Notifier<Day?> {
   void select(Day? day) => state = day;
 }
 
-class TodayScreen extends ConsumerWidget {
+class TodayScreen extends ConsumerStatefulWidget {
   const TodayScreen({super.key});
 
   @override
-  Widget build(BuildContext context, WidgetRef ref) {
+  ConsumerState<TodayScreen> createState() => _TodayScreenState();
+}
+
+/// Taps in a row on one habit: one message, and Annuler goes back to
+/// [before], the value ahead of the first tap.
+class _Burst {
+  _Burst(this.habitId, this.day, this.before, String text)
+    : text = ValueNotifier(text);
+
+  final int habitId;
+  final Day day;
+  final double before;
+  final ValueNotifier<String> text;
+  bool closed = false;
+}
+
+class _TodayScreenState extends ConsumerState<TodayScreen> {
+  final _avatarKey = GlobalKey();
+  final _pillKeys = <int, GlobalKey>{};
+  final _celebrations = <int, int>{};
+  _Burst? _burst;
+
+  @override
+  Widget build(BuildContext context) {
     final habits = ref.watch(habitsProvider).value;
-    final history = ref.watch(historyProvider).value;
-    if (habits == null || history == null) return const SizedBox.shrink();
+    final stored = ref.watch(historyProvider).value;
+    final pending = ref.watch(pendingEntriesProvider);
+    return AnimatedSwitcher(
+      duration: context.motion(Motion.medium),
+      switchInCurve: Motion.curve,
+      switchOutCurve: Motion.curve,
+      layoutBuilder: (current, previous) =>
+          Stack(fit: StackFit.expand, children: [...previous, ?current]),
+      // Fades in once loaded rather than popping in.
+      child: habits == null || stored == null
+          ? const SizedBox.shrink()
+          : KeyedSubtree(
+              key: const ValueKey(true),
+              child: _content(context, habits, stored.withValues(pending)),
+            ),
+    );
+  }
+
+  Widget _content(BuildContext context, List<Habit> habits, History history) {
     final today = ref.watch(todayProvider);
     final selected = ref.watch(selectedDayProvider) ?? today;
     final data = buildToday(
@@ -57,6 +106,7 @@ class TodayScreen extends ConsumerWidget {
       selected: selected,
       today: today,
       interactive: habits.isNotEmpty,
+      avatarKey: _avatarKey,
     );
     if (habits.isEmpty) return EmptyToday(header: header);
 
@@ -77,10 +127,15 @@ class TodayScreen extends ConsumerWidget {
               MediaQuery.paddingOf(context).bottom + 16,
             ),
             children: [
-              for (final p in data.active) ...[
-                _pill(context, ref, p, fmt, selected, editable),
-                const SizedBox(height: 8),
-              ],
+              for (final p in data.active)
+                Padding(
+                  key: _pillKeys.putIfAbsent(p.habit.id, GlobalKey.new),
+                  padding: const EdgeInsets.only(bottom: 8),
+                  child: PillEntrance(
+                    habitId: p.habit.id,
+                    child: _pill(context, p, fmt, selected, editable, history),
+                  ),
+                ),
               if (data.resting.isNotEmpty) ...[
                 Padding(
                   padding: const EdgeInsets.fromLTRB(4, 12, 4, 8),
@@ -90,10 +145,14 @@ class TodayScreen extends ConsumerWidget {
                         .copyWith(color: c.muted),
                   ),
                 ),
-                for (final p in data.resting) ...[
-                  _restingPill(context, ref, p, fmt),
-                  const SizedBox(height: 8),
-                ],
+                for (final p in data.resting)
+                  Padding(
+                    padding: const EdgeInsets.only(bottom: 8),
+                    child: PillEntrance(
+                      habitId: p.habit.id,
+                      child: _restingPill(context, p, fmt, selected),
+                    ),
+                  ),
               ],
             ],
           ),
@@ -104,11 +163,11 @@ class TodayScreen extends ConsumerWidget {
 
   Widget _pill(
     BuildContext context,
-    WidgetRef ref,
     PillData p,
     HabitFormat fmt,
     Day day,
     bool editable,
+    History history,
   ) {
     final l10n = context.l10n;
     final h = p.habit;
@@ -122,7 +181,15 @@ class TodayScreen extends ConsumerWidget {
       ),
       SetValue() => p.value >= 1 ? l10n.hintUncheck : l10n.hintCheck,
     };
+    // A hold logs the goal: minutes for a duration, today for a frequency.
+    final goal = switch (h.type) {
+      HabitType.yesNo || HabitType.frequency => 1.0,
+      _ => h.goal,
+    };
+    final holdable =
+        editable && !p.done && h.type != HabitType.journal && p.value < goal;
     return HabitPill(
+      key: ValueKey(h.id),
       name: h.name,
       subtitle: fmt.value(h, p.value, weekCount: p.weekCount),
       percent: percent,
@@ -130,6 +197,7 @@ class TodayScreen extends ConsumerWidget {
       fill: context.sorbet.habit[h.color]!,
       progress: p.progress,
       done: p.done,
+      celebrate: _celebrations[h.id] ?? 0,
       semanticLabel: [
         l10n.pillLabel(h.name, percent),
         if (p.done) l10n.pillDone,
@@ -137,28 +205,41 @@ class TodayScreen extends ConsumerWidget {
       semanticHint: editable ? hint : null,
       iconSemanticLabel: '${h.name}, ${l10n.hintOpen}',
       onTap: editable
-          ? () => _runQuickAction(context, ref, p, action, day)
+          ? () => switch (action) {
+              OpenDetail(:final startTimer) => context.push(
+                Routes.habit(h.id, startTimer: startTimer),
+              ),
+              SetValue(:final value) => _setValue(p, value, day, history),
+            }
+          : null,
+      onHoldComplete: holdable
+          ? () {
+              _setValue(p, goal, day, history);
+              // Ends an open session, or its pause would log over the goal.
+              if (h.type == HabitType.duration) {
+                ref.read(sessionTimersProvider.notifier).markDone(h);
+              }
+            }
           : null,
       onIconTap: () => context.push(Routes.habit(h.id)),
-      onLongPress: () => showHabitOptions(context, h),
+      onIconLongPress: () => _options(h),
     );
   }
 
   Widget _restingPill(
     BuildContext context,
-    WidgetRef ref,
     PillData p,
     HabitFormat fmt,
+    Day day,
   ) {
     final l10n = context.l10n;
     final h = p.habit;
-    final pause = h.pauses.where(
-      (x) => x.covers(ref.read(selectedDayProvider) ?? ref.read(todayProvider)),
-    );
+    final pause = h.pauses.where((x) => x.covers(day));
     final subtitle = p.status == DayStatus.paused
         ? l10n.pausedUntil(fmt.longDate(pause.first.to))
         : l10n.restDay;
     return HabitPill(
+      key: ValueKey(h.id),
       name: h.name,
       subtitle: subtitle,
       icon: habitIcon(h.icon),
@@ -169,48 +250,95 @@ class TodayScreen extends ConsumerWidget {
       iconSemanticLabel: '${h.name}, ${l10n.hintOpen}',
       onTap: () => context.push(Routes.habit(h.id)),
       onIconTap: () => context.push(Routes.habit(h.id)),
-      onLongPress: () => showHabitOptions(context, h),
+      onLongPress: () => _options(h),
     );
   }
 
-  Future<void> _runQuickAction(
-    BuildContext context,
-    WidgetRef ref,
-    PillData p,
-    QuickAction action,
-    Day day,
-  ) async {
+  void _options(Habit h) {
+    ref.read(feedbackProvider).haptic(Haptic.light);
+    showHabitOptions(context, h);
+  }
+
+  /// Logs [value] at once (the pill fills on this frame), plays what it
+  /// earns, and shows or updates the message to undo the burst.
+  void _setValue(PillData p, double value, Day day, History history) {
     final h = p.habit;
-    switch (action) {
-      case OpenDetail(:final startTimer):
-        context.push(Routes.habit(h.id, startTimer: startTimer));
-      case SetValue(:final value):
-        final l10n = context.l10n;
-        final step = context.habitFormat.step(h);
-        final messenger = ScaffoldMessenger.of(context);
-        final repo = ref.read(habitRepositoryProvider);
-        await repo.setEntry(HabitEntry(habitId: h.id, day: day, value: value));
-        messenger
-          ..hideCurrentSnackBar()
-          ..showSnackBar(
-            SnackBar(
-              persist: false,
-              content: Text(switch (h.type) {
-                HabitType.quantity => l10n.toastAdded(h.name, step!),
-                _ when value >= 1 => l10n.toastChecked(h.name),
-                _ => l10n.toastUnchecked(h.name),
-              }),
-              action: SnackBarAction(
-                label: l10n.undo,
-                onPressed: () => p.value == 0
-                    ? repo.clearEntry(h.id, day)
-                    : repo.setEntry(
-                        HabitEntry(habitId: h.id, day: day, value: p.value),
-                      ),
-              ),
-            ),
-          );
+    final l10n = context.l10n;
+    final today = ref.read(todayProvider);
+    final after = history.withValues({(h.id, day): value});
+    final done = buildToday(
+      history: after,
+      habits: [h],
+      selected: day,
+      today: today,
+      firstWeekday: context.firstWeekday,
+    ).active.single.done;
+    final feedback = ref.read(feedbackProvider);
+    if (value > p.value) {
+      if (done && !p.done) {
+        if (ref.read(celebratedProvider.notifier).claim('habit:${h.id}:$day')) {
+          setState(() => _celebrations[h.id] = (_celebrations[h.id] ?? 0) + 1);
+          feedback
+            ..haptic(Haptic.success)
+            ..sound(Sound.done);
+        } else {
+          feedback.haptic(Haptic.light);
+        }
+      } else {
+        feedback
+          ..haptic(Haptic.light)
+          ..sound(Sound.pop);
+      }
+      showXpFlight(
+        context,
+        from: _pillKeys[h.id]!,
+        to: _avatarKey,
+        xp: levelXp(after, today) - levelXp(history, today),
+      );
+    } else {
+      feedback.haptic(Haptic.light);
     }
+
+    final pending = ref.read(pendingEntriesProvider.notifier);
+    pending.set(h.id, day, value);
+    final current = _burst;
+    final ongoing =
+        current != null &&
+        !current.closed &&
+        current.habitId == h.id &&
+        current.day == day;
+    final before = ongoing ? current.before : p.value;
+    final text = switch (h.type) {
+      // The whole burst, which is what Annuler takes back.
+      HabitType.quantity => l10n.toastAdded(
+        h.name,
+        context.habitFormat.step(h, value - before)!,
+      ),
+      _ when value >= 1 => l10n.toastChecked(h.name),
+      _ => l10n.toastUnchecked(h.name),
+    };
+    if (ongoing) {
+      current.text.value = text;
+      return;
+    }
+    final burst = _burst = _Burst(h.id, day, before, text);
+    final messenger = ScaffoldMessenger.of(context)..hideCurrentSnackBar();
+    messenger
+        .showSnackBar(
+          SnackBar(
+            persist: false,
+            content: ValueListenableBuilder(
+              valueListenable: burst.text,
+              builder: (context, text, _) => Text(text),
+            ),
+            action: SnackBarAction(
+              label: l10n.undo,
+              onPressed: () => pending.set(h.id, day, burst.before),
+            ),
+          ),
+        )
+        .closed
+        .then((_) => burst.closed = true);
   }
 }
 
@@ -220,6 +348,7 @@ class _TodayHeader extends ConsumerWidget {
     required this.selected,
     required this.today,
     required this.interactive,
+    required this.avatarKey,
   });
 
   final TodayData data;
@@ -228,6 +357,7 @@ class _TodayHeader extends ConsumerWidget {
 
   /// False on the empty state, where the strip is decorative.
   final bool interactive;
+  final GlobalKey avatarKey;
 
   @override
   Widget build(BuildContext context, WidgetRef ref) {
@@ -243,7 +373,9 @@ class _TodayHeader extends ConsumerWidget {
       top: Row(
         children: [
           XpAvatar(
+            key: avatarKey,
             fraction: level.fraction,
+            level: level.level,
             semanticLabel: l10n.levelProgress(
               level.level,
               fmt.percent(level.fraction),

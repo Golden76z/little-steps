@@ -3,7 +3,8 @@ import 'package:flutter/widgets.dart';
 import '../theme/motion.dart';
 
 /// The tab branches, kept alive like an IndexedStack; the tab you switch
-/// to fades in and rises a few pixels.
+/// to fades in and rises a few pixels, while the old one is gone at once
+/// (never a double image).
 class FadingBranches extends StatefulWidget {
   const FadingBranches({
     super.key,
@@ -32,7 +33,8 @@ class _FadingBranchesState extends State<FadingBranches>
     super.didUpdateWidget(old);
     if (old.index != widget.index) {
       _controller.duration = context.motion(Motion.medium);
-      _controller.forward(from: 0);
+      // Mid-fade, the next tab carries on from the current opacity.
+      _controller.forward(from: _controller.isAnimating ? null : 0);
     }
   }
 

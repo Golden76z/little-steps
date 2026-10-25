@@ -3,6 +3,7 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:intl/intl.dart';
 
 import '../../core/database/providers.dart';
+import '../../core/feedback/feedback.dart';
 import '../../core/domain/day.dart';
 import '../../core/domain/habit.dart';
 import '../../core/domain/rules.dart';
@@ -13,8 +14,9 @@ import '../../core/theme/sorbet_colors.dart';
 import '../../core/time/today_provider.dart';
 import '../../core/widgets/dashed_border.dart';
 import '../../core/widgets/marked_text.dart';
-import '../../core/widgets/press_scale.dart';
 import '../../core/widgets/month_mosaic.dart';
+import '../../core/widgets/press_scale.dart';
+import '../../core/widgets/rolling_text.dart';
 import '../../core/widgets/segmented_strip.dart';
 import '../../core/widgets/sorbet_card.dart';
 import 'detail_model.dart';
@@ -89,30 +91,37 @@ class _YesNoDetailState extends ConsumerState<YesNoDetail> {
       children: [
         _StreakCard(
           habit: _habit,
+          today: today,
           stats: stats,
           done: history.isDone(_habit, today),
           unit: _unit(l10n, stats.streak.current),
           reminder: reminder == null ? null : _time(reminder),
           onToggle: () {
             final repo = ref.read(habitRepositoryProvider);
-            history.isDone(_habit, today)
-                ? repo.clearEntry(_habit.id, today)
-                : repo.setEntry(
-                    HabitEntry(habitId: _habit.id, day: today, value: 1),
-                  );
+            if (history.isDone(_habit, today)) {
+              ref.read(feedbackProvider).haptic(Haptic.light);
+              repo.clearEntry(_habit.id, today);
+            } else {
+              celebrateHabit(ref, _habit, today);
+              repo.setEntry(
+                HabitEntry(habitId: _habit.id, day: today, value: 1),
+              );
+            }
           },
         ),
         const SizedBox(height: 12),
-        if (_year)
-          _YearCard(habit: _habit, history: history, today: today)
-        else
-          _MonthCard(
-            habit: _habit,
-            history: history,
-            today: today,
-            stats: stats,
-            unit: _unit(l10n, stats.monthDue),
-          ),
+        StripBody(
+          index: _year ? 1 : 0,
+          child: _year
+              ? _YearCard(habit: _habit, history: history, today: today)
+              : _MonthCard(
+                  habit: _habit,
+                  history: history,
+                  today: today,
+                  stats: stats,
+                  unit: _unit(l10n, stats.monthDue),
+                ),
+        ),
         const SizedBox(height: 12),
         _JokerTip(
           text: l10n.jokerTip(
@@ -128,6 +137,7 @@ class _YesNoDetailState extends ConsumerState<YesNoDetail> {
 class _StreakCard extends StatelessWidget {
   const _StreakCard({
     required this.habit,
+    required this.today,
     required this.stats,
     required this.done,
     required this.unit,
@@ -136,6 +146,7 @@ class _StreakCard extends StatelessWidget {
   });
 
   final Habit habit;
+  final Day today;
   final HabitStats stats;
   final bool done;
   final String unit;
@@ -150,8 +161,8 @@ class _StreakCard extends StatelessWidget {
     final tones = c.tones[habit.color]!;
     final text = Theme.of(context).textTheme;
     final button = AnimatedContainer(
-      // Fill fades in, as in the mockup (background 0.2 s).
-      duration: context.motion(const Duration(milliseconds: 200)),
+      duration: context.motion(Motion.medium),
+      curve: Motion.curve,
       width: 118,
       height: 118,
       decoration: BoxDecoration(
@@ -210,8 +221,9 @@ class _StreakCard extends StatelessWidget {
                   ],
                 ),
                 const SizedBox(height: 4),
-                Text(
+                RollingText(
                   fmt.number(stats.streak.current),
+                  value: stats.streak.current,
                   style: text.displayMedium!.copyWith(fontSize: 56),
                 ),
                 Text(l10n.inARow(unit), style: text.bodyLarge),
@@ -231,17 +243,20 @@ class _StreakCard extends StatelessWidget {
             toggled: done,
             label: done ? l10n.doneLabel : l10n.iDidIt,
             excludeSemantics: true,
-            child: PressScale(
-              child: GestureDetector(
-                onTap: onToggle,
-                child: done
-                    ? button
-                    : DashedBorder(
-                        color: c.dashed,
-                        radius: 59,
-                        width: 3,
-                        child: button,
-                      ),
+            child: HabitPop(
+              habit: habit,
+              day: today,
+              child: PressScale(
+                child: GestureDetector(
+                  onTap: onToggle,
+                  // Always in the tree, so checking never remounts the button.
+                  child: DashedBorder(
+                    color: done ? Colors.transparent : c.dashed,
+                    radius: 59,
+                    width: 3,
+                    child: button,
+                  ),
+                ),
               ),
             ),
           ),

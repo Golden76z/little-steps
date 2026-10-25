@@ -4,6 +4,7 @@ import 'package:little_steps/core/database/app_database.dart';
 import 'package:little_steps/core/database/habit_repository.dart';
 import 'package:little_steps/core/domain/day.dart';
 import 'package:little_steps/core/domain/habit.dart';
+import 'package:little_steps/core/feedback/feedback.dart';
 
 import '../helpers.dart';
 
@@ -85,6 +86,25 @@ void main() {
 
     await write(tester, '$note\nEncore');
     expect(find.text('Enregistrer'), findsOneWidget);
+  });
+
+  testApp('saving the page celebrates once; moods tick', (tester, db) async {
+    await openJournal(tester, db);
+    await addOtherHabit(tester, db);
+    final haptics = recordHaptics(tester);
+    await write(tester, 'Une\nDeux\nTrois');
+    await tester.tap(find.bySemanticsLabel('Super'));
+    await tester.pumpAndSettle();
+    expect(haptics, ['HapticFeedbackType.selectionClick']);
+    await tester.tap(find.text('Enregistrer'));
+    await settle(tester);
+    expect(haptics.last, 'HapticFeedbackType.mediumImpact');
+    expect(sounds.played, [Sound.done]);
+    await write(tester, 'Une\nDeux\nTrois\nQuatre');
+    await tester.tap(find.text('Enregistrer'));
+    await settle(tester);
+    expect(haptics.last, 'HapticFeedbackType.lightImpact');
+    expect(sounds.played, [Sound.done]);
   });
 
   testApp('another question rotates the prompt', (tester, db) async {

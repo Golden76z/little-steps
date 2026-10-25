@@ -1,3 +1,4 @@
+import 'package:flutter/cupertino.dart' show CupertinoPageTransitionsBuilder;
 import 'package:flutter/material.dart';
 import 'package:flutter/services.dart';
 
@@ -54,6 +55,18 @@ ThemeData buildSorbetTheme([SorbetColors c = SorbetColors.light]) {
     colorScheme: scheme,
     scaffoldBackgroundColor: c.bg,
     fontFamily: _font,
+    // No ripple anywhere: presses sink instead (PressSink, PressScale);
+    // list rows keep a soft tint that fades in and out.
+    splashFactory: NoSplash.splashFactory,
+    // Opened screens slide in from the right and back out (Android's system
+    // back gesture keeps the edge; no predictive-back preview with this).
+    pageTransitionsTheme: const PageTransitionsTheme(
+      builders: {
+        TargetPlatform.android: CupertinoPageTransitionsBuilder(),
+        TargetPlatform.iOS: CupertinoPageTransitionsBuilder(),
+      },
+    ),
+    highlightColor: c.ink.withValues(alpha: 0.06),
     textTheme: _textTheme(c.ink),
     appBarTheme: AppBarTheme(
       backgroundColor: c.bg,

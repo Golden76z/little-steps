@@ -343,5 +343,10 @@
   "notifChannelDescription": "Rappels d’habitudes et alertes de série",
   "reminderBody": "Un petit pas maintenant ?",
   "dangerBody": "Encore {names} aujourd’hui pour garder ta flamme.",
-  "remindersSummary": "{habits, plural, one{{habits} habitude} other{{habits} habitudes}} · {reminders, plural, one{{reminders} rappel} other{{reminders} rappels}}"
+  "remindersSummary": "{habits, plural, one{{habits} habitude} other{{habits} habitudes}} · {reminders, plural, one{{reminders} rappel} other{{reminders} rappels}}",
+  "rowHaptics": "Vibrations",
+  "rowSounds": "Sons",
+  "actionComplete": "Compléter",
+  "actionOptions": "Options",
+  "xpGained": "+{xp} XP"
 }

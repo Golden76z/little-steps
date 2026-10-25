@@ -1,3 +1,4 @@
+import 'dart:async';
 import 'dart:math' as math;
 
 import 'package:flutter/widgets.dart';
@@ -5,23 +6,30 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../database/providers.dart';
 import '../domain/day.dart';
+import '../domain/rewards.dart';
+import '../domain/rules.dart';
+import '../feedback/celebrated.dart';
+import '../feedback/feedback.dart';
 import '../theme/motion.dart';
 import '../theme/sorbet_colors.dart';
 import '../time/today_provider.dart';
 
-/// A shower of Sorbet confetti the moment today becomes a perfect day,
-/// wherever the user is. Never on launch, never blocks taps.
-class PerfectDayConfetti extends ConsumerStatefulWidget {
-  const PerfectDayConfetti({super.key});
+/// The app-wide celebrations, wherever the user is: today becoming a
+/// perfect day (with a shower of Sorbet confetti), a level up, a new badge,
+/// a challenge of the week completed. Each one plays once in the app's
+/// life, with the success haptic and a single `celebrate` sound however
+/// many come at once. Never on launch, never blocks taps.
+class Celebrations extends ConsumerStatefulWidget {
+  const Celebrations({super.key});
 
   /// Present only while a burst is falling (tests look for it).
   static const burstKey = Key('perfect-day-confetti');
 
   @override
-  ConsumerState<PerfectDayConfetti> createState() => _PerfectDayConfettiState();
+  ConsumerState<Celebrations> createState() => _CelebrationsState();
 }
 
-class _PerfectDayConfettiState extends ConsumerState<PerfectDayConfetti>
+class _CelebrationsState extends ConsumerState<Celebrations>
     with SingleTickerProviderStateMixin {
   static const _duration = Duration(milliseconds: 2200);
   late final _controller = AnimationController(vsync: this, duration: _duration)
@@ -30,8 +38,13 @@ class _PerfectDayConfettiState extends ConsumerState<PerfectDayConfetti>
     });
   final _random = math.Random();
   List<_Piece> _pieces = const [];
-  Day? _day;
-  bool _wasPerfect = false;
+
+  /// What was already true at the first look: never celebrated.
+  Set<String>? _known;
+
+  /// The celebration waiting for the habit's own (its +XP flight) to end.
+  Timer? _pending;
+  bool _withBurst = false;
 
   @override
   void initState() {
@@ -39,17 +52,46 @@ class _PerfectDayConfettiState extends ConsumerState<PerfectDayConfetti>
     ref.listenManual(historyProvider, (_, next) {
       final history = next.value;
       if (history == null) return;
-      final today = ref.read(todayProvider);
-      final perfect = history.isPerfect(today) ?? false;
-      // The first look at a day only records it: no burst on launch.
-      if (_day == today && perfect && !_wasPerfect) _burst();
-      _day = today;
-      _wasPerfect = perfect;
+      final now = _achievements(history, ref.read(todayProvider));
+      final known = _known;
+      if (known == null) {
+        _known = now;
+        return;
+      }
+      final celebrated = ref.read(celebratedProvider.notifier);
+      final fresh = [
+        for (final k in now)
+          if (!known.contains(k) && celebrated.claim(k)) k,
+      ];
+      if (fresh.isEmpty) return;
+      _withBurst |= fresh.any((k) => k.startsWith('perfect:'));
+      _pending?.cancel();
+      _pending = Timer(Motion.flight, () {
+        ref.read(feedbackProvider)
+          ..haptic(Haptic.success)
+          ..sound(Sound.celebrate);
+        if (_withBurst) _burst();
+        _withBurst = false;
+      });
     }, fireImmediately: true);
+  }
+
+  /// Everything worth celebrating that is true now, as celebrated keys.
+  static Set<String> _achievements(History history, Day today) {
+    final week = today.weekStart(DateTime.monday);
+    final level = levelFor(levelXp(history, today)).level;
+    return {
+      if (history.isPerfect(today) ?? false) 'perfect:$today',
+      for (var n = 2; n <= level; n++) 'level:$n',
+      for (final b in earnedBadges(history, today)) 'badge:${b.name}',
+      for (final c in weeklyChallenges(history, today))
+        if (c.completed) 'challenge:$week:${c.kind.name}',
+    };
   }
 
   @override
   void dispose() {
+    _pending?.cancel();
     _controller.dispose();
     super.dispose();
   }
@@ -81,11 +123,13 @@ class _PerfectDayConfettiState extends ConsumerState<PerfectDayConfetti>
   Widget build(BuildContext context) {
     if (_pieces.isEmpty) return const SizedBox.shrink();
     return IgnorePointer(
-      key: PerfectDayConfetti.burstKey,
+      key: Celebrations.burstKey,
       child: ExcludeSemantics(
-        child: CustomPaint(
-          size: Size.infinite,
-          painter: _ConfettiPainter(_pieces, _controller, _duration),
+        child: RepaintBoundary(
+          child: CustomPaint(
+            size: Size.infinite,
+            painter: _ConfettiPainter(_pieces, _controller, _duration),
+          ),
         ),
       ),
     );

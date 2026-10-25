@@ -1,4 +1,5 @@
 import 'package:flutter_test/flutter_test.dart';
+import 'package:little_steps/core/widgets/fade_through_switcher.dart';
 import 'package:little_steps/core/database/app_database.dart';
 import 'package:little_steps/core/database/habit_repository.dart';
 import 'package:little_steps/core/domain/day.dart';
@@ -68,6 +69,13 @@ void main() {
     await tester.tap(find.text('Utiliser un joker · 2 restants'));
     await settle(tester);
     expect(find.text('Série sauvée !'), findsOneWidget);
+    expect(
+      find.descendant(
+        of: find.byType(FadeThroughSwitcher),
+        matching: find.text('Série sauvée !'),
+      ),
+      findsOneWidget,
+    );
     expect(
       find.text('Toujours 14 jours de suite. Il te reste 1 joker.'),
       findsOneWidget,

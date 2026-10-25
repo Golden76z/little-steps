@@ -7,6 +7,7 @@ import '../../core/domain/day.dart';
 import '../../core/domain/habit.dart';
 import '../../core/domain/rewards.dart';
 import '../../core/domain/rules.dart';
+import '../../core/feedback/feedback.dart';
 import '../../core/icons/phosphor_icons.dart';
 import '../../core/l10n/formatters.dart';
 import '../../core/l10n/l10n.dart';
@@ -14,6 +15,7 @@ import '../../core/router/app_router.dart';
 import '../../core/theme/sorbet_colors.dart';
 import '../../core/time/today_provider.dart';
 import '../../core/widgets/app_header_card.dart';
+import '../../core/widgets/rolling_text.dart';
 import '../../core/widgets/round_icon_button.dart';
 import '../../core/widgets/sorbet_card.dart';
 import '../../core/widgets/sorbet_switch.dart';
@@ -69,6 +71,22 @@ class ProfileScreen extends ConsumerWidget {
     final l10n = context.l10n;
     final c = context.sorbet;
     final reminders = habits.expand((h) => h.reminders);
+    final repo = ref.read(habitRepositoryProvider);
+    Widget toggle(
+      String label,
+      Color color,
+      IconData icon,
+      String key,
+      bool on,
+    ) => ProfileRow(
+      leading: ProfileIconBox(color: color, icon: icon),
+      label: label,
+      trailing: SorbetSwitch(
+        value: on,
+        onChanged: (v) => repo.setSetting(key, v ? '1' : '0'),
+        label: label,
+      ),
+    );
     // The header scrolls too, so large text keeps room for the rows.
     return ListView(
       padding: EdgeInsets.only(
@@ -144,6 +162,20 @@ class ProfileScreen extends ConsumerWidget {
                           ],
                         ),
                       ),
+                    ),
+                    toggle(
+                      l10n.rowHaptics,
+                      c.habit[HabitColor.peach]!,
+                      PhosphorIconsRegular.vibrate,
+                      hapticsKey,
+                      ref.watch(hapticsEnabledProvider),
+                    ),
+                    toggle(
+                      l10n.rowSounds,
+                      c.habit[HabitColor.sky]!,
+                      PhosphorIconsRegular.speakerHigh,
+                      soundsKey,
+                      ref.watch(soundsEnabledProvider),
                     ),
                     ProfileRow(
                       leading: ProfileIconBox(
@@ -252,12 +284,14 @@ class _ProfileHeader extends ConsumerWidget {
     final name = ref.watch(settingProvider(_firstNameKey)).value ?? '';
     final level = levelFor(levelXp(history, today));
     final streak = globalStreak(history, today);
+    final pills = _pillsFilled(history, today);
     return AppHeaderCard(
       top: Row(
         children: [
           XpAvatar(
             size: 56,
             fraction: level.fraction,
+            level: level.level,
             badge: '${level.level}',
             semanticLabel: l10n.levelProgress(
               level.level,
@@ -326,16 +360,19 @@ class _ProfileHeader extends ConsumerWidget {
             children: [
               _Stat(
                 value: l10n.daysShort(fmt.number(streak.current)),
+                number: streak.current,
                 label: l10n.statSeries,
               ),
               Container(width: 1.5, color: c.divider),
               _Stat(
                 value: l10n.daysShort(fmt.number(streak.best)),
+                number: streak.best,
                 label: l10n.statBest,
               ),
               Container(width: 1.5, color: c.divider),
               _Stat(
-                value: fmt.number(_pillsFilled(history, today)),
+                value: fmt.number(pills),
+                number: pills,
                 label: l10n.pillsFilled,
               ),
             ],
@@ -360,9 +397,10 @@ class _ProfileHeader extends ConsumerWidget {
 }
 
 class _Stat extends StatelessWidget {
-  const _Stat({required this.value, required this.label});
+  const _Stat({required this.value, required this.number, required this.label});
 
   final String value;
+  final int number;
   final String label;
 
   @override
@@ -373,7 +411,13 @@ class _Stat extends StatelessWidget {
         child: Column(
           mainAxisAlignment: MainAxisAlignment.center,
           children: [
-            Text(value, style: text.titleLarge, textAlign: TextAlign.center),
+            RollingText(
+              value,
+              value: number,
+              style: text.titleLarge,
+              textAlign: TextAlign.center,
+              alignment: Alignment.center,
+            ),
             Text(
               label,
               style: text.labelMedium!.copyWith(color: context.sorbet.muted),

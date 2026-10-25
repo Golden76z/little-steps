@@ -5,7 +5,7 @@ import 'core/l10n/l10n.dart';
 import 'core/notifications/reminder_sync.dart';
 import 'core/router/app_router.dart';
 import 'core/theme/app_theme.dart';
-import 'core/widgets/perfect_day_confetti.dart';
+import 'core/widgets/celebrations.dart';
 
 class LittleStepsApp extends ConsumerWidget {
   const LittleStepsApp({super.key, this.locale});
@@ -27,7 +27,7 @@ class LittleStepsApp extends ConsumerWidget {
         child: Stack(
           children: [
             ReminderSync(child: child!),
-            const Positioned.fill(child: PerfectDayConfetti()),
+            const Positioned.fill(child: Celebrations()),
           ],
         ),
       ),

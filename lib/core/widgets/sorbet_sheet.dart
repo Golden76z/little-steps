@@ -3,6 +3,7 @@ import 'dart:math' as math;
 import 'package:flutter/material.dart';
 
 import '../icons/phosphor_icons.dart';
+import '../theme/motion.dart';
 import '../theme/sorbet_colors.dart';
 
 /// Bottom sheet in the E2/E3 style: white, top corners 32, grab handle,
@@ -22,6 +23,11 @@ Future<T?> showSorbetSheet<T>(
     backgroundColor: Colors.transparent,
     elevation: 0,
     barrierColor: c.barrier,
+    sheetAnimationStyle: AnimationStyle(
+      duration: context.motion(Motion.sheetIn),
+      reverseDuration: context.motion(Motion.sheetOut),
+      curve: Easing.emphasizedDecelerate,
+    ),
     builder: (context) => DecoratedBox(
       decoration: BoxDecoration(
         color: c.surface,

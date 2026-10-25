@@ -13,6 +13,7 @@ import '../../core/l10n/l10n.dart';
 import '../../core/router/app_router.dart';
 import '../../core/theme/sorbet_colors.dart';
 import '../../core/time/today_provider.dart';
+import '../../core/widgets/fade_through_switcher.dart';
 import '../../core/widgets/marked_text.dart';
 import '../../core/widgets/segmented_strip.dart';
 import '../../core/widgets/sorbet_sheet.dart';
@@ -108,73 +109,82 @@ class _HabitOptionsState extends ConsumerState<_HabitOptions> {
                 expanded: _pauseOpen,
                 onTap: () => setState(() => _pauseOpen = !_pauseOpen),
               ),
-              if (_pauseOpen)
-                Padding(
-                  padding: const EdgeInsets.only(bottom: 14),
-                  child: Column(
-                    crossAxisAlignment: CrossAxisAlignment.stretch,
-                    children: [
-                      Semantics(
-                        label: l10n.pauseLength,
-                        container: true,
-                        child: SegmentedStrip.outlined(
-                          count: 4,
-                          selected: _duration,
-                          onSelected: (i) => _pickDuration(i, today),
-                          itemBuilder: (context, i, on) => Text(
-                            [
-                              l10n.pause1Week,
-                              l10n.pause2Weeks,
-                              l10n.pause1Month,
-                              l10n.pauseDates,
-                            ][i],
-                            style: text.labelLarge!.copyWith(
-                              color: on ? c.ink : c.muted,
+              FadeThroughSwitcher(
+                child: _pauseOpen
+                    ? Padding(
+                        key: const ValueKey(true),
+                        padding: const EdgeInsets.only(bottom: 14),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.stretch,
+                          children: [
+                            Semantics(
+                              label: l10n.pauseLength,
+                              container: true,
+                              child: SegmentedStrip.outlined(
+                                count: 4,
+                                selected: _duration,
+                                onSelected: (i) => _pickDuration(i, today),
+                                itemBuilder: (context, i, on) => Text(
+                                  [
+                                    l10n.pause1Week,
+                                    l10n.pause2Weeks,
+                                    l10n.pause1Month,
+                                    l10n.pauseDates,
+                                  ][i],
+                                  style: text.labelLarge!.copyWith(
+                                    color: on ? c.ink : c.muted,
+                                  ),
+                                ),
+                              ),
                             ),
-                          ),
+                            const SizedBox(height: 10),
+                            MarkedText(
+                              l10n.pauseFrozen(
+                                _habit.isWeekly
+                                    ? l10n.weeksCount(streak)
+                                    : l10n.daysCount(streak),
+                                resume == null
+                                    ? l10n.pauseChosenDay
+                                    : fmt.longDate(resume),
+                              ),
+                              style: text.bodySmall!.copyWith(
+                                height: 1.35,
+                                color: c.inkSoft,
+                              ),
+                              strong: TextStyle(
+                                fontWeight: FontWeight.w600,
+                                color: c.ink,
+                              ),
+                            ),
+                            const SizedBox(height: 12),
+                            FilledButton(
+                              onPressed: resume == null || _paused
+                                  ? null
+                                  : () => _pause(today, resume),
+                              style: FilledButton.styleFrom(
+                                minimumSize: const Size.fromHeight(50),
+                                backgroundColor: c.accent,
+                                foregroundColor: c.onAccent,
+                                disabledBackgroundColor: _paused
+                                    ? c.surface
+                                    : c.chipOff,
+                                disabledForegroundColor: _paused
+                                    ? c.ink
+                                    : c.faint,
+                                textStyle: text.bodyLarge,
+                              ),
+                              child: Text(
+                                _paused ? l10n.pauseActive : l10n.pauseConfirm,
+                              ),
+                            ),
+                          ],
                         ),
+                      )
+                    : const SizedBox(
+                        key: ValueKey(false),
+                        width: double.infinity,
                       ),
-                      const SizedBox(height: 10),
-                      MarkedText(
-                        l10n.pauseFrozen(
-                          _habit.isWeekly
-                              ? l10n.weeksCount(streak)
-                              : l10n.daysCount(streak),
-                          resume == null
-                              ? l10n.pauseChosenDay
-                              : fmt.longDate(resume),
-                        ),
-                        style: text.bodySmall!.copyWith(
-                          height: 1.35,
-                          color: c.inkSoft,
-                        ),
-                        strong: TextStyle(
-                          fontWeight: FontWeight.w600,
-                          color: c.ink,
-                        ),
-                      ),
-                      const SizedBox(height: 12),
-                      FilledButton(
-                        onPressed: resume == null || _paused
-                            ? null
-                            : () => _pause(today, resume),
-                        style: FilledButton.styleFrom(
-                          minimumSize: const Size.fromHeight(50),
-                          backgroundColor: c.accent,
-                          foregroundColor: c.onAccent,
-                          disabledBackgroundColor: _paused
-                              ? c.surface
-                              : c.chipOff,
-                          disabledForegroundColor: _paused ? c.ink : c.faint,
-                          textStyle: text.bodyLarge,
-                        ),
-                        child: Text(
-                          _paused ? l10n.pauseActive : l10n.pauseConfirm,
-                        ),
-                      ),
-                    ],
-                  ),
-                ),
+              ),
               Container(height: 1.5, color: c.sheetDivider),
               _OptionRow(
                 icon: PhosphorIconsRegular.archive,

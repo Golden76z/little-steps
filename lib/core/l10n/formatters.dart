@@ -58,9 +58,10 @@ class HabitFormat {
     Moment.anytime => l10n.momentAnytime,
   };
 
-  /// What one quick action adds, e.g. "25 cl"; null when it does not add.
-  String? step(Habit h) {
-    final s = h.step;
+  /// What one quick action adds, e.g. "25 cl", or [amount] in the same
+  /// words; null when it does not add.
+  String? step(Habit h, [double? amount]) {
+    final s = amount ?? h.step;
     return switch (h.type) {
       HabitType.quantity => switch (h.unit ?? QuantityUnit.times) {
         QuantityUnit.liters => l10n.stepCl(number(s / 10)),

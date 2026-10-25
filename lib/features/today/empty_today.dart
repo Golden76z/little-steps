@@ -7,6 +7,7 @@ import '../../core/l10n/l10n.dart';
 import '../../core/router/app_router.dart';
 import '../../core/theme/sorbet_colors.dart';
 import '../../core/widgets/dashed_border.dart';
+import '../../core/widgets/press_scale.dart';
 import '../create_habit/draft_provider.dart';
 import '../create_habit/habit_draft.dart';
 
@@ -142,43 +143,49 @@ class _IdeaChip extends StatelessWidget {
     final c = context.sorbet;
     final radius = BorderRadius.circular(19);
     // 38 px chip inside a 48 px tap target.
-    return Material(
-      type: MaterialType.transparency,
-      child: InkWell(
-        customBorder: const StadiumBorder(),
-        onTap: onTap,
-        child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 5),
-          child: DecoratedBox(
-            decoration: BoxDecoration(
-              color: c.surface,
-              borderRadius: radius,
-              boxShadow: [
-                BoxShadow(color: c.shadowPill, offset: const Offset(0, 2)),
-              ],
-            ),
-            child: Padding(
-              padding: const EdgeInsets.fromLTRB(6, 5, 14, 5),
-              child: Row(
-                mainAxisSize: MainAxisSize.min,
-                spacing: 7,
-                children: [
-                  Container(
-                    width: 28,
-                    height: 28,
-                    decoration: BoxDecoration(
-                      shape: BoxShape.circle,
-                      color: color,
-                    ),
-                    child: Icon(icon, size: 16, color: c.ink),
-                  ),
-                  Flexible(
-                    child: Text(
-                      label,
-                      style: Theme.of(context).textTheme.bodyMedium,
-                    ),
+    return PressSink(
+      depth: 2,
+      builder: (context, pressed) => Material(
+        type: MaterialType.transparency,
+        child: InkWell(
+          customBorder: const StadiumBorder(),
+          onTap: onTap,
+          child: Padding(
+            padding: const EdgeInsets.symmetric(vertical: 5),
+            child: DecoratedBox(
+              decoration: BoxDecoration(
+                color: c.surface,
+                borderRadius: radius,
+                boxShadow: [
+                  BoxShadow(
+                    color: c.shadowPill,
+                    offset: Offset(0, 2 - 2 * pressed),
                   ),
                 ],
+              ),
+              child: Padding(
+                padding: const EdgeInsets.fromLTRB(6, 5, 14, 5),
+                child: Row(
+                  mainAxisSize: MainAxisSize.min,
+                  spacing: 7,
+                  children: [
+                    Container(
+                      width: 28,
+                      height: 28,
+                      decoration: BoxDecoration(
+                        shape: BoxShape.circle,
+                        color: color,
+                      ),
+                      child: Icon(icon, size: 16, color: c.ink),
+                    ),
+                    Flexible(
+                      child: Text(
+                        label,
+                        style: Theme.of(context).textTheme.bodyMedium,
+                      ),
+                    ),
+                  ],
+                ),
               ),
             ),
           ),

@@ -30,6 +30,23 @@ void main() {
     expect(find.bySemanticsLabel('Main navigation'), findsNothing);
   });
 
+  testApp('an opened screen slides in from the right', (tester, db) async {
+    await pumpApp(tester, db);
+    await tester.tap(find.bySemanticsLabel('New habit'));
+    for (var i = 0; i < 30 && find.text('1/3').evaluate().isEmpty; i++) {
+      await tester.pump(const Duration(milliseconds: 16));
+    }
+    await tester.pump(const Duration(milliseconds: 60));
+    final slides = tester.widgetList<SlideTransition>(
+      find.ancestor(
+        of: find.text('1/3'),
+        matching: find.byType(SlideTransition),
+      ),
+    );
+    expect(slides.any((s) => s.position.value.dx > 0), isTrue);
+    await tester.pumpAndSettle();
+  });
+
   testApp('French strings', (tester, db) async {
     await pumpApp(tester, db, locale: 'fr');
     expect(find.text('Aujourd’hui'), findsOneWidget);
@@ -66,5 +83,32 @@ void main() {
     expect(fade.opacity.value, inExclusiveRange(0, 1));
     await tester.pumpAndSettle();
     expect(fade.opacity.value, 1);
+  });
+
+  testApp('a tab change mid-fade carries on from the current opacity', (
+    tester,
+    db,
+  ) async {
+    await pumpApp(tester, db);
+    FadeTransition branch(int i) =>
+        tester.widget<FadeTransition>(find.byKey(ValueKey('branch-$i')));
+    await tester.tap(find.bySemanticsLabel('Progress'));
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 60));
+    final midway = branch(1).opacity.value;
+    expect(midway, inExclusiveRange(0, 1));
+    await tester.tap(find.bySemanticsLabel('Trophies'));
+    await tester.pump();
+    expect(branch(2).opacity.value, greaterThanOrEqualTo(midway - 0.01));
+    await tester.pumpAndSettle();
+    expect(branch(2).opacity.value, 1);
+  });
+
+  testApp('a tab change ticks', (tester, db) async {
+    await pumpApp(tester, db);
+    final haptics = recordHaptics(tester);
+    await tester.tap(find.bySemanticsLabel('Progress'));
+    await tester.pumpAndSettle();
+    expect(haptics, ['HapticFeedbackType.selectionClick']);
   });
 }

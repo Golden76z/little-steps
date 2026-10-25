@@ -7,6 +7,9 @@ import 'package:little_steps/core/database/habit_repository.dart';
 import 'package:little_steps/core/database/providers.dart';
 import 'package:little_steps/core/domain/day.dart';
 import 'package:little_steps/core/domain/habit.dart';
+import 'package:little_steps/core/feedback/feedback.dart';
+import 'package:little_steps/core/widgets/rolling_text.dart';
+import 'package:little_steps/features/habit_detail/detail_scaffold.dart';
 import 'package:little_steps/core/notifications/reminder_scheduler.dart';
 import 'package:little_steps/core/time/today_provider.dart';
 
@@ -55,6 +58,7 @@ Future<void> openDetail(
         databaseProvider.overrideWithValue(db),
         clockProvider.overrideWithValue(() => now),
         reminderSchedulerProvider.overrideWithValue(FakeScheduler()),
+        soundPlayerProvider.overrideWithValue(sounds = FakeSoundPlayer()),
       ],
       child: const LittleStepsApp(locale: Locale('fr')),
     ),
@@ -70,6 +74,11 @@ Future<double?> todayValue(WidgetTester tester) async {
   final entries = await tester.runAsync(() => repo.watchEntries().first);
   return entries!.where((e) => e.day == today).firstOrNull?.value;
 }
+
+/// The clock's digits, rolling one by one.
+Finder clock(String time) => find.byWidgetPredicate(
+  (w) => w is RollingText && w.perCharacter && w.text == time,
+);
 
 /// Advances the clock and lets the 1 s refresh run.
 Future<void> wait(WidgetTester tester, Duration d) async {
@@ -91,12 +100,12 @@ void main() {
     final habit = await tester.runAsync(() => repo.watchHabits().first);
     expect(habit!.single.goal, 900);
     expect(find.text('15 min · chaque matin'), findsOneWidget);
-    expect(find.text('15:00'), findsOneWidget);
+    expect(clock('15:00'), findsOneWidget);
   });
 
   testApp('“already done” logs the goal', (tester, db) async {
     await openDetail(tester, db, logged: 60);
-    expect(find.text('04:00'), findsOneWidget);
+    expect(clock('04:00'), findsOneWidget);
     await tester.tap(find.text('Déjà fait, noter 5 min'));
     await settle(tester);
     expect(await todayValue(tester), 300);
@@ -112,7 +121,7 @@ void main() {
     expect(find.text('sur 05:00'), findsOneWidget);
     await tester.tap(find.bySemanticsLabel('Démarrer'));
     await wait(tester, const Duration(minutes: 2));
-    expect(find.text('02:00'), findsOneWidget);
+    expect(clock('02:00'), findsOneWidget);
     expect(find.text('En cours…'), findsOneWidget);
     expect(find.bySemanticsLabel('3 minutes sur 5'), findsOneWidget);
     await tester.tap(find.bySemanticsLabel('Mettre en pause'));
@@ -126,7 +135,7 @@ void main() {
     await tester.tap(find.bySemanticsLabel('Démarrer'));
     await wait(tester, const Duration(minutes: 7));
     expect(find.text('Séance terminée !'), findsOneWidget);
-    expect(find.text('00:00'), findsOneWidget);
+    expect(clock('00:00'), findsOneWidget);
     expect(await todayValue(tester), 300);
   });
 
@@ -138,7 +147,7 @@ void main() {
     await tester.tap(find.bySemanticsLabel('Recommencer'));
     await settle(tester);
     expect(await todayValue(tester), isNull);
-    expect(find.text('05:00'), findsOneWidget);
+    expect(clock('05:00'), findsOneWidget);
     await tester.tap(find.bySemanticsLabel('Démarrer'));
     await wait(tester, const Duration(seconds: 90));
     await tester.tap(find.bySemanticsLabel('Terminer la séance'));
@@ -155,6 +164,38 @@ void main() {
     expect(find.text('En cours…'), findsOneWidget);
     await tester.tap(find.bySemanticsLabel('Mettre en pause'));
     await settle(tester);
+  });
+
+  testApp('a tick only rebuilds the clock, not the screen', (tester, db) async {
+    await openDetail(tester, db);
+    await tester.tap(find.bySemanticsLabel('Démarrer'));
+    await wait(tester, const Duration(seconds: 10));
+    final rebuilt = <Widget>[];
+    debugOnRebuildDirtyWidget = (e, _) => rebuilt.add(e.widget);
+    addTearDown(() => debugOnRebuildDirtyWidget = null);
+    now = now.add(const Duration(seconds: 1));
+    await tester.pump(const Duration(seconds: 1));
+    debugOnRebuildDirtyWidget = null;
+    expect(rebuilt, isNotEmpty);
+    expect(rebuilt.whereType<DetailScaffold>(), isEmpty);
+    await tester.pumpAndSettle();
+    expect(clock('04:49'), findsOneWidget);
+    await tester.tap(find.bySemanticsLabel('Mettre en pause'));
+    await settle(tester);
+  });
+
+  testApp('the end of the timer celebrates once', (tester, db) async {
+    await openDetail(tester, db);
+    await addOtherHabit(tester, db);
+    final haptics = recordHaptics(tester);
+    await tester.tap(find.bySemanticsLabel('Démarrer'));
+    await wait(tester, const Duration(minutes: 7));
+    await wait(tester, const Duration(seconds: 5));
+    expect(haptics, [
+      'HapticFeedbackType.lightImpact',
+      'HapticFeedbackType.mediumImpact',
+    ]);
+    expect(sounds.played, [Sound.done]);
   });
 
   testApp('meets tap-target and label guidelines', (tester, db) async {

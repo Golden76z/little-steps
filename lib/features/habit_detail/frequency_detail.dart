@@ -6,13 +6,16 @@ import 'package:intl/intl.dart';
 import '../../core/database/providers.dart';
 import '../../core/domain/day.dart';
 import '../../core/domain/habit.dart';
+import '../../core/feedback/feedback.dart';
 import '../../core/icons/habit_icons.dart';
 import '../../core/icons/phosphor_icons.dart';
 import '../../core/l10n/formatters.dart';
 import '../../core/l10n/l10n.dart';
+import '../../core/theme/motion.dart';
 import '../../core/theme/sorbet_colors.dart';
 import '../../core/time/today_provider.dart';
 import '../../core/widgets/dashed_border.dart';
+import '../../core/widgets/press_scale.dart';
 import '../../core/widgets/segmented_strip.dart';
 import '../../core/widgets/sorbet_card.dart';
 import 'detail_model.dart';
@@ -80,17 +83,37 @@ class _FrequencyDetailState extends ConsumerState<FrequencyDetail> {
         done: doneToday,
         onPressed: () {
           final repo = ref.read(habitRepositoryProvider);
-          doneToday
-              ? repo.clearEntry(h.id, today)
-              : repo.setEntry(HabitEntry(habitId: h.id, day: today, value: 1));
+          final feedback = ref.read(feedbackProvider);
+          if (doneToday) {
+            feedback.haptic(Haptic.light);
+            repo.clearEntry(h.id, today);
+            return;
+          }
+          // Only a session that closes the week completes the habit.
+          if (counts.last + 1 >= h.timesPerWeek) {
+            celebrateHabit(ref, h, today);
+          } else {
+            feedback
+              ..haptic(Haptic.light)
+              ..sound(Sound.pop);
+          }
+          repo.setEntry(HabitEntry(habitId: h.id, day: today, value: 1));
         },
       ),
       children: [
-        if (_tab == 0) ...[
-          _ThisWeek(habit: h, count: counts.last, today: today),
-          const SizedBox(height: 12),
-        ],
-        grid,
+        StripBody(
+          index: _tab,
+          child: Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              if (_tab == 0) ...[
+                _ThisWeek(habit: h, count: counts.last, today: today),
+                const SizedBox(height: 12),
+              ],
+              grid,
+            ],
+          ),
+        ),
       ],
     );
   }
@@ -414,40 +437,59 @@ class _SessionButton extends StatelessWidget {
   Widget build(BuildContext context) {
     final c = context.sorbet;
     final l10n = context.l10n;
-    return DecoratedBox(
-      decoration: BoxDecoration(
-        borderRadius: BorderRadius.circular(30),
-        boxShadow: [
-          BoxShadow(
-            color: done ? c.shadowPill : c.ctaShadow,
-            offset: Offset(0, done ? 3 : 4),
-          ),
-        ],
-      ),
-      child: FilledButton(
-        onPressed: onPressed,
-        style: FilledButton.styleFrom(
-          minimumSize: const Size.fromHeight(60),
-          backgroundColor: done ? c.surface : c.accent,
-          foregroundColor: done ? c.ink : c.onAccent,
-          textStyle: Theme.of(context).textTheme.titleMedium!
-              .copyWith(fontSize: 19, fontWeight: FontWeight.w500),
-        ),
-        child: Row(
-          mainAxisSize: MainAxisSize.min,
-          spacing: 8,
-          children: [
-            Icon(
-              done ? PhosphorIconsBold.check : PhosphorIconsBold.plus,
-              size: 18,
+    final depth = done ? 3.0 : 4.0;
+    return Semantics(
+      button: true,
+      child: GestureDetector(
+        behavior: HitTestBehavior.opaque,
+        onTap: onPressed,
+        child: PressSink(
+          depth: depth,
+          // The shadow follows the finger; the fill fades on its own.
+          builder: (context, pressed) => DecoratedBox(
+            decoration: BoxDecoration(
+              borderRadius: BorderRadius.circular(30),
+              boxShadow: [
+                BoxShadow(
+                  color: done ? c.shadowPill : c.ctaShadow,
+                  offset: Offset(0, depth * (1 - pressed)),
+                ),
+              ],
             ),
-            Flexible(
-              child: Text(
-                done ? l10n.sessionLogged : l10n.logSession,
-                textAlign: TextAlign.center,
+            child: AnimatedContainer(
+              duration: context.motion(Motion.fast),
+              curve: Motion.curve,
+              constraints: const BoxConstraints(minHeight: 60),
+              alignment: Alignment.center,
+              padding: const EdgeInsets.symmetric(horizontal: 20),
+              decoration: BoxDecoration(
+                color: done ? c.surface : c.accent,
+                borderRadius: BorderRadius.circular(30),
+              ),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                spacing: 8,
+                children: [
+                  Icon(
+                    done ? PhosphorIconsBold.check : PhosphorIconsBold.plus,
+                    size: 18,
+                    color: done ? c.ink : c.onAccent,
+                  ),
+                  Flexible(
+                    child: Text(
+                      done ? l10n.sessionLogged : l10n.logSession,
+                      textAlign: TextAlign.center,
+                      style: Theme.of(context).textTheme.titleMedium!.copyWith(
+                        fontSize: 19,
+                        fontWeight: FontWeight.w500,
+                        color: done ? c.ink : c.onAccent,
+                      ),
+                    ),
+                  ),
+                ],
               ),
             ),
-          ],
+          ),
         ),
       ),
     );

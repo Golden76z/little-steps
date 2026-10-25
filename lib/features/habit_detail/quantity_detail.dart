@@ -5,15 +5,19 @@ import '../../core/database/providers.dart';
 import '../../core/domain/day.dart';
 import '../../core/domain/habit.dart';
 import '../../core/domain/rules.dart';
+import '../../core/feedback/feedback.dart';
 import '../../core/icons/phosphor_icons.dart';
 import '../../core/l10n/formatters.dart';
 import '../../core/l10n/l10n.dart';
 import '../../core/theme/sorbet_colors.dart';
 import '../../core/time/today_provider.dart';
 import '../../core/widgets/month_mosaic.dart';
+import '../../core/widgets/press_scale.dart';
 import '../../core/widgets/primary_button.dart';
+import '../../core/widgets/rolling_text.dart';
 import '../../core/widgets/segmented_strip.dart';
 import '../../core/widgets/sorbet_card.dart';
+import '../../core/widgets/spring_builder.dart';
 import '../create_habit/habit_draft.dart';
 import '../create_habit/labels.dart';
 import 'detail_model.dart';
@@ -40,9 +44,19 @@ class QuantityDetail extends ConsumerWidget {
     final step = fmt.step(habit)!;
     final repo = ref.read(habitRepositoryProvider);
 
-    Future<void> save(double v) => v <= 0
-        ? repo.clearEntry(habit.id, today)
-        : repo.setEntry(HabitEntry(habitId: habit.id, day: today, value: v));
+    final feedback = ref.read(feedbackProvider);
+    Future<void> save(double v) {
+      if (v > value && habit.isCompleted(v) && !habit.isCompleted(value)) {
+        celebrateHabit(ref, habit, today);
+      } else {
+        feedback.haptic(Haptic.light);
+        if (v > value) feedback.sound(Sound.pop);
+      }
+      return v <= 0
+          ? repo.clearEntry(habit.id, today)
+          : repo.setEntry(HabitEntry(habitId: habit.id, day: today, value: v));
+    }
+
     Future<void> edit(HabitDraft Function(HabitDraft) change) =>
         repo.updateHabit(
           change(HabitDraft.fromHabit(habit)).build(habit.createdOn),
@@ -114,7 +128,10 @@ class QuantityDetail extends ConsumerWidget {
           const SizedBox(height: 14),
           _StepPicker(
             habit: habit,
-            onSelected: (s) => edit((d) => d.copyWith(step: s)),
+            onSelected: (s) {
+              feedback.haptic(Haptic.tick);
+              edit((d) => d.copyWith(step: s));
+            },
           ),
         ],
         const SizedBox(height: 12),
@@ -185,16 +202,20 @@ class _WaveCard extends StatelessWidget {
         children: [
           Positioned.fill(
             child: LayoutBuilder(
-              builder: (context, box) => Stack(
-                children: [
-                  _wave(
-                    box,
-                    0.10 + p * 0.50,
-                    tones.mid.withValues(alpha: 0.55),
-                    wide: true,
-                  ),
-                  _wave(box, 0.16 + p * 0.52, tones.base),
-                ],
+              builder: (context, box) => SpringBuilder(
+                value: p,
+                spring: Springs.fill,
+                builder: (context, p, _) => Stack(
+                  children: [
+                    _wave(
+                      box,
+                      0.10 + p * 0.50,
+                      tones.mid.withValues(alpha: 0.55),
+                      wide: true,
+                    ),
+                    _wave(box, 0.16 + p * 0.52, tones.base),
+                  ],
+                ),
               ),
             ),
           ),
@@ -209,12 +230,21 @@ class _WaveCard extends StatelessWidget {
                     color: c.subtitle,
                   ),
                 ),
-                Text.rich(
-                  TextSpan(
-                    text: _amount(fmt, habit, value),
+                // Large text shrinks the line instead of overflowing.
+                FittedBox(
+                  fit: BoxFit.scaleDown,
+                  child: Row(
+                    mainAxisSize: MainAxisSize.min,
+                    crossAxisAlignment: CrossAxisAlignment.baseline,
+                    textBaseline: TextBaseline.alphabetic,
                     children: [
-                      TextSpan(
-                        text: ' ${l10n.bigOf(goalShort)}',
+                      RollingText(
+                        _amount(fmt, habit, value),
+                        value: value,
+                        style: text.displayLarge!.copyWith(fontSize: 60),
+                      ),
+                      Text(
+                        ' ${l10n.bigOf(goalShort)}',
                         style: text.displaySmall!.copyWith(
                           fontSize: 26,
                           color: c.subtitle,
@@ -222,8 +252,6 @@ class _WaveCard extends StatelessWidget {
                       ),
                     ],
                   ),
-                  textAlign: TextAlign.center,
-                  style: text.displayLarge!.copyWith(fontSize: 60),
                 ),
                 Text(sub, textAlign: TextAlign.center, style: text.bodyLarge),
               ],
@@ -242,8 +270,7 @@ class _WaveCard extends StatelessWidget {
     bool wide = false,
   }) {
     final w = box.maxWidth * (wide ? 1.2 : 1);
-    return AnimatedPositioned(
-      duration: const Duration(milliseconds: 350),
+    return Positioned(
       left: wide ? -box.maxWidth * 0.1 : 0,
       width: w,
       bottom: 0,
@@ -327,6 +354,7 @@ class _StepPicker extends StatelessWidget {
                           padding: const EdgeInsets.symmetric(vertical: 4),
                           child: AnimatedContainer(
                             duration: context.motion(Motion.fast),
+                            curve: Motion.curve,
                             constraints: const BoxConstraints(minHeight: 40),
                             alignment: Alignment.center,
                             decoration: BoxDecoration(
@@ -495,26 +523,29 @@ class _MinusButton extends StatelessWidget {
       enabled: onTap != null,
       label: label,
       excludeSemantics: true,
-      child: DecoratedBox(
-        decoration: BoxDecoration(
-          shape: BoxShape.circle,
-          color: c.surface,
-          boxShadow: [
-            BoxShadow(color: c.shadowPill, offset: const Offset(0, 3)),
-          ],
-        ),
-        child: Material(
-          type: MaterialType.transparency,
-          shape: const CircleBorder(),
-          clipBehavior: Clip.antiAlias,
-          child: InkWell(
-            onTap: onTap,
-            child: SizedBox.square(
-              dimension: 60,
-              child: Icon(
-                PhosphorIconsBold.minus,
-                size: 20,
-                color: onTap == null ? c.faint : c.ink,
+      child: PressScale(
+        enabled: onTap != null,
+        child: DecoratedBox(
+          decoration: BoxDecoration(
+            shape: BoxShape.circle,
+            color: c.surface,
+            boxShadow: [
+              BoxShadow(color: c.shadowPill, offset: const Offset(0, 3)),
+            ],
+          ),
+          child: Material(
+            type: MaterialType.transparency,
+            shape: const CircleBorder(),
+            clipBehavior: Clip.antiAlias,
+            child: InkWell(
+              onTap: onTap,
+              child: SizedBox.square(
+                dimension: 60,
+                child: Icon(
+                  PhosphorIconsBold.minus,
+                  size: 20,
+                  color: onTap == null ? c.faint : c.ink,
+                ),
               ),
             ),
           ),

@@ -2161,6 +2161,36 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'{habits, plural, one{{habits} habit} other{{habits} habits}} · {reminders, plural, one{{reminders} reminder} other{{reminders} reminders}}'**
   String remindersSummary(int habits, int reminders);
+
+  /// No description provided for @rowHaptics.
+  ///
+  /// In en, this message translates to:
+  /// **'Haptics'**
+  String get rowHaptics;
+
+  /// No description provided for @rowSounds.
+  ///
+  /// In en, this message translates to:
+  /// **'Sounds'**
+  String get rowSounds;
+
+  /// Accessibility action on a Today pill: fill it to its goal
+  ///
+  /// In en, this message translates to:
+  /// **'Complete'**
+  String get actionComplete;
+
+  /// Accessibility action on a Today pill: open its options sheet
+  ///
+  /// In en, this message translates to:
+  /// **'Options'**
+  String get actionOptions;
+
+  /// XP flying from a pill to the avatar
+  ///
+  /// In en, this message translates to:
+  /// **'+{xp} XP'**
+  String xpGained(int xp);
 }
 
 class _AppLocalizationsDelegate

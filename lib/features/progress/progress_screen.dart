@@ -1,20 +1,28 @@
+import 'dart:async';
+import 'dart:math' as math;
+
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
 import '../../core/database/providers.dart';
 import '../../core/domain/habit.dart';
+import '../../core/feedback/feedback.dart';
 import '../../core/icons/habit_icons.dart';
 import '../../core/icons/phosphor_icons.dart';
 import '../../core/l10n/formatters.dart';
 import '../../core/l10n/l10n.dart';
 import '../../core/router/app_router.dart';
+import '../../core/theme/motion.dart';
 import '../../core/theme/sorbet_colors.dart';
 import '../../core/time/today_provider.dart';
 import '../../core/widgets/app_header_card.dart';
-import '../../core/widgets/segmented_strip.dart';
-import 'progress_model.dart';
+import '../../core/widgets/fade_through_switcher.dart';
+import '../../core/widgets/press_scale.dart';
 import '../../core/widgets/rolling_text.dart';
+import '../../core/widgets/segmented_strip.dart';
+import '../../core/widgets/spring_builder.dart';
+import 'progress_model.dart';
 
 /// F-Progres: completion rate over a week, month or year.
 class ProgressScreen extends ConsumerStatefulWidget {
@@ -29,6 +37,10 @@ class _ProgressScreenState extends ConsumerState<ProgressScreen> {
 
   /// Periods back from the current one.
   var _offset = 0;
+
+  /// Where the new period's content comes from: a later or longer period
+  /// enters from the right, an earlier or shorter one from the left.
+  AxisDirection? _direction;
 
   @override
   Widget build(BuildContext context) {
@@ -54,10 +66,19 @@ class _ProgressScreenState extends ConsumerState<ProgressScreen> {
           data: data,
           canGoNext: _offset < 0,
           onPeriod: (p) => setState(() {
+            _direction = p.index > _period.index
+                ? AxisDirection.left
+                : AxisDirection.right;
             _period = p;
             _offset = 0;
           }),
-          onShift: (by) => setState(() => _offset += by),
+          onShift: (by) {
+            ref.read(feedbackProvider).haptic(Haptic.tick);
+            setState(() {
+              _direction = by > 0 ? AxisDirection.left : AxisDirection.right;
+              _offset += by;
+            });
+          },
         ),
         Expanded(
           child: ListView(
@@ -68,45 +89,108 @@ class _ProgressScreenState extends ConsumerState<ProgressScreen> {
               MediaQuery.paddingOf(context).bottom + 16,
             ),
             children: [
-              _RateCard(period: _period, data: data),
-              const SizedBox(height: 16),
-              Padding(
-                padding: const EdgeInsets.symmetric(horizontal: 4),
-                child: Row(
-                  crossAxisAlignment: CrossAxisAlignment.baseline,
-                  textBaseline: TextBaseline.alphabetic,
+              FadeThroughSwitcher(
+                direction: _direction,
+                child: Column(
+                  key: ValueKey((_period, _offset)),
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
                   children: [
-                    Expanded(
-                      child: Semantics(
-                        header: true,
-                        child: Text(l10n.byHabit, style: text.titleMedium),
+                    _RateCard(period: _period, data: data),
+                    const SizedBox(height: 16),
+                    Padding(
+                      padding: const EdgeInsets.symmetric(horizontal: 4),
+                      child: Row(
+                        crossAxisAlignment: CrossAxisAlignment.baseline,
+                        textBaseline: TextBaseline.alphabetic,
+                        children: [
+                          Expanded(
+                            child: Semantics(
+                              header: true,
+                              child: Text(
+                                l10n.byHabit,
+                                style: text.titleMedium,
+                              ),
+                            ),
+                          ),
+                          Flexible(
+                            child: Text(
+                              l10n.daysSucceeded,
+                              textAlign: TextAlign.end,
+                              style: text.bodySmall!.copyWith(color: c.muted),
+                            ),
+                          ),
+                        ],
                       ),
                     ),
-                    Flexible(
-                      child: Text(
-                        l10n.daysSucceeded,
-                        textAlign: TextAlign.end,
-                        style: text.bodySmall!.copyWith(color: c.muted),
+                    // 8 in the mockup, minus the 7 px of tap area above the pill.
+                    const SizedBox(height: 1),
+                    for (final (i, (h, t)) in data.rows.indexed)
+                      _HabitRow(
+                        key: ValueKey(h.id),
+                        habit: h,
+                        done: t.done,
+                        planned: t.planned,
+                        rate: t.rate,
+                        delay: _stagger(i, data.rows.length),
                       ),
-                    ),
                   ],
                 ),
               ),
-              // 8 in the mockup, minus the 7 px of tap area above the pill.
-              const SizedBox(height: 1),
-              for (final (h, t) in data.rows)
-                _HabitRow(
-                  habit: h,
-                  done: t.done,
-                  planned: t.planned,
-                  rate: t.rate,
-                ),
             ],
           ),
         ),
       ],
     );
   }
+}
+
+/// Bars fill one after the other: 30 ms apart, 300 ms at most in all.
+Duration _stagger(int i, int count) =>
+    Motion.slow * i ~/ math.max(10, count - 1);
+
+/// Fills from 0 to [value] with [Springs.fill], starting after [delay];
+/// later changes of [value] spring from where the fill is.
+class _StaggeredFill extends StatefulWidget {
+  const _StaggeredFill({
+    required this.value,
+    required this.delay,
+    required this.builder,
+  });
+
+  final double value;
+  final Duration delay;
+  final Widget Function(BuildContext context, double value) builder;
+
+  @override
+  State<_StaggeredFill> createState() => _StaggeredFillState();
+}
+
+class _StaggeredFillState extends State<_StaggeredFill> {
+  Timer? _timer;
+  late var _started = widget.delay == Duration.zero;
+
+  @override
+  void initState() {
+    super.initState();
+    if (!_started) {
+      _timer = Timer(widget.delay, () => setState(() => _started = true));
+    }
+  }
+
+  @override
+  void dispose() {
+    _timer?.cancel();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) => SpringBuilder(
+    from: 0,
+    value: _started || context.reduceMotion ? widget.value : 0,
+    spring: Springs.fill,
+    // No bounce, but a fraction must never go below 0.
+    builder: (context, v, _) => widget.builder(context, math.max(0, v)),
+  );
 }
 
 class _Header extends StatelessWidget {
@@ -210,20 +294,24 @@ class _ArrowButton extends StatelessWidget {
       enabled: onTap != null,
       label: label,
       excludeSemantics: true,
-      child: InkResponse(
-        radius: 24,
-        onTap: onTap,
-        child: SizedBox.square(
-          dimension: 48,
-          child: Center(
-            child: Container(
-              width: 40,
-              height: 40,
-              decoration: BoxDecoration(shape: BoxShape.circle, color: c.bg),
-              child: Icon(
-                icon,
-                size: 17,
-                color: onTap == null ? c.flameOff : c.ink,
+      child: PressScale(
+        scale: 0.9,
+        enabled: onTap != null,
+        child: InkResponse(
+          radius: 24,
+          onTap: onTap,
+          child: SizedBox.square(
+            dimension: 48,
+            child: Center(
+              child: Container(
+                width: 40,
+                height: 40,
+                decoration: BoxDecoration(shape: BoxShape.circle, color: c.bg),
+                child: Icon(
+                  icon,
+                  size: 17,
+                  color: onTap == null ? c.flameOff : c.ink,
+                ),
               ),
             ),
           ),
@@ -353,6 +441,7 @@ class _RateCard extends StatelessWidget {
                       rate: slices[i].tally.rate,
                       current: i == data.current,
                       label: sliceLabel(i),
+                      delay: _stagger(i, slices.length),
                     ),
                   ),
               ],
@@ -365,11 +454,17 @@ class _RateCard extends StatelessWidget {
 }
 
 class _Tube extends StatelessWidget {
-  const _Tube({required this.rate, required this.current, required this.label});
+  const _Tube({
+    required this.rate,
+    required this.current,
+    required this.label,
+    required this.delay,
+  });
 
   final double rate;
   final bool current;
   final String label;
+  final Duration delay;
 
   @override
   Widget build(BuildContext context) {
@@ -389,13 +484,17 @@ class _Tube extends StatelessWidget {
                 )
               : null,
           alignment: Alignment.bottomCenter,
-          child: FractionallySizedBox(
-            heightFactor: rate,
-            widthFactor: 1,
-            child: DecoratedBox(
-              decoration: BoxDecoration(
-                color: rate >= 1 ? c.accent : c.habit[HabitColor.pink],
-                borderRadius: radius,
+          child: _StaggeredFill(
+            value: rate,
+            delay: delay,
+            builder: (context, v) => FractionallySizedBox(
+              heightFactor: v,
+              widthFactor: 1,
+              child: DecoratedBox(
+                decoration: BoxDecoration(
+                  color: rate >= 1 ? c.accent : c.habit[HabitColor.pink],
+                  borderRadius: radius,
+                ),
               ),
             ),
           ),
@@ -418,16 +517,19 @@ class _Tube extends StatelessWidget {
 /// 34 px pill inside a 48 px tap target; opens the habit's detail.
 class _HabitRow extends StatelessWidget {
   const _HabitRow({
+    super.key,
     required this.habit,
     required this.done,
     required this.planned,
     required this.rate,
+    required this.delay,
   });
 
   final Habit habit;
   final int done;
   final int planned;
   final double rate;
+  final Duration delay;
 
   @override
   Widget build(BuildContext context) {
@@ -453,13 +555,17 @@ class _HabitRow extends StatelessWidget {
             child: Stack(
               children: [
                 Positioned.fill(
-                  child: FractionallySizedBox(
-                    alignment: AlignmentDirectional.centerStart,
-                    widthFactor: rate,
-                    child: DecoratedBox(
-                      decoration: BoxDecoration(
-                        color: c.habit[habit.color],
-                        borderRadius: radius,
+                  child: _StaggeredFill(
+                    value: rate,
+                    delay: delay,
+                    builder: (context, v) => FractionallySizedBox(
+                      alignment: AlignmentDirectional.centerStart,
+                      widthFactor: v,
+                      child: DecoratedBox(
+                        decoration: BoxDecoration(
+                          color: c.habit[habit.color],
+                          borderRadius: radius,
+                        ),
                       ),
                     ),
                   ),

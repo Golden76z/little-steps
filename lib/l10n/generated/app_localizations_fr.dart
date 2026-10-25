@@ -1439,4 +1439,21 @@ class AppLocalizationsFr extends AppLocalizations {
     );
     return '$_temp0 · $_temp1';
   }
+
+  @override
+  String get rowHaptics => 'Vibrations';
+
+  @override
+  String get rowSounds => 'Sons';
+
+  @override
+  String get actionComplete => 'Compléter';
+
+  @override
+  String get actionOptions => 'Options';
+
+  @override
+  String xpGained(int xp) {
+    return '+$xp XP';
+  }
 }

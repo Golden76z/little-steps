@@ -204,73 +204,87 @@ class _PopularTile extends StatelessWidget {
     final draft = HabitDraft.fromPreset(preset, name: '');
     final label = presetLabel(l10n, preset);
     final radius = BorderRadius.circular(20);
-    return PressScale(
-      child: Semantics(
+    const depth = 3.0;
+    return PressSink(
+      depth: depth,
+      builder: (context, pressed) => Semantics(
         button: true,
         selected: selected,
         label: '$label, ${typeName(l10n, draft.type)}',
         excludeSemantics: true,
-        child: AnimatedContainer(
-          duration: context.motion(Motion.fast),
+        // The shadow follows the finger; colour and ring fade on their own.
+        child: DecoratedBox(
           decoration: BoxDecoration(
-            color: c.habit[draft.color],
             borderRadius: radius,
             boxShadow: selected
                 ? null
-                : [BoxShadow(color: c.floatShadow, offset: const Offset(0, 3))],
-          ),
-          // Inset ring drawn on top, so selecting does not shift the content.
-          foregroundDecoration: selected
-              ? BoxDecoration(
-                  borderRadius: radius,
-                  border: Border.all(color: c.ink, width: 2.5),
-                )
-              : null,
-          child: Material(
-            type: MaterialType.transparency,
-            child: InkWell(
-              borderRadius: radius,
-              onTap: onTap,
-              child: ConstrainedBox(
-                constraints: const BoxConstraints(minHeight: 76),
-                child: Stack(
-                  children: [
-                    Padding(
-                      padding: const EdgeInsets.fromLTRB(10, 10, 10, 8),
-                      child: Column(
-                        crossAxisAlignment: CrossAxisAlignment.start,
-                        mainAxisSize: MainAxisSize.min,
-                        children: [
-                          Icon(habitIcon(draft.icon), size: 22, color: c.ink),
-                          const SizedBox(height: 14),
-                          Text(
-                            label,
-                            style: text.labelLarge!.copyWith(height: 1.1),
-                          ),
-                        ],
-                      ),
-                    ),
-                    PositionedDirectional(
-                      top: 9,
-                      end: 9,
-                      child: Container(
-                        height: 18,
-                        padding: const EdgeInsets.symmetric(horizontal: 6),
-                        alignment: Alignment.center,
-                        decoration: BoxDecoration(
-                          color: c.badge,
-                          borderRadius: BorderRadius.circular(9),
-                        ),
-                        child: Text(
-                          typeName(l10n, draft.type),
-                          style: text.labelSmall!.copyWith(
-                            fontSize: 10.5,
-                            height: 1,
-                          ),
-                        ),
-                      ),
+                : [
+                    BoxShadow(
+                      color: c.floatShadow,
+                      offset: Offset(0, depth * (1 - pressed)),
                     ),
                   ],
+          ),
+          child: AnimatedContainer(
+            duration: context.motion(Motion.fast),
+            curve: Motion.curve,
+            decoration: BoxDecoration(
+              color: c.habit[draft.color],
+              borderRadius: radius,
+            ),
+            // Inset ring drawn on top, so selecting does not shift the content.
+            foregroundDecoration: selected
+                ? BoxDecoration(
+                    borderRadius: radius,
+                    border: Border.all(color: c.ink, width: 2.5),
+                  )
+                : null,
+            child: Material(
+              type: MaterialType.transparency,
+              child: InkWell(
+                borderRadius: radius,
+                onTap: onTap,
+                child: ConstrainedBox(
+                  constraints: const BoxConstraints(minHeight: 76),
+                  child: Stack(
+                    children: [
+                      Padding(
+                        padding: const EdgeInsets.fromLTRB(10, 10, 10, 8),
+                        child: Column(
+                          crossAxisAlignment: CrossAxisAlignment.start,
+                          mainAxisSize: MainAxisSize.min,
+                          children: [
+                            Icon(habitIcon(draft.icon), size: 22, color: c.ink),
+                            const SizedBox(height: 14),
+                            Text(
+                              label,
+                              style: text.labelLarge!.copyWith(height: 1.1),
+                            ),
+                          ],
+                        ),
+                      ),
+                      PositionedDirectional(
+                        top: 9,
+                        end: 9,
+                        child: Container(
+                          height: 18,
+                          padding: const EdgeInsets.symmetric(horizontal: 6),
+                          alignment: Alignment.center,
+                          decoration: BoxDecoration(
+                            color: c.badge,
+                            borderRadius: BorderRadius.circular(9),
+                          ),
+                          child: Text(
+                            typeName(l10n, draft.type),
+                            style: text.labelSmall!.copyWith(
+                              fontSize: 10.5,
+                              height: 1,
+                            ),
+                          ),
+                        ),
+                      ),
+                    ],
+                  ),
                 ),
               ),
             ),
@@ -344,6 +358,7 @@ class _TypeRow extends StatelessWidget {
               ),
               AnimatedContainer(
                 duration: context.motion(Motion.fast),
+                curve: Motion.curve,
                 width: 22,
                 height: 22,
                 decoration: BoxDecoration(

@@ -1,3 +1,4 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
@@ -30,6 +31,12 @@ abstract final class Routes {
   static String habit(int id, {bool startTimer = false}) =>
       '/habit/$id${startTimer ? '?timer=1' : ''}';
 }
+
+/// An opened screen: every top-level route uses `pageBuilder: _page`.
+/// go_router does not see our MaterialApp and would fall back to pages
+/// without any transition.
+Page<void> _page(GoRouterState state, Widget child) =>
+    MaterialPage(key: state.pageKey, child: child);
 
 final routerProvider = Provider<GoRouter>((ref) {
   final router = GoRouter(
@@ -81,27 +88,33 @@ final routerProvider = Provider<GoRouter>((ref) {
             canCreateHabit(ref.read(habitsProvider).value?.length ?? 0)
             ? null
             : Routes.premium,
-        builder: (_, _) => const ChooseTypeScreen(),
+        pageBuilder: (_, state) => _page(state, const ChooseTypeScreen()),
       ),
       // Not nested under /create: editing reuses them without the limit redirect.
       GoRoute(
         path: Routes.createSettings,
-        builder: (_, _) => const HabitSettingsScreen(),
+        pageBuilder: (_, state) => _page(state, const HabitSettingsScreen()),
       ),
       GoRoute(
         path: Routes.createSchedule,
-        builder: (_, _) => const ScheduleScreen(),
+        pageBuilder: (_, state) => _page(state, const ScheduleScreen()),
       ),
-      GoRoute(path: Routes.premium, builder: (_, _) => const PremiumScreen()),
+      GoRoute(
+        path: Routes.premium,
+        pageBuilder: (_, state) => _page(state, const PremiumScreen()),
+      ),
       GoRoute(
         path: Routes.reminders,
-        builder: (_, _) => const RemindersScreen(),
+        pageBuilder: (_, state) => _page(state, const RemindersScreen()),
       ),
       GoRoute(
         path: '/habit/:id',
-        builder: (_, state) => HabitDetailScreen(
-          habitId: int.parse(state.pathParameters['id']!),
-          startTimer: state.uri.queryParameters['timer'] == '1',
+        pageBuilder: (_, state) => _page(
+          state,
+          HabitDetailScreen(
+            habitId: int.parse(state.pathParameters['id']!),
+            startTimer: state.uri.queryParameters['timer'] == '1',
+          ),
         ),
       ),
     ],

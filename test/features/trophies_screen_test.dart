@@ -3,6 +3,7 @@ import 'package:little_steps/core/database/app_database.dart';
 import 'package:little_steps/core/database/habit_repository.dart';
 import 'package:little_steps/core/domain/day.dart';
 import 'package:little_steps/core/domain/habit.dart';
+import 'package:little_steps/core/widgets/fade_through_switcher.dart';
 
 import '../helpers.dart';
 
@@ -77,6 +78,19 @@ void main() {
     expect(find.text('Une semaine parfaite'), findsOneWidget);
     expect(find.text('2 journées parfaites sur 7'), findsOneWidget);
     expect(find.text('+300 XP'), findsOneWidget);
+  });
+
+  testApp('switching tabs fades through', (tester, db) async {
+    await openTrophies(tester, db);
+    expect(find.byType(FadeThroughSwitcher), findsOneWidget);
+    await tester.tap(find.text('Défis'));
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 100));
+    // Both contents while they cross, then only the challenges.
+    expect(find.text('2 sur 12'), findsOneWidget);
+    expect(find.text('Une semaine parfaite'), findsOneWidget);
+    await tester.pumpAndSettle();
+    expect(find.text('2 sur 12'), findsNothing);
   });
 
   testApp('tap targets meet the guideline', (tester, db) async {

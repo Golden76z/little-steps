@@ -5,11 +5,14 @@ import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import '../../core/database/providers.dart';
 import '../../core/domain/habit.dart';
+import '../../core/feedback/feedback.dart';
 import '../../core/icons/phosphor_icons.dart';
 import '../../core/l10n/formatters.dart';
 import '../../core/l10n/l10n.dart';
 import '../../core/theme/sorbet_colors.dart';
 import '../../core/time/today_provider.dart';
+import '../../core/widgets/fade_through_switcher.dart';
+import '../../core/widgets/press_scale.dart';
 import '../../core/widgets/primary_button.dart';
 import '../../core/widgets/segmented_strip.dart';
 import '../../core/widgets/sorbet_card.dart';
@@ -84,7 +87,10 @@ class _JournalDetailState extends ConsumerState<JournalDetail> {
 
   int get _goal => math.max(1, widget.habit.goal.round());
 
+  void _tick() => ref.read(feedbackProvider).haptic(Haptic.tick);
+
   Future<void> _save(int lines) async {
+    celebrateHabit(ref, widget.habit, ref.read(todayProvider));
     await ref
         .read(habitRepositoryProvider)
         .setEntry(
@@ -125,26 +131,47 @@ class _JournalDetailState extends ConsumerState<JournalDetail> {
       bottom: _tab == 0
           ? ListenableBuilder(listenable: _text, builder: (_, _) => _cta())
           : null,
-      children: _tab == 0
-          ? [
-              ListenableBuilder(listenable: _text, builder: (_, _) => _page()),
-              const SizedBox(height: 12),
-              _MoodCard(
-                mood: _mood,
-                tones: c.tones[h.color]!,
-                onPick: (m) => setState(() {
-                  _mood = m;
-                  _saved = false;
-                }),
-              ),
-            ]
-          : [_History(habit: h)],
+      children: [
+        StripBody(
+          index: _tab,
+          child: _tab == 0
+              ? Column(
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: [
+                    ListenableBuilder(
+                      listenable: _text,
+                      builder: (_, _) => _page(),
+                    ),
+                    const SizedBox(height: 12),
+                    _MoodCard(
+                      mood: _mood,
+                      tones: c.tones[h.color]!,
+                      onPick: (m) {
+                        _tick();
+                        setState(() {
+                          _mood = m;
+                          _saved = false;
+                        });
+                      },
+                    ),
+                  ],
+                )
+              : _History(habit: h),
+        ),
+      ],
     );
   }
 
   Widget _cta() {
-    final l10n = context.l10n;
     final lines = _lineCount(_text.text);
+    final state = lines < _goal ? 'left' : (_saved ? 'saved' : 'save');
+    return FadeThroughSwitcher(
+      child: KeyedSubtree(key: ValueKey(state), child: _button(lines)),
+    );
+  }
+
+  Widget _button(int lines) {
+    final l10n = context.l10n;
     if (lines >= _goal) {
       return PrimaryButton(
         label: _saved ? l10n.journalSaved : l10n.journalSave,
@@ -229,25 +256,30 @@ class _JournalDetailState extends ConsumerState<JournalDetail> {
               Flexible(
                 child: Semantics(
                   button: true,
-                  child: GestureDetector(
-                    behavior: HitTestBehavior.opaque,
-                    onTap: () => setState(() => _prompt = (_prompt + 1) % 3),
-                    child: Padding(
-                      padding: const EdgeInsets.symmetric(vertical: 8),
-                      child: Container(
-                        constraints: const BoxConstraints(minHeight: 32),
-                        alignment: Alignment.center,
-                        padding: const EdgeInsets.symmetric(horizontal: 12),
-                        decoration: BoxDecoration(
-                          color: c.bg,
-                          borderRadius: BorderRadius.circular(16),
-                        ),
-                        child: Text(
-                          l10n.otherQuestion,
-                          textAlign: TextAlign.center,
-                          style: text.labelMedium!.copyWith(
-                            fontWeight: FontWeight.w500,
-                            color: c.inkSoft,
+                  child: PressScale(
+                    child: GestureDetector(
+                      behavior: HitTestBehavior.opaque,
+                      onTap: () {
+                        _tick();
+                        setState(() => _prompt = (_prompt + 1) % 3);
+                      },
+                      child: Padding(
+                        padding: const EdgeInsets.symmetric(vertical: 8),
+                        child: Container(
+                          constraints: const BoxConstraints(minHeight: 32),
+                          alignment: Alignment.center,
+                          padding: const EdgeInsets.symmetric(horizontal: 12),
+                          decoration: BoxDecoration(
+                            color: c.bg,
+                            borderRadius: BorderRadius.circular(16),
+                          ),
+                          child: Text(
+                            l10n.otherQuestion,
+                            textAlign: TextAlign.center,
+                            style: text.labelMedium!.copyWith(
+                              fontWeight: FontWeight.w500,
+                              color: c.inkSoft,
+                            ),
                           ),
                         ),
                       ),
@@ -367,28 +399,31 @@ class _MoodCard extends StatelessWidget {
                         selected: i == mood,
                         inMutuallyExclusiveGroup: true,
                         label: labels[i],
-                        child: GestureDetector(
-                          behavior: HitTestBehavior.opaque,
-                          onTap: () => onPick(i),
-                          child: AnimatedContainer(
-                            duration: context.motion(Motion.fast),
-                            height: 48,
-                            decoration: BoxDecoration(
-                              color: i == mood ? tones.base : null,
-                              borderRadius: BorderRadius.circular(16),
-                              boxShadow: i == mood
-                                  ? [
-                                      BoxShadow(
-                                        color: tones.mid,
-                                        offset: const Offset(0, 2),
-                                      ),
-                                    ]
-                                  : null,
-                            ),
-                            child: Icon(
-                              _moodIcons[i],
-                              size: 28,
-                              color: i == mood ? c.ink : c.faint,
+                        child: PressScale(
+                          child: GestureDetector(
+                            behavior: HitTestBehavior.opaque,
+                            onTap: () => onPick(i),
+                            child: AnimatedContainer(
+                              duration: context.motion(Motion.fast),
+                              curve: Motion.curve,
+                              height: 48,
+                              decoration: BoxDecoration(
+                                color: i == mood ? tones.base : null,
+                                borderRadius: BorderRadius.circular(16),
+                                boxShadow: i == mood
+                                    ? [
+                                        BoxShadow(
+                                          color: tones.mid,
+                                          offset: const Offset(0, 2),
+                                        ),
+                                      ]
+                                    : null,
+                              ),
+                              child: Icon(
+                                _moodIcons[i],
+                                size: 28,
+                                color: i == mood ? c.ink : c.faint,
+                              ),
                             ),
                           ),
                         ),

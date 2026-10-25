@@ -6,6 +6,7 @@ import 'package:intl/intl.dart';
 import '../../core/database/providers.dart';
 import '../../core/domain/day.dart';
 import '../../core/domain/habit.dart';
+import '../../core/feedback/feedback.dart';
 import '../../core/icons/phosphor_icons.dart';
 import '../../core/l10n/formatters.dart';
 import '../../core/notifications/reminder_planner.dart';
@@ -14,7 +15,10 @@ import '../../core/router/app_router.dart';
 import '../../core/theme/sorbet_colors.dart';
 import '../../core/time/today_provider.dart';
 import '../../core/widgets/dashed_border.dart';
+import '../../core/widgets/fade_through_switcher.dart';
+import '../../core/widgets/press_scale.dart';
 import '../../core/widgets/primary_button.dart';
+import '../../core/widgets/rolling_text.dart';
 import '../../core/widgets/round_icon_button.dart';
 import '../../core/widgets/segmented_strip.dart';
 import '../../core/widgets/sorbet_card.dart';
@@ -24,6 +28,7 @@ import 'draft_provider.dart';
 import 'habit_draft.dart';
 import 'labels.dart';
 import '../../core/theme/motion.dart';
+import '../today/pill_entrance.dart';
 
 /// P3: rhythm, moment of the day, reminders.
 class ScheduleScreen extends ConsumerWidget {
@@ -37,6 +42,12 @@ class ScheduleScreen extends ConsumerWidget {
     final draft = ref.watch(draftProvider);
     void update(HabitDraft Function(HabitDraft) change) =>
         ref.read(draftProvider.notifier).update(change);
+    // Days, times a week and reminders: a tick with each change.
+    void pick(HabitDraft Function(HabitDraft) change) {
+      ref.read(feedbackProvider).haptic(Haptic.tick);
+      update(change);
+    }
+
     String time(int minutes) =>
         MaterialLocalizations.of(context).formatTimeOfDay(
           TimeOfDay(hour: minutes ~/ 60, minute: minutes % 60),
@@ -80,10 +91,14 @@ class ScheduleScreen extends ConsumerWidget {
                 ),
               ],
               const SizedBox(height: 12),
-              if (draft.isWeekly)
-                _TimesPerWeek(draft: draft, onChange: update)
-              else
-                _ActiveDays(draft: draft, onChange: update),
+              FadeThroughSwitcher(
+                child: KeyedSubtree(
+                  key: ValueKey(draft.isWeekly),
+                  child: draft.isWeekly
+                      ? _TimesPerWeek(draft: draft, onChange: pick)
+                      : _ActiveDays(draft: draft, onChange: pick),
+                ),
+              ),
             ],
           ),
         ),
@@ -140,33 +155,36 @@ class ScheduleScreen extends ConsumerWidget {
             children: [
               CardTitle(l10n.remindersTitle),
               const SizedBox(height: 5),
-              Wrap(
-                spacing: 8,
-                crossAxisAlignment: WrapCrossAlignment.center,
-                children: [
-                  for (final m in draft.reminders)
-                    _ReminderChip(
-                      label: time(m),
-                      semanticLabel: l10n.removeReminder(time(m)),
-                      onTap: () => update((d) => d.withReminderRemoved(m)),
-                    ),
-                  _AddReminder(
-                    label: l10n.addReminder,
-                    onTap: () async {
-                      final picked = await showTimePicker(
-                        context: context,
-                        initialTime: const TimeOfDay(hour: 9, minute: 0),
-                      );
-                      if (picked != null) {
-                        update(
-                          (d) => d.withReminderAdded(
-                            picked.hour * 60 + picked.minute,
-                          ),
+              FadeThroughSwitcher(
+                child: Wrap(
+                  key: ValueKey(draft.reminders.join(',')),
+                  spacing: 8,
+                  crossAxisAlignment: WrapCrossAlignment.center,
+                  children: [
+                    for (final m in draft.reminders)
+                      _ReminderChip(
+                        label: time(m),
+                        semanticLabel: l10n.removeReminder(time(m)),
+                        onTap: () => pick((d) => d.withReminderRemoved(m)),
+                      ),
+                    _AddReminder(
+                      label: l10n.addReminder,
+                      onTap: () async {
+                        final picked = await showTimePicker(
+                          context: context,
+                          initialTime: const TimeOfDay(hour: 9, minute: 0),
                         );
-                      }
-                    },
-                  ),
-                ],
+                        if (picked != null) {
+                          pick(
+                            (d) => d.withReminderAdded(
+                              picked.hour * 60 + picked.minute,
+                            ),
+                          );
+                        }
+                      },
+                    ),
+                  ],
+                ),
               ),
               const SizedBox(height: 7),
               Row(
@@ -211,10 +229,20 @@ class ScheduleScreen extends ConsumerWidget {
     if (draft.isEditing) {
       await repo.updateHabit(habit);
     } else {
-      await repo.createHabit(habit);
+      ref.read(justCreatedProvider.notifier).set(await repo.createHabit(habit));
     }
     if (!context.mounted) return;
+    final route = ModalRoute.of(context)?.animation;
+    final created = ref.read(justCreatedProvider.notifier);
     context.go(Routes.today);
+    // The new pill comes in once this screen has slid away.
+    void slidAway(AnimationStatus s) {
+      if (s != AnimationStatus.dismissed) return;
+      route?.removeStatusListener(slidAway);
+      created.landed();
+    }
+
+    route == null ? created.landed() : route.addStatusListener(slidAway);
     messenger
       ..hideCurrentSnackBar()
       ..showSnackBar(
@@ -303,6 +331,7 @@ class _ActiveDays extends StatelessWidget {
         onTap: () => onChange((draft) => draft.toggleDay(d.weekday)),
         child: AnimatedContainer(
           duration: context.motion(Motion.fast),
+          curve: Motion.curve,
           constraints: const BoxConstraints(minHeight: 58),
           decoration: BoxDecoration(
             color: on ? c.dayOn : c.cellOff,
@@ -359,8 +388,9 @@ class _TimesPerWeek extends StatelessWidget {
             Expanded(
               child: Column(
                 children: [
-                  Text(
+                  RollingText(
                     context.habitFormat.number(draft.timesPerWeek),
+                    value: draft.timesPerWeek,
                     style: text.displaySmall,
                   ),
                   Text(
@@ -408,25 +438,27 @@ class _ReminderChip extends StatelessWidget {
       button: true,
       label: semanticLabel,
       excludeSemantics: true,
-      child: InkWell(
-        onTap: onTap,
-        customBorder: const StadiumBorder(),
-        child: Padding(
-          padding: const EdgeInsets.symmetric(vertical: 5),
-          child: Container(
-            height: 38,
-            padding: const EdgeInsets.symmetric(horizontal: 14),
-            decoration: BoxDecoration(
-              color: c.strip,
-              borderRadius: BorderRadius.circular(19),
-            ),
-            child: Row(
-              mainAxisSize: MainAxisSize.min,
-              spacing: 6,
-              children: [
-                Icon(PhosphorIconsRegular.bell, size: 16, color: c.ink),
-                Text(label, style: Theme.of(context).textTheme.bodyMedium),
-              ],
+      child: PressScale(
+        child: InkWell(
+          onTap: onTap,
+          customBorder: const StadiumBorder(),
+          child: Padding(
+            padding: const EdgeInsets.symmetric(vertical: 5),
+            child: Container(
+              height: 38,
+              padding: const EdgeInsets.symmetric(horizontal: 14),
+              decoration: BoxDecoration(
+                color: c.strip,
+                borderRadius: BorderRadius.circular(19),
+              ),
+              child: Row(
+                mainAxisSize: MainAxisSize.min,
+                spacing: 6,
+                children: [
+                  Icon(PhosphorIconsRegular.bell, size: 16, color: c.ink),
+                  Text(label, style: Theme.of(context).textTheme.bodyMedium),
+                ],
+              ),
             ),
           ),
         ),

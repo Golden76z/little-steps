@@ -1,6 +1,7 @@
 import 'dart:async';
 import 'dart:math' as math;
 
+import 'package:flutter/foundation.dart';
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
@@ -8,14 +9,18 @@ import '../../core/database/providers.dart';
 import '../../core/domain/day.dart';
 import '../../core/domain/habit.dart';
 import '../../core/domain/rules.dart';
+import '../../core/feedback/feedback.dart';
 import '../../core/icons/phosphor_icons.dart';
 import '../../core/l10n/formatters.dart';
 import '../../core/l10n/l10n.dart';
 import '../../core/theme/sorbet_colors.dart';
 import '../../core/time/today_provider.dart';
+import '../../core/widgets/press_scale.dart';
+import '../../core/widgets/rolling_text.dart';
 import '../../core/widgets/round_icon_button.dart';
 import '../../core/widgets/segmented_strip.dart';
 import '../../core/widgets/sorbet_card.dart';
+import '../../core/widgets/spring_builder.dart';
 import '../create_habit/habit_draft.dart';
 import 'detail_scaffold.dart';
 import 'session_timer.dart';
@@ -41,9 +46,10 @@ class DurationDetail extends ConsumerStatefulWidget {
 class _DurationDetailState extends ConsumerState<DurationDetail> {
   static const _presets = [5, 10, 15, 20];
 
-  /// Repaints the clock while a run goes; the time itself is read from
-  /// the session, so pausing this loses nothing.
+  /// Beats every second while a run goes, to repaint the clock only; the
+  /// time itself is read from the session, so pausing this loses nothing.
   Timer? _ticker;
+  final _beat = ValueNotifier(0);
   bool _autoStarted = false;
 
   SessionTimers get _timers => ref.read(sessionTimersProvider.notifier);
@@ -51,6 +57,7 @@ class _DurationDetailState extends ConsumerState<DurationDetail> {
   @override
   void dispose() {
     _ticker?.cancel();
+    _beat.dispose();
     super.dispose();
   }
 
@@ -60,10 +67,12 @@ class _DurationDetailState extends ConsumerState<DurationDetail> {
     _ticker = running
         ? Timer.periodic(const Duration(seconds: 1), (_) {
             _timers.tick(widget.habit);
-            if (mounted) setState(() {});
+            _beat.value++;
           })
         : null;
   }
+
+  bool _done(Session s) => s.finished && s.base >= widget.habit.goal;
 
   Future<void> _setGoal(int seconds) async {
     final h = widget.habit;
@@ -84,6 +93,13 @@ class _DurationDetailState extends ConsumerState<DurationDetail> {
     if (history == null) return const Scaffold();
 
     final session = _timers.current(h);
+    // However the session ends (clock, "already done", finish), once.
+    ref.listen(sessionTimersProvider, (prev, next) {
+      final after = next[h.id];
+      if (after != null && _done(after) && !_done(prev?[h.id] ?? session)) {
+        celebrateHabit(ref, h, after.day);
+      }
+    });
     if (widget.startTimer && !_autoStarted) {
       _autoStarted = true;
       WidgetsBinding.instance.addPostFrameCallback((_) => _timers.start(h));
@@ -95,7 +111,8 @@ class _DurationDetailState extends ConsumerState<DurationDetail> {
     final text = Theme.of(context).textTheme;
     final c = context.sorbet;
     final goal = h.goal.toInt();
-    final elapsed = math.min(session.elapsed(ref.read(clockProvider)()), goal);
+    final clock = ref.read(clockProvider);
+    int elapsed() => math.min(session.elapsed(clock()), goal);
     final preset = _presets.indexWhere((m) => m * 60 == goal);
 
     return DetailScaffold(
@@ -118,25 +135,37 @@ class _DurationDetailState extends ConsumerState<DurationDetail> {
       children: [
         _TimerCard(
           habit: h,
+          today: today,
           session: session,
+          beat: _beat,
           elapsed: elapsed,
           onReset: () => _timers.reset(h),
-          onToggle: session.running
-              ? () => _timers.pause(h)
-              : () => _timers.start(h),
+          onToggle: () {
+            ref.read(feedbackProvider).haptic(Haptic.light);
+            session.running ? _timers.pause(h) : _timers.start(h);
+          },
           onFinish: () => _timers.finish(h),
         ),
         const SizedBox(height: 12),
         _AlreadyDoneButton(
           label: l10n.alreadyDone(goal ~/ 60),
-          onTap: () => _timers.markDone(h),
+          onTap: () {
+            // Otherwise the celebration answers the tap.
+            if (_done(session)) {
+              ref.read(feedbackProvider).haptic(Haptic.light);
+            }
+            _timers.markDone(h);
+          },
         ),
         const SizedBox(height: 12),
-        _WeekCard(
-          habit: h,
-          history: history,
-          today: today,
-          todaySeconds: elapsed,
+        ValueListenableBuilder(
+          valueListenable: _beat,
+          builder: (context, _, _) => _WeekCard(
+            habit: h,
+            history: history,
+            today: today,
+            todaySeconds: elapsed(),
+          ),
         ),
       ],
     );
@@ -150,7 +179,9 @@ String _mmss(int seconds) =>
 class _TimerCard extends StatelessWidget {
   const _TimerCard({
     required this.habit,
+    required this.today,
     required this.session,
+    required this.beat,
     required this.elapsed,
     required this.onReset,
     required this.onToggle,
@@ -158,8 +189,12 @@ class _TimerCard extends StatelessWidget {
   });
 
   final Habit habit;
+  final Day today;
   final Session session;
-  final int elapsed;
+
+  /// Rebuilds the ring and the digits only, once a second.
+  final ValueListenable<int> beat;
+  final int Function() elapsed;
   final VoidCallback onReset;
   final VoidCallback onToggle;
   final VoidCallback onFinish;
@@ -186,48 +221,64 @@ class _TimerCard extends StatelessWidget {
       ),
       child: Column(
         children: [
-          Semantics(
-            container: true,
-            label: l10n.ringLabel(elapsed ~/ 60, goal ~/ 60),
-            excludeSemantics: true,
-            // The arc glides between the 1 s ticks, as in the mockup (0.9 s linear).
-            child: TweenAnimationBuilder<double>(
-              tween: Tween(end: goal == 0 ? 0 : elapsed / goal),
-              duration: context.motion(const Duration(milliseconds: 900)),
-              builder: (context, progress, child) => CustomPaint(
-                size: const Size.square(210),
-                painter: _RingPainter(
-                  progress: progress,
-                  face: tones.pale,
-                  track: tones.light,
-                  arc: tones.strong,
-                ),
-                child: child,
-              ),
-              child: SizedBox.square(
-                dimension: 210,
-                // The 2x text scale must still fit inside the ring.
-                child: Padding(
-                  padding: const EdgeInsets.all(30),
-                  child: FittedBox(
-                    fit: BoxFit.scaleDown,
-                    child: Column(
-                      mainAxisSize: MainAxisSize.min,
-                      children: [
-                        Text(_mmss(goal - elapsed), style: text.displayMedium),
-                        const SizedBox(height: 4),
-                        Text(
-                          status,
-                          style: text.bodyMedium!.copyWith(
-                            fontWeight: FontWeight.w400,
-                            color: c.muted,
+          HabitPop(
+            habit: habit,
+            day: today,
+            child: ValueListenableBuilder(
+              valueListenable: beat,
+              builder: (context, _, _) {
+                final elapsed = this.elapsed();
+                return Semantics(
+                  container: true,
+                  label: l10n.ringLabel(elapsed ~/ 60, goal ~/ 60),
+                  excludeSemantics: true,
+                  child: SpringBuilder(
+                    value: goal == 0 ? 0 : elapsed / goal,
+                    spring: Springs.fill,
+                    builder: (context, progress, child) => RepaintBoundary(
+                      child: CustomPaint(
+                        size: const Size.square(210),
+                        painter: _RingPainter(
+                          progress: progress,
+                          face: tones.pale,
+                          track: tones.light,
+                          arc: tones.strong,
+                        ),
+                        child: child,
+                      ),
+                    ),
+                    child: SizedBox.square(
+                      dimension: 210,
+                      // The 2x text scale must still fit inside the ring.
+                      child: Padding(
+                        padding: const EdgeInsets.all(30),
+                        child: FittedBox(
+                          fit: BoxFit.scaleDown,
+                          child: Column(
+                            mainAxisSize: MainAxisSize.min,
+                            children: [
+                              RollingText(
+                                _mmss(goal - elapsed),
+                                value: goal - elapsed,
+                                perCharacter: true,
+                                style: text.displayMedium,
+                              ),
+                              const SizedBox(height: 4),
+                              Text(
+                                status,
+                                style: text.bodyMedium!.copyWith(
+                                  fontWeight: FontWeight.w400,
+                                  color: c.muted,
+                                ),
+                              ),
+                            ],
                           ),
                         ),
-                      ],
+                      ),
                     ),
                   ),
-                ),
-              ),
+                );
+              },
             ),
           ),
           const SizedBox(height: 18),
@@ -321,24 +372,27 @@ class _PlayButton extends StatelessWidget {
       enabled: onTap != null,
       label: running ? l10n.pauseTimer : l10n.startTimer,
       excludeSemantics: true,
-      child: GestureDetector(
-        onTap: onTap,
-        child: Container(
-          width: 76,
-          height: 76,
-          decoration: BoxDecoration(
-            shape: BoxShape.circle,
-            color: onTap == null ? c.chipOff : c.accent,
-            boxShadow: [
-              BoxShadow(color: c.ctaShadow, offset: const Offset(0, 5)),
-            ],
-          ),
-          // The play triangle sits optically centred 4 px to the right.
-          padding: EdgeInsets.only(left: running ? 0 : 4),
-          child: Icon(
-            running ? PhosphorIconsFill.pause : PhosphorIconsFill.play,
-            size: 30,
-            color: onTap == null ? c.faint : c.onAccent,
+      child: PressScale(
+        enabled: onTap != null,
+        child: GestureDetector(
+          onTap: onTap,
+          child: Container(
+            width: 76,
+            height: 76,
+            decoration: BoxDecoration(
+              shape: BoxShape.circle,
+              color: onTap == null ? c.chipOff : c.accent,
+              boxShadow: [
+                BoxShadow(color: c.ctaShadow, offset: const Offset(0, 5)),
+              ],
+            ),
+            // The play triangle sits optically centred 4 px to the right.
+            padding: EdgeInsets.only(left: running ? 0 : 4),
+            child: Icon(
+              running ? PhosphorIconsFill.pause : PhosphorIconsFill.play,
+              size: 30,
+              color: onTap == null ? c.faint : c.onAccent,
+            ),
           ),
         ),
       ),
@@ -357,32 +411,34 @@ class _AlreadyDoneButton extends StatelessWidget {
     final c = context.sorbet;
     return Semantics(
       button: true,
-      child: GestureDetector(
-        behavior: HitTestBehavior.opaque,
-        onTap: onTap,
-        child: Container(
-          constraints: const BoxConstraints(minHeight: 50),
-          padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
-          decoration: BoxDecoration(
-            color: c.surface,
-            borderRadius: BorderRadius.circular(25),
-            boxShadow: [
-              BoxShadow(color: c.shadowPill, offset: const Offset(0, 3)),
-            ],
-          ),
-          child: Row(
-            mainAxisAlignment: MainAxisAlignment.center,
-            spacing: 8,
-            children: [
-              Icon(PhosphorIconsRegular.clock, size: 18, color: c.ink),
-              Flexible(
-                child: Text(
-                  label,
-                  textAlign: TextAlign.center,
-                  style: Theme.of(context).textTheme.bodyLarge,
+      child: PressScale(
+        child: GestureDetector(
+          behavior: HitTestBehavior.opaque,
+          onTap: onTap,
+          child: Container(
+            constraints: const BoxConstraints(minHeight: 50),
+            padding: const EdgeInsets.symmetric(horizontal: 16, vertical: 8),
+            decoration: BoxDecoration(
+              color: c.surface,
+              borderRadius: BorderRadius.circular(25),
+              boxShadow: [
+                BoxShadow(color: c.shadowPill, offset: const Offset(0, 3)),
+              ],
+            ),
+            child: Row(
+              mainAxisAlignment: MainAxisAlignment.center,
+              spacing: 8,
+              children: [
+                Icon(PhosphorIconsRegular.clock, size: 18, color: c.ink),
+                Flexible(
+                  child: Text(
+                    label,
+                    textAlign: TextAlign.center,
+                    style: Theme.of(context).textTheme.bodyLarge,
+                  ),
                 ),
-              ),
-            ],
+              ],
+            ),
           ),
         ),
       ),

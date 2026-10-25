@@ -1,14 +1,17 @@
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
+import 'package:flutter_riverpod/flutter_riverpod.dart';
 
+import '../feedback/feedback.dart';
 import '../theme/motion.dart';
 import '../theme/sorbet_colors.dart';
+import 'spring_builder.dart';
 
 /// Glued segmented control: cells on one tinted band, the selected one
 /// white with a soft pink inset outline. Week days, Semaine/Mois/Année,
 /// Badges/Défis.
-class SegmentedStrip extends StatelessWidget {
+class SegmentedStrip extends ConsumerWidget {
   const SegmentedStrip({
     super.key,
     required this.count,
@@ -52,8 +55,13 @@ class SegmentedStrip extends StatelessWidget {
   static const indicatorKey = Key('segmented-strip-indicator');
 
   @override
-  Widget build(BuildContext context) {
+  Widget build(BuildContext context, WidgetRef ref) {
     final c = context.sorbet;
+    void select(int i) {
+      if (i != selected) ref.read(feedbackProvider).haptic(Haptic.tick);
+      onSelected!(i);
+    }
+
     // Cells under 40 px get a taller invisible hit area, up to 48 px; the
     // band then grows by that difference, split above and below.
     final hitPad = math.max(4.0, (48 - cellHeight) / 2);
@@ -83,14 +91,17 @@ class SegmentedStrip extends StatelessWidget {
                     return Stack(
                       children: [
                         if (at != null && at >= 0)
-                          AnimatedPositioned(
-                            key: indicatorKey,
-                            duration: context.motion(Motion.medium),
-                            curve: Motion.curve,
-                            left: width * at,
-                            width: width,
-                            top: hitPad,
-                            bottom: hitPad,
+                          SpringBuilder(
+                            value: at.toDouble(),
+                            spring: Springs.snappy,
+                            builder: (context, x, child) => Positioned(
+                              key: indicatorKey,
+                              left: width * x,
+                              width: width,
+                              top: hitPad,
+                              bottom: hitPad,
+                              child: child!,
+                            ),
                             child: DecoratedBox(decoration: _selection(c)),
                           ),
                         Row(
@@ -102,6 +113,7 @@ class SegmentedStrip extends StatelessWidget {
                                   c,
                                   i,
                                   hitPad,
+                                  select,
                                   paintsSelection: false,
                                 ),
                               ),
@@ -127,6 +139,7 @@ class SegmentedStrip extends StatelessWidget {
                                 c,
                                 i,
                                 hitPad,
+                                select,
                                 paintsSelection: true,
                               ),
                             ),
@@ -153,7 +166,8 @@ class SegmentedStrip extends StatelessWidget {
     BuildContext context,
     SorbetColors c,
     int i,
-    double hitPad, {
+    double hitPad,
+    ValueChanged<int> select, {
     required bool paintsSelection,
   }) {
     final on = i == selected;
@@ -165,12 +179,13 @@ class SegmentedStrip extends StatelessWidget {
       excludeSemantics: semanticLabels != null,
       child: GestureDetector(
         behavior: HitTestBehavior.opaque,
-        onTap: onSelected == null ? null : () => onSelected!(i),
+        onTap: onSelected == null ? null : () => select(i),
         child: Padding(
           padding: EdgeInsets.symmetric(vertical: hitPad),
           // Several rows cannot share one sliding selection: each cell fades its own.
           child: AnimatedContainer(
             duration: context.motion(Motion.fast),
+            curve: Motion.curve,
             constraints: BoxConstraints(minHeight: cellHeight),
             decoration: paintsSelection && on
                 ? _selection(c)
@@ -179,13 +194,75 @@ class SegmentedStrip extends StatelessWidget {
                   ),
             child: AnimatedDefaultTextStyle(
               duration: context.motion(Motion.fast),
+              curve: Motion.curve,
               style: DefaultTextStyle.of(context).style
                   .copyWith(color: on ? c.ink : c.muted),
-              child: Center(child: itemBuilder(context, i, on)),
+              child: Center(
+                child: _CellFade(
+                  on: on,
+                  builder: (context, on) => itemBuilder(context, i, on),
+                ),
+              ),
             ),
           ),
         ),
       ),
     );
   }
+}
+
+/// Cross-fades a cell from its previous look to the new one, so colours an
+/// [SegmentedStrip.itemBuilder] sets itself still change smoothly. The old
+/// look only exists while it fades out.
+class _CellFade extends StatefulWidget {
+  const _CellFade({required this.on, required this.builder});
+
+  final bool on;
+  final Widget Function(BuildContext context, bool on) builder;
+
+  @override
+  State<_CellFade> createState() => _CellFadeState();
+}
+
+class _CellFadeState extends State<_CellFade>
+    with SingleTickerProviderStateMixin {
+  late final _c = AnimationController(vsync: this, value: 1)
+    ..addStatusListener((_) => setState(() {}));
+  late final _out = CurvedAnimation(
+    parent: ReverseAnimation(_c),
+    curve: Motion.curve,
+  );
+
+  @override
+  void didUpdateWidget(_CellFade old) {
+    super.didUpdateWidget(old);
+    if (old.on == widget.on) return;
+    _c.duration = context.motion(Motion.fast);
+    // Turned back mid-fade: start from where the look is now.
+    _c.forward(from: 1 - _c.value);
+  }
+
+  @override
+  void dispose() {
+    _out.dispose();
+    _c.dispose();
+    super.dispose();
+  }
+
+  @override
+  Widget build(BuildContext context) => Stack(
+    alignment: Alignment.center,
+    children: [
+      widget.builder(context, widget.on),
+      if (_c.isAnimating)
+        IgnorePointer(
+          child: ExcludeSemantics(
+            child: FadeTransition(
+              opacity: _out,
+              child: widget.builder(context, !widget.on),
+            ),
+          ),
+        ),
+    ],
+  );
 }

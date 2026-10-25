@@ -30,7 +30,6 @@ class RoundIconButton extends StatelessWidget {
       label: label,
       excludeSemantics: true,
       child: PressScale(
-        scale: 0.9,
         enabled: onTap != null,
         child: InkResponse(
           onTap: onTap,

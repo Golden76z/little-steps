@@ -1236,5 +1236,24 @@
         "type": "int"
       }
     }
+  },
+  "rowHaptics": "Haptics",
+  "rowSounds": "Sounds",
+  "actionComplete": "Complete",
+  "actionOptions": "Options",
+  "xpGained": "+{xp} XP",
+  "@actionComplete": {
+    "description": "Accessibility action on a Today pill: fill it to its goal"
+  },
+  "@actionOptions": {
+    "description": "Accessibility action on a Today pill: open its options sheet"
+  },
+  "@xpGained": {
+    "description": "XP flying from a pill to the avatar",
+    "placeholders": {
+      "xp": {
+        "type": "int"
+      }
+    }
   }
 }

@@ -1,14 +1,19 @@
 import 'dart:math' as math;
 
 import 'package:flutter/material.dart';
+import 'package:flutter/physics.dart';
 
 import '../icons/phosphor_icons.dart';
 import '../theme/sorbet_colors.dart';
 import '../theme/motion.dart';
+import 'spring_builder.dart';
 
 /// Avatar inside the XP ring (accent arc over a pale track): 48 px on
-/// Today and Trophies, 56 px with a level pill on Profile.
-class XpAvatar extends StatelessWidget {
+/// Today and Trophies, 56 px with a level pill on Profile. The ring fills
+/// with [Springs.fill] and the avatar pops when it grows; given [level], a
+/// level up fills the ring to the end, pops, then starts again from 0 (a
+/// level lost empties it, then comes back from full).
+class XpAvatar extends StatefulWidget {
   const XpAvatar({
     super.key,
     required this.fraction,
@@ -18,6 +23,7 @@ class XpAvatar extends StatelessWidget {
     this.color,
     this.child,
     this.badge,
+    this.level,
   });
 
   final double size;
@@ -36,81 +42,142 @@ class XpAvatar extends StatelessWidget {
   final String semanticLabel;
   final VoidCallback? onTap;
 
+  /// Current level, so a level change can fill the ring up rather than back.
+  final int? level;
+
+  @override
+  State<XpAvatar> createState() => _XpAvatarState();
+}
+
+class _XpAvatarState extends State<XpAvatar>
+    with SingleTickerProviderStateMixin {
+  late final _ring = AnimationController.unbounded(
+    vsync: this,
+    value: widget.fraction,
+  );
+  var _pops = 0;
+
+  /// True while the ring runs to an end on a level change: fraction
+  /// changes then wait for it.
+  var _wrapping = false;
+
+  TickerFuture _fill(double to) => _ring.animateWith(
+    SpringSimulation(
+      Springs.fill,
+      _ring.value,
+      to,
+      _ring.velocity,
+      snapToEnd: true,
+    ),
+  );
+
+  @override
+  void didUpdateWidget(XpAvatar old) {
+    super.didUpdateWidget(old);
+    final (was, now) = (old.level, widget.level);
+    final change = was == null || now == null ? 0 : now.compareTo(was);
+    if (context.reduceMotion) {
+      _wrapping = false;
+      _ring.value = widget.fraction;
+    } else if (change != 0) {
+      _wrapping = true;
+      // Cut short by a newer level change, this run never completes.
+      _fill(change > 0 ? 1 : 0).then((_) {
+        if (!mounted) return;
+        if (change > 0) setState(() => _pops++);
+        _wrapping = false;
+        _ring.value = change > 0 ? 0 : 1;
+        _fill(widget.fraction);
+      });
+    } else if (!_wrapping && widget.fraction != old.fraction) {
+      if (widget.fraction > old.fraction) _pops++;
+      _fill(widget.fraction);
+    }
+  }
+
+  @override
+  void dispose() {
+    _ring.dispose();
+    super.dispose();
+  }
+
   @override
   Widget build(BuildContext context) {
     final c = context.sorbet;
+    final XpAvatar(:size, :color, :child, :badge) = widget;
     return Semantics(
-      button: onTap != null,
-      label: semanticLabel,
+      button: widget.onTap != null,
+      label: widget.semanticLabel,
       excludeSemantics: true,
       child: GestureDetector(
-        onTap: onTap,
-        child: SizedBox.square(
-          dimension: size,
-          child: Stack(
-            clipBehavior: Clip.none,
-            children: [
-              Positioned.fill(
-                child: TweenAnimationBuilder<double>(
-                  tween: Tween(end: fraction),
-                  duration: context.motion(Motion.ring),
-                  curve: Motion.curve,
-                  builder: (context, f, child) => CustomPaint(
-                    painter: _RingPainter(
-                      fraction: f,
-                      track: c.track,
-                      color: c.accent,
+        onTap: widget.onTap,
+        child: Pop(
+          trigger: _pops,
+          child: SizedBox.square(
+            dimension: size,
+            child: Stack(
+              clipBehavior: Clip.none,
+              children: [
+                Positioned.fill(
+                  child: AnimatedBuilder(
+                    animation: _ring,
+                    builder: (context, child) => CustomPaint(
+                      painter: _RingPainter(
+                        fraction: _ring.value,
+                        track: c.track,
+                        color: c.accent,
+                      ),
+                      child: child,
                     ),
-                    child: child,
+                    child: Padding(
+                      // Mockup: inset 7 at 48 px, 8 at 56 px.
+                      padding: EdgeInsets.all(size / 7),
+                      child: DecoratedBox(
+                        decoration: BoxDecoration(
+                          shape: BoxShape.circle,
+                          color: color ?? c.habit[HabitColor.lilac],
+                        ),
+                        child: Center(
+                          child:
+                              child ??
+                              Icon(
+                                PhosphorIconsFill.user,
+                                size: 18,
+                                color: c.ink,
+                              ),
+                        ),
+                      ),
+                    ),
                   ),
-                  child: Padding(
-                    // Mockup: inset 7 at 48 px, 8 at 56 px.
-                    padding: EdgeInsets.all(size / 7),
-                    child: DecoratedBox(
+                ),
+                if (badge != null)
+                  Positioned(
+                    right: -4,
+                    bottom: -2,
+                    child: Container(
+                      constraints: const BoxConstraints(
+                        minWidth: 22,
+                        minHeight: 22,
+                      ),
+                      padding: const EdgeInsets.symmetric(horizontal: 5),
+                      alignment: Alignment.center,
                       decoration: BoxDecoration(
-                        shape: BoxShape.circle,
-                        color: color ?? c.habit[HabitColor.lilac],
+                        color: c.ink,
+                        borderRadius: BorderRadius.circular(11),
+                        border: Border.all(color: c.surface, width: 2),
                       ),
-                      child: Center(
-                        child:
-                            child ??
-                            Icon(
-                              PhosphorIconsFill.user,
-                              size: 18,
-                              color: c.ink,
-                            ),
-                      ),
-                    ),
-                  ),
-                ),
-              ),
-              if (badge != null)
-                Positioned(
-                  right: -4,
-                  bottom: -2,
-                  child: Container(
-                    constraints: const BoxConstraints(
-                      minWidth: 22,
-                      minHeight: 22,
-                    ),
-                    padding: const EdgeInsets.symmetric(horizontal: 5),
-                    alignment: Alignment.center,
-                    decoration: BoxDecoration(
-                      color: c.ink,
-                      borderRadius: BorderRadius.circular(11),
-                      border: Border.all(color: c.surface, width: 2),
-                    ),
-                    child: Text(
-                      badge!,
-                      style: Theme.of(context).textTheme.labelSmall!.copyWith(
-                        fontWeight: FontWeight.w600,
-                        color: c.onAccent,
-                        height: 1,
+                      child: Text(
+                        badge,
+                        style: Theme.of(context).textTheme.labelSmall!.copyWith(
+                          fontWeight: FontWeight.w600,
+                          color: c.onAccent,
+                          height: 1,
+                        ),
                       ),
                     ),
                   ),
-                ),
-            ],
+              ],
+            ),
           ),
         ),
       ),

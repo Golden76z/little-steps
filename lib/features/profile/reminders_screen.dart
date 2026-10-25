@@ -7,6 +7,7 @@ import '../../core/icons/habit_icons.dart';
 import '../../core/icons/phosphor_icons.dart';
 import '../../core/l10n/l10n.dart';
 import '../../core/router/app_router.dart';
+import '../../core/theme/motion.dart';
 import '../../core/theme/sorbet_colors.dart';
 import '../../core/widgets/app_header_card.dart';
 import '../../core/widgets/round_icon_button.dart';
@@ -79,31 +80,38 @@ class RemindersScreen extends ConsumerWidget {
                 MediaQuery.paddingOf(context).bottom + 16,
               ),
               children: [
-                if (habits.isNotEmpty)
-                  SorbetCard(
-                    padding: const EdgeInsets.symmetric(
-                      horizontal: 14,
-                      vertical: 6,
-                    ),
-                    child: Column(
-                      children: [
-                        for (final h in habits)
-                          ProfileRow(
-                            leading: ProfileIconBox(
-                              color: c.habit[h.color]!,
-                              icon: habitIcon(h.icon),
-                              circle: true,
-                            ),
-                            label: h.name,
-                            value: h.reminders.isEmpty
-                                ? l10n.noReminder
-                                : formatReminders(context, h.reminders),
-                            onTap: () => context.push(Routes.habit(h.id)),
-                            last: h == habits.last,
+                // Habits added or removed meanwhile: the card grows or shrinks.
+                AnimatedSize(
+                  duration: context.motion(Motion.resize),
+                  curve: SpringCurve(Springs.smooth, Motion.resize),
+                  alignment: Alignment.topCenter,
+                  child: habits.isEmpty
+                      ? const SizedBox(width: double.infinity)
+                      : SorbetCard(
+                          padding: const EdgeInsets.symmetric(
+                            horizontal: 14,
+                            vertical: 6,
                           ),
-                      ],
-                    ),
-                  ),
+                          child: Column(
+                            children: [
+                              for (final h in habits)
+                                ProfileRow(
+                                  leading: ProfileIconBox(
+                                    color: c.habit[h.color]!,
+                                    icon: habitIcon(h.icon),
+                                    circle: true,
+                                  ),
+                                  label: h.name,
+                                  value: h.reminders.isEmpty
+                                      ? l10n.noReminder
+                                      : formatReminders(context, h.reminders),
+                                  onTap: () => context.push(Routes.habit(h.id)),
+                                  last: h == habits.last,
+                                ),
+                            ],
+                          ),
+                        ),
+                ),
               ],
             ),
           ),

@@ -4,14 +4,19 @@ import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 import 'package:go_router/go_router.dart';
 
+import '../../core/domain/day.dart';
 import '../../core/domain/habit.dart';
+import '../../core/feedback/celebrated.dart';
+import '../../core/feedback/feedback.dart';
 import '../../core/icons/habit_icons.dart';
 import '../../core/icons/phosphor_icons.dart';
 import '../../core/l10n/l10n.dart';
 import '../../core/router/app_router.dart';
 import '../../core/theme/sorbet_colors.dart';
 import '../../core/widgets/app_header_card.dart';
+import '../../core/widgets/fade_through_switcher.dart';
 import '../../core/widgets/round_icon_button.dart';
+import '../../core/widgets/spring_builder.dart';
 import '../create_habit/draft_provider.dart';
 import '../create_habit/habit_draft.dart';
 
@@ -113,6 +118,8 @@ class DetailScaffold extends ConsumerWidget {
               ),
               Expanded(
                 child: SingleChildScrollView(
+                  keyboardDismissBehavior:
+                      ScrollViewKeyboardDismissBehavior.onDrag,
                   padding: EdgeInsets.fromLTRB(
                     20,
                     16,
@@ -166,5 +173,57 @@ class DetailCardTitle extends StatelessWidget {
           ),
       ],
     );
+  }
+}
+
+/// The part of a detail that follows its two-segment strip: fades through,
+/// travelling the way the strip moved (to the second segment: leftwards).
+class StripBody extends StatelessWidget {
+  const StripBody({super.key, required this.index, required this.child});
+
+  final int index;
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context) => FadeThroughSwitcher(
+    direction: index == 0 ? AxisDirection.right : AxisDirection.left,
+    child: SizedBox(key: ValueKey(index), width: double.infinity, child: child),
+  );
+}
+
+String _celebrationKey(Habit h, Day day) => 'habit:${h.id}:$day';
+
+/// [h] became done on [day]: success and `done` the first time in the app's
+/// life, a light tap after that.
+void celebrateHabit(WidgetRef ref, Habit h, Day day) {
+  final feedback = ref.read(feedbackProvider);
+  if (ref.read(celebratedProvider.notifier).claim(_celebrationKey(h, day))) {
+    feedback
+      ..haptic(Haptic.success)
+      ..sound(Sound.done);
+  } else {
+    feedback.haptic(Haptic.light);
+  }
+}
+
+/// [child] pops when [habit]'s celebration of [day] plays, once.
+class HabitPop extends ConsumerWidget {
+  const HabitPop({
+    super.key,
+    required this.habit,
+    required this.day,
+    required this.child,
+  });
+
+  final Habit habit;
+  final Day day;
+  final Widget child;
+
+  @override
+  Widget build(BuildContext context, WidgetRef ref) {
+    final played = ref.watch(
+      celebratedProvider.select((s) => s.contains(_celebrationKey(habit, day))),
+    );
+    return Pop(trigger: played ? 1 : 0, child: child);
   }
 }

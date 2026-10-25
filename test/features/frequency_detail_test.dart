@@ -3,6 +3,7 @@ import 'package:little_steps/core/database/app_database.dart';
 import 'package:little_steps/core/database/habit_repository.dart';
 import 'package:little_steps/core/domain/day.dart';
 import 'package:little_steps/core/domain/habit.dart';
+import 'package:little_steps/core/feedback/feedback.dart';
 
 import '../helpers.dart';
 
@@ -100,6 +101,29 @@ void main() {
     await settle(tester);
     expect(await todayValue(tester, db), 0);
     expect(find.text('1 / 3 séances'), findsOneWidget);
+  });
+
+  testApp('a session pops; closing the week celebrates', (tester, db) async {
+    await openDetail(tester, db, sessions: [-1], times: 2);
+    await addOtherHabit(tester, db);
+    final haptics = recordHaptics(tester);
+    await tester.tap(find.text('Noter une séance aujourd’hui'));
+    await settle(tester);
+    // Closing the week also completes the weekly challenge.
+    expect(haptics, [
+      'HapticFeedbackType.mediumImpact',
+      'HapticFeedbackType.mediumImpact',
+    ]);
+    expect(sounds.played, [Sound.done, Sound.celebrate]);
+  });
+
+  testApp('a session short of the target only pops', (tester, db) async {
+    await openDetail(tester, db, sessions: [-1]);
+    final haptics = recordHaptics(tester);
+    await tester.tap(find.text('Noter une séance aujourd’hui'));
+    await settle(tester);
+    expect(haptics, ['HapticFeedbackType.lightImpact']);
+    expect(sounds.played, [Sound.pop]);
   });
 
   testApp('reaching the target says so', (tester, db) async {

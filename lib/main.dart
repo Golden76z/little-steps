@@ -3,6 +3,7 @@ import 'package:flutter/services.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
 
 import 'app.dart';
+import 'core/feedback/feedback.dart';
 
 Future<void> main() async {
   WidgetsFlutterBinding.ensureInitialized();
@@ -10,5 +11,12 @@ Future<void> main() async {
   await SystemChrome.setEnabledSystemUIMode(SystemUiMode.edgeToEdge);
   // The whole design is portrait (390 × 844).
   await SystemChrome.setPreferredOrientations([DeviceOrientation.portraitUp]);
-  runApp(const ProviderScope(child: LittleStepsApp()));
+  // Feedback settings and the API level load now, before the first tap.
+  final container = ProviderContainer()..listen(feedbackProvider, (_, _) {});
+  runApp(
+    UncontrolledProviderScope(
+      container: container,
+      child: const LittleStepsApp(),
+    ),
+  );
 }

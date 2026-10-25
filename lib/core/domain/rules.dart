@@ -17,6 +17,14 @@ final class History {
     this.jokerDays = const {},
   }) : _values = {for (final e in entries) (e.habitId, e.day): e.value};
 
+  History._(this.habits, this.jokerDays, this._values);
+
+  /// This history with [values] logged on top (0 clears), for values not
+  /// stored yet.
+  History withValues(Map<(int, Day), double> values) => values.isEmpty
+      ? this
+      : History._(habits, jokerDays, {..._values, ...values});
+
   final List<Habit> habits;
 
   /// Days saved by a joker: neutral for every streak.

@@ -1,9 +1,11 @@
+import 'package:flutter/material.dart';
 import 'package:flutter_test/flutter_test.dart';
 import 'package:intl/intl.dart';
 import 'package:little_steps/core/database/app_database.dart';
 import 'package:little_steps/core/database/habit_repository.dart';
 import 'package:little_steps/core/domain/day.dart';
 import 'package:little_steps/core/domain/habit.dart';
+import 'package:little_steps/core/widgets/fade_through_switcher.dart';
 import 'package:little_steps/features/habit_detail/yes_no_detail.dart';
 
 import '../helpers.dart';
@@ -99,6 +101,49 @@ void main() {
     await tester.tap(find.bySemanticsLabel('Période suivante'));
     await tester.pumpAndSettle();
     expect(find.text('19 – 25 octobre'), findsOneWidget);
+  });
+
+  /// Width share of the fill of the row showing [name].
+  double fillOf(WidgetTester tester, String name) => tester
+      .widget<FractionallySizedBox>(
+        find
+            .descendant(
+              of: find.ancestor(
+                of: find.text(name),
+                matching: find.byType(InkWell),
+              ),
+              matching: find.byType(FractionallySizedBox),
+            )
+            .last,
+      )
+      .widthFactor!;
+
+  testApp('a period change fades through and springs the bars', (
+    tester,
+    db,
+  ) async {
+    await openProgress(tester, db);
+    expect(fillOf(tester, 'Lire'), 1);
+    await tester.tap(find.text('Mois'));
+    await tester.pump();
+    expect(find.byType(FadeThroughSwitcher), findsOneWidget);
+    await tester.pump(const Duration(milliseconds: 300));
+    // Past the fade (old content gone), the bars are still filling: 7 / 16.
+    expect(find.text('Lire'), findsOneWidget);
+    expect(fillOf(tester, 'Lire'), inExclusiveRange(0.01, 7 / 16 - 0.01));
+    await tester.pumpAndSettle();
+    expect(fillOf(tester, 'Lire'), closeTo(7 / 16, 1e-6));
+  });
+
+  testApp('the arrows tick', (tester, db) async {
+    await openProgress(tester, db);
+    final haptics = recordHaptics(tester);
+    await tester.tap(find.bySemanticsLabel('Période précédente'));
+    await tester.pumpAndSettle();
+    expect(haptics, ['HapticFeedbackType.selectionClick']);
+    await tester.tap(find.bySemanticsLabel('Période suivante'));
+    await tester.pumpAndSettle();
+    expect(haptics, hasLength(2));
   });
 
   testApp('tapping a habit row opens its detail', (tester, db) async {

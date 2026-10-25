@@ -9,6 +9,7 @@ import '../../core/l10n/formatters.dart';
 import '../../core/l10n/l10n.dart';
 import '../../core/theme/sorbet_colors.dart';
 import '../../core/time/today_provider.dart';
+import '../../core/widgets/fade_through_switcher.dart';
 import '../../core/widgets/marked_text.dart';
 import '../../core/widgets/primary_button.dart';
 import '../../core/widgets/sorbet_sheet.dart';
@@ -105,91 +106,98 @@ class _JokerSheetState extends ConsumerState<_JokerSheet> {
       onPressed: () => Navigator.pop(context),
     );
 
-    return switch (_step) {
-      _Step.ask => Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          const SizedBox(height: 18),
-          Center(
-            child: disc(c.jokerSoft, PhosphorIconsFill.shield, c.joker, 38),
+    return FadeThroughSwitcher(
+      child: KeyedSubtree(
+        key: ValueKey(_step),
+        child: switch (_step) {
+          _Step.ask => Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              const SizedBox(height: 18),
+              Center(
+                child: disc(c.jokerSoft, PhosphorIconsFill.shield, c.joker, 38),
+              ),
+              const SizedBox(height: 14),
+              title(l10n.streakAtRisk),
+              const SizedBox(height: 8),
+              MarkedText(
+                l10n.missedYesterday(
+                  context.habitFormat.list([for (final h in p.missed) h.name]),
+                  streak,
+                ),
+                style: body,
+                textAlign: TextAlign.center,
+                strong: TextStyle(fontWeight: FontWeight.w600, color: c.ink),
+              ),
+              const SizedBox(height: 16),
+              ExcludeSemantics(child: _WeekStrip(day: p.day)),
+              const SizedBox(height: 18),
+              _JokerButton(
+                label: l10n.useJoker(p.jokers),
+                onPressed: () async {
+                  await ref.read(habitRepositoryProvider).useJoker(p.day);
+                  if (mounted) setState(() => _step = _Step.saved);
+                },
+              ),
+              const SizedBox(height: 10),
+              TextButton(
+                onPressed: () => setState(() => _step = _Step.skipped),
+                style: TextButton.styleFrom(
+                  minimumSize: const Size.fromHeight(50),
+                  backgroundColor: c.bg,
+                  foregroundColor: c.inkSoft,
+                  shape: const StadiumBorder(),
+                  textStyle: text.bodyLarge,
+                ),
+                child: Text(l10n.letItGo),
+              ),
+              const SizedBox(height: 12),
+              Text(
+                l10n.jokerEarnHint,
+                textAlign: TextAlign.center,
+                style: text.labelMedium!.copyWith(color: c.muted),
+              ),
+            ],
           ),
-          const SizedBox(height: 14),
-          title(l10n.streakAtRisk),
-          const SizedBox(height: 8),
-          MarkedText(
-            l10n.missedYesterday(
-              context.habitFormat.list([for (final h in p.missed) h.name]),
-              streak,
-            ),
-            style: body,
-            textAlign: TextAlign.center,
-            strong: TextStyle(fontWeight: FontWeight.w600, color: c.ink),
+          _Step.saved => Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              const SizedBox(height: 22),
+              Center(
+                child: disc(c.flameChip, PhosphorIconsFill.fire, c.flame, 38),
+              ),
+              const SizedBox(height: 14),
+              title(l10n.streakSaved),
+              const SizedBox(height: 8),
+              Text(
+                l10n.stillInARow(streak, p.jokers - 1),
+                textAlign: TextAlign.center,
+                style: body.copyWith(height: null),
+              ),
+              const SizedBox(height: 22),
+              close,
+            ],
           ),
-          const SizedBox(height: 16),
-          ExcludeSemantics(child: _WeekStrip(day: p.day)),
-          const SizedBox(height: 18),
-          _JokerButton(
-            label: l10n.useJoker(p.jokers),
-            onPressed: () async {
-              await ref.read(habitRepositoryProvider).useJoker(p.day);
-              if (mounted) setState(() => _step = _Step.saved);
-            },
+          _Step.skipped => Column(
+            crossAxisAlignment: CrossAxisAlignment.stretch,
+            children: [
+              const SizedBox(height: 22),
+              Center(child: disc(c.bg, PhosphorIconsFill.fire, c.flameOff, 36)),
+              const SizedBox(height: 14),
+              title(l10n.freshStart),
+              const SizedBox(height: 8),
+              Text(
+                l10n.recordKept(streak),
+                textAlign: TextAlign.center,
+                style: body.copyWith(height: null),
+              ),
+              const SizedBox(height: 22),
+              close,
+            ],
           ),
-          const SizedBox(height: 10),
-          TextButton(
-            onPressed: () => setState(() => _step = _Step.skipped),
-            style: TextButton.styleFrom(
-              minimumSize: const Size.fromHeight(50),
-              backgroundColor: c.bg,
-              foregroundColor: c.inkSoft,
-              shape: const StadiumBorder(),
-              textStyle: text.bodyLarge,
-            ),
-            child: Text(l10n.letItGo),
-          ),
-          const SizedBox(height: 12),
-          Text(
-            l10n.jokerEarnHint,
-            textAlign: TextAlign.center,
-            style: text.labelMedium!.copyWith(color: c.muted),
-          ),
-        ],
+        },
       ),
-      _Step.saved => Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          const SizedBox(height: 22),
-          Center(child: disc(c.flameChip, PhosphorIconsFill.fire, c.flame, 38)),
-          const SizedBox(height: 14),
-          title(l10n.streakSaved),
-          const SizedBox(height: 8),
-          Text(
-            l10n.stillInARow(streak, p.jokers - 1),
-            textAlign: TextAlign.center,
-            style: body.copyWith(height: null),
-          ),
-          const SizedBox(height: 22),
-          close,
-        ],
-      ),
-      _Step.skipped => Column(
-        crossAxisAlignment: CrossAxisAlignment.stretch,
-        children: [
-          const SizedBox(height: 22),
-          Center(child: disc(c.bg, PhosphorIconsFill.fire, c.flameOff, 36)),
-          const SizedBox(height: 14),
-          title(l10n.freshStart),
-          const SizedBox(height: 8),
-          Text(
-            l10n.recordKept(streak),
-            textAlign: TextAlign.center,
-            style: body.copyWith(height: null),
-          ),
-          const SizedBox(height: 22),
-          close,
-        ],
-      ),
-    };
+    );
   }
 }
 

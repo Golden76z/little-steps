@@ -24,15 +24,17 @@ class PrimaryButton extends StatelessWidget {
   Widget build(BuildContext context) {
     final c = context.sorbet;
     final enabled = onPressed != null;
-    return PressScale(
+    const depth = 4.0;
+    return PressSink(
+      depth: depth,
       enabled: enabled,
-      child: DecoratedBox(
+      builder: (context, pressed) => DecoratedBox(
         decoration: BoxDecoration(
           borderRadius: BorderRadius.circular(height / 2),
           boxShadow: [
             BoxShadow(
               color: enabled ? c.ctaShadow : c.shadowPill,
-              offset: const Offset(0, 4),
+              offset: Offset(0, depth - depth * pressed),
             ),
           ],
         ),

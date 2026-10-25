@@ -11,8 +11,12 @@ import '../../core/l10n/formatters.dart';
 import '../../core/l10n/l10n.dart';
 import '../../core/theme/sorbet_colors.dart';
 import '../../core/time/today_provider.dart';
+import '../../core/theme/motion.dart';
 import '../../core/widgets/app_header_card.dart';
+import '../../core/widgets/fade_through_switcher.dart';
+import '../../core/widgets/rolling_text.dart';
 import '../../core/widgets/segmented_strip.dart';
+import '../../core/widgets/spring_builder.dart';
 import '../../core/widgets/streak_chip.dart';
 import '../../core/widgets/xp_avatar.dart';
 
@@ -48,23 +52,32 @@ class _TrophiesScreenState extends ConsumerState<TrophiesScreen> {
               20,
               MediaQuery.paddingOf(context).bottom + 16,
             ),
-            children: _tab == 0
-                ? [
-                    _Stats(
-                      jokers: jokerBalance(history, today),
-                      best: globalStreak(history, today).best,
-                    ),
-                    const SizedBox(height: 16),
-                    _BadgeGrid(earned: earnedBadges(history, today)),
-                    const SizedBox(height: 12),
-                    _WeeklyChallenge(challenge: challenges.first),
-                  ]
-                : [
-                    for (final ch in challenges) ...[
-                      _ChallengeCard(challenge: ch, today: today),
-                      const SizedBox(height: 10),
-                    ],
-                  ],
+            children: [
+              FadeThroughSwitcher(
+                direction: _tab == 0 ? AxisDirection.right : AxisDirection.left,
+                child: Column(
+                  key: ValueKey(_tab),
+                  crossAxisAlignment: CrossAxisAlignment.stretch,
+                  children: _tab == 0
+                      ? [
+                          _Stats(
+                            jokers: jokerBalance(history, today),
+                            best: globalStreak(history, today).best,
+                          ),
+                          const SizedBox(height: 16),
+                          _BadgeGrid(earned: earnedBadges(history, today)),
+                          const SizedBox(height: 12),
+                          _WeeklyChallenge(challenge: challenges.first),
+                        ]
+                      : [
+                          for (final ch in challenges) ...[
+                            _ChallengeCard(challenge: ch, today: today),
+                            const SizedBox(height: 10),
+                          ],
+                        ],
+                ),
+              ),
+            ],
           ),
         ),
       ],
@@ -97,6 +110,7 @@ class _Header extends StatelessWidget {
         children: [
           XpAvatar(
             fraction: level.fraction,
+            level: level.level,
             color: c.habit[HabitColor.lemon],
             semanticLabel: l10n.levelProgress(
               level.level,
@@ -119,8 +133,10 @@ class _Header extends StatelessWidget {
             child: Column(
               crossAxisAlignment: CrossAxisAlignment.start,
               children: [
-                Text(
+                RollingText(
                   l10n.xpOf(fmt.number(level.xp), fmt.number(level.toNext)),
+                  value:
+                      level.level + level.fraction, // grows with the total XP
                   style: text.bodySmall!.copyWith(color: c.muted),
                 ),
                 Semantics(
@@ -616,10 +632,18 @@ class _ChallengeCard extends StatelessWidget {
                       height: 10,
                       color: c.track,
                       alignment: AlignmentDirectional.centerStart,
-                      child: FractionallySizedBox(
-                        widthFactor: (challenge.progress / challenge.target)
-                            .clamp(0, 1),
-                        heightFactor: 1,
+                      child: SpringBuilder(
+                        from: 0,
+                        value: (challenge.progress / challenge.target)
+                            .clamp(0, 1)
+                            .toDouble(),
+                        spring: Springs.fill,
+                        builder: (context, v, child) => FractionallySizedBox(
+                          // No bounce, but a fraction must never go below 0.
+                          widthFactor: v < 0 ? 0 : v,
+                          heightFactor: 1,
+                          child: child,
+                        ),
                         child: DecoratedBox(
                           decoration: BoxDecoration(
                             color: h == null ? tones.deep : tones.strong,

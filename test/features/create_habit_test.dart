@@ -3,7 +3,11 @@ import 'package:flutter_test/flutter_test.dart';
 import 'package:little_steps/core/database/habit_repository.dart';
 import 'package:little_steps/core/domain/day.dart';
 import 'package:little_steps/core/domain/habit.dart';
+import 'package:little_steps/core/feedback/feedback.dart';
+import 'package:little_steps/core/widgets/fade_through_switcher.dart';
+import 'package:little_steps/core/widgets/rolling_text.dart';
 
+import 'package:little_steps/features/today/pill_entrance.dart';
 import '../helpers.dart';
 
 Habit yesNo(String name) => Habit(
@@ -66,6 +70,96 @@ void main() {
       (h.goal, h.step, h.unit, h.icon),
       (2250.0, 250.0, QuantityUnit.liters, 'drop'),
     );
+  });
+
+  testApp('a created habit pops into Today, once', (tester, db) async {
+    await pumpApp(tester, db, locale: 'fr');
+    await tapText(tester, 'Créer ma première habitude');
+    await tapText(tester, 'Vitamines');
+    await tapText(tester, 'Continuer · Vitamines');
+    await tapText(tester, 'Continuer');
+    final haptics = recordHaptics(tester);
+    await tester.tap(find.text('Créer l’habitude'));
+    await tester.runAsync(
+      () => Future<void>.delayed(const Duration(milliseconds: 30)),
+    );
+    await tester.pump();
+    await tester.pump(const Duration(milliseconds: 16));
+    // Still covered by the creation screen sliding out: it waits.
+    expect(find.text('Quand ?'), findsOneWidget);
+    expect(sounds.played, isEmpty);
+    var sparkled = false;
+    for (var i = 0; i < 60; i++) {
+      await tester.pump(const Duration(milliseconds: 16));
+      sparkled |= find.byKey(PillEntrance.sparkleKey).evaluate().isNotEmpty;
+    }
+    expect(sparkled, isTrue);
+    await settle(tester);
+    expect(find.byKey(PillEntrance.sparkleKey), findsNothing);
+    expect(find.text('Vitamines'), findsOneWidget);
+    expect(sounds.played, [Sound.pop]);
+    expect(haptics, contains('HapticFeedbackType.lightImpact'));
+    // Leaving Today and coming back does not replay it.
+    await tester.tap(find.bySemanticsLabel(RegExp('Progrès')).first);
+    await settle(tester);
+    await tester.tap(find.bySemanticsLabel(RegExp('Aujourd’hui')).first);
+    await settle(tester);
+    expect(sounds.played, [Sound.pop]);
+  });
+
+  testApp('a habit created to rest today pops in too', (tester, db) async {
+    await pumpApp(tester, db, locale: 'fr');
+    await tapText(tester, 'Créer ma première habitude');
+    await tapText(tester, 'Vitamines');
+    await tapText(tester, 'Continuer · Vitamines');
+    await tapText(tester, 'Continuer');
+    // Tuesday (the test day) off.
+    await tester.tap(find.text('M').first);
+    await tester.pumpAndSettle();
+    await tapText(tester, 'Créer l’habitude');
+    await settle(tester);
+    expect(find.text('Repos aujourd’hui'), findsOneWidget);
+    expect(sounds.played, [Sound.pop]);
+  });
+
+  testApp('the goal step rolls and ticks; colour and icon tick', (
+    tester,
+    db,
+  ) async {
+    await pumpApp(tester, db, locale: 'fr');
+    await tapText(tester, 'Créer ma première habitude');
+    await tapText(tester, 'Boire de l’eau');
+    await tapText(tester, 'Continuer · Boire de l’eau');
+    final haptics = recordHaptics(tester);
+    await tester.tap(find.bySemanticsLabel('Augmenter l’objectif'));
+    await tester.pumpAndSettle();
+    expect(
+      find.byWidgetPredicate((w) => w is RollingText && w.text == '2,25'),
+      findsOneWidget,
+    );
+    expect(haptics, ['HapticFeedbackType.selectionClick']);
+    await tester.tap(find.bySemanticsLabel('Changer l’icône'));
+    await tester.pumpAndSettle();
+    expect(haptics, hasLength(2));
+  });
+
+  testApp('changing the rhythm fades through', (tester, db) async {
+    await pumpApp(tester, db, locale: 'fr');
+    await tapText(tester, 'Créer ma première habitude');
+    await tapText(tester, 'Vitamines');
+    await tapText(tester, 'Continuer · Vitamines');
+    await tapText(tester, 'Continuer');
+    Finder switched(String text) => find.ancestor(
+      of: find.text(text),
+      matching: find.byType(FadeThroughSwitcher),
+    );
+    expect(switched('Tous les jours, sans repos.'), findsOneWidget);
+    final haptics = recordHaptics(tester);
+    await tester.tap(find.bySemanticsLabel('samedi, actif'));
+    await tester.pumpAndSettle();
+    expect(haptics, ['HapticFeedbackType.selectionClick']);
+    await tapText(tester, 'X fois / semaine');
+    expect(switched('fois par semaine'), findsOneWidget);
   });
 
   testApp('the search text becomes the name', (tester, db) async {
@@ -154,7 +248,7 @@ void main() {
   testApp('Modifier edits the habit in place', (tester, db) async {
     await tester.runAsync(() => HabitRepository(db).createHabit(yesNo('Lire')));
     await pumpApp(tester, db, locale: 'fr');
-    await tester.longPress(find.text('Lire'));
+    await tester.longPress(find.bySemanticsLabel('Lire, ouvrir'));
     await tester.pumpAndSettle();
     await tapText(tester, 'Modifier l’habitude');
     expect(find.text('2/3'), findsOneWidget);

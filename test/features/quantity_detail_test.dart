@@ -4,6 +4,8 @@ import 'package:little_steps/core/database/app_database.dart';
 import 'package:little_steps/core/database/habit_repository.dart';
 import 'package:little_steps/core/domain/day.dart';
 import 'package:little_steps/core/domain/habit.dart';
+import 'package:little_steps/core/feedback/feedback.dart';
+import 'package:little_steps/core/widgets/rolling_text.dart';
 
 import '../helpers.dart';
 
@@ -91,6 +93,48 @@ void main() {
     await tester.tap(find.bySemanticsLabel('Retirer 25 cl'));
     await settle(tester);
     expect(await todayValue(tester, db), 0);
+  });
+
+  testApp('the big amount rolls', (tester, db) async {
+    await openDetail(
+      tester,
+      db,
+      quantity('Boire de l’eau', QuantityUnit.liters),
+      values: {0: 1250},
+    );
+    expect(
+      find.byWidgetPredicate((w) => w is RollingText && w.text == '1,25'),
+      findsOneWidget,
+    );
+  });
+
+  testApp('a step pops, reaching the goal celebrates once', (tester, db) async {
+    await openDetail(
+      tester,
+      db,
+      quantity('Boire de l’eau', QuantityUnit.liters),
+      values: {0: 1500},
+    );
+    await addOtherHabit(tester, db);
+    final haptics = recordHaptics(tester);
+    final plus = find.widgetWithText(FilledButton, '+25 cl');
+    await tester.tap(plus);
+    await settle(tester);
+    expect(haptics, ['HapticFeedbackType.lightImpact']);
+    expect(sounds.played, [Sound.pop]);
+    await tester.tap(plus);
+    await settle(tester);
+    expect(haptics.last, 'HapticFeedbackType.mediumImpact');
+    expect(sounds.played, [Sound.pop, Sound.done]);
+    await tester.tap(find.bySemanticsLabel('Retirer 25 cl'));
+    await settle(tester);
+    await tester.tap(find.widgetWithText(FilledButton, '+25 cl'));
+    await settle(tester);
+    expect(haptics.skip(2), [
+      'HapticFeedbackType.lightImpact',
+      'HapticFeedbackType.lightImpact',
+    ]);
+    expect(sounds.played, [Sound.pop, Sound.done]);
   });
 
   testApp('switching to glasses keeps the amount', (tester, db) async {

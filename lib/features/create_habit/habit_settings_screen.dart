@@ -5,13 +5,16 @@ import 'package:intl/intl.dart';
 
 import '../../core/domain/day.dart';
 import '../../core/domain/habit.dart';
+import '../../core/feedback/feedback.dart';
 import '../../core/icons/habit_icons.dart';
 import '../../core/icons/phosphor_icons.dart';
 import '../../core/l10n/formatters.dart';
 import '../../core/l10n/l10n.dart';
 import '../../core/router/app_router.dart';
 import '../../core/theme/sorbet_colors.dart';
+import '../../core/widgets/press_scale.dart';
 import '../../core/widgets/primary_button.dart';
+import '../../core/widgets/rolling_text.dart';
 import '../../core/widgets/round_icon_button.dart';
 import '../../core/widgets/segmented_strip.dart';
 import '../../core/widgets/sorbet_card.dart';
@@ -41,6 +44,12 @@ class _HabitSettingsScreenState extends ConsumerState<HabitSettingsScreen> {
 
   void _update(HabitDraft Function(HabitDraft) change) =>
       ref.read(draftProvider.notifier).update(change);
+
+  /// A selection or a step of the goal: a tick, then the change.
+  void _pick(HabitDraft Function(HabitDraft) change) {
+    ref.read(feedbackProvider).haptic(Haptic.tick);
+    _update(change);
+  }
 
   @override
   Widget build(BuildContext context) {
@@ -77,7 +86,7 @@ class _HabitSettingsScreenState extends ConsumerState<HabitSettingsScreen> {
               _Preview(
                 draft: draft,
                 onIconTap: () =>
-                    _update((d) => d.copyWith(icon: _nextIcon(d.icon))),
+                    _pick((d) => d.copyWith(icon: _nextIcon(d.icon))),
               ),
               const SizedBox(height: 12),
               TextField(
@@ -102,14 +111,14 @@ class _HabitSettingsScreenState extends ConsumerState<HabitSettingsScreen> {
               const SizedBox(height: 12),
               _ColorGrid(
                 selected: draft.color,
-                onSelected: (color) => _update((d) => d.copyWith(color: color)),
+                onSelected: (color) => _pick((d) => d.copyWith(color: color)),
               ),
             ],
           ),
         ),
         if (hasGoal) ...[
           const SizedBox(height: 12),
-          _GoalCard(draft: draft, onChange: _update),
+          _GoalCard(draft: draft, onChange: _update, onStep: _pick),
         ],
         if (draft.type == HabitType.quantity) ...[
           const SizedBox(height: 12),
@@ -184,23 +193,25 @@ class _Preview extends StatelessWidget {
                     button: true,
                     label: l10n.changeIcon,
                     excludeSemantics: true,
-                    child: InkResponse(
-                      onTap: onIconTap,
-                      radius: 24,
-                      child: SizedBox.square(
-                        dimension: 48,
-                        child: Center(
-                          child: Container(
-                            width: 40,
-                            height: 40,
-                            decoration: BoxDecoration(
-                              shape: BoxShape.circle,
-                              color: c.iconHalo,
-                            ),
-                            child: Icon(
-                              habitIcon(draft.icon),
-                              size: 20,
-                              color: c.ink,
+                    child: PressScale(
+                      child: InkResponse(
+                        onTap: onIconTap,
+                        radius: 24,
+                        child: SizedBox.square(
+                          dimension: 48,
+                          child: Center(
+                            child: Container(
+                              width: 40,
+                              height: 40,
+                              decoration: BoxDecoration(
+                                shape: BoxShape.circle,
+                                color: c.iconHalo,
+                              ),
+                              child: Icon(
+                                habitIcon(draft.icon),
+                                size: 20,
+                                color: c.ink,
+                              ),
                             ),
                           ),
                         ),
@@ -297,6 +308,7 @@ class _ColorGrid extends StatelessWidget {
                           onTap: () => onSelected(color),
                           child: AnimatedContainer(
                             duration: context.motion(Motion.fast),
+                            curve: Motion.curve,
                             height: 28,
                             decoration: BoxDecoration(
                               color: c.habit[color],
@@ -319,10 +331,17 @@ class _ColorGrid extends StatelessWidget {
 }
 
 class _GoalCard extends StatelessWidget {
-  const _GoalCard({required this.draft, required this.onChange});
+  const _GoalCard({
+    required this.draft,
+    required this.onChange,
+    required this.onStep,
+  });
 
   final HabitDraft draft;
   final void Function(HabitDraft Function(HabitDraft)) onChange;
+
+  /// −/+ on the goal, with their tick.
+  final void Function(HabitDraft Function(HabitDraft)) onStep;
 
   @override
   Widget build(BuildContext context) {
@@ -374,7 +393,7 @@ class _GoalCard extends StatelessWidget {
                 size: 50,
                 iconSize: 20,
                 label: l10n.decreaseGoal,
-                onTap: () => onChange((d) => d.decGoal()),
+                onTap: () => onStep((d) => d.decGoal()),
               ),
               Expanded(
                 child: Column(
@@ -385,7 +404,11 @@ class _GoalCard extends StatelessWidget {
                       textBaseline: TextBaseline.alphabetic,
                       spacing: 5,
                       children: [
-                        Text(fmt.number(shown), style: text.displaySmall),
+                        RollingText(
+                          fmt.number(shown),
+                          value: shown,
+                          style: text.displaySmall,
+                        ),
                         Flexible(
                           child: Text(
                             word,
@@ -414,7 +437,7 @@ class _GoalCard extends StatelessWidget {
                 size: 50,
                 iconSize: 20,
                 label: l10n.increaseGoal,
-                onTap: () => onChange((d) => d.incGoal()),
+                onTap: () => onStep((d) => d.incGoal()),
               ),
             ],
           ),
