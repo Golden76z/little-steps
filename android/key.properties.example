@@ -1,0 +1,6 @@
+# Copy to android/key.properties (git-ignored) and fill in.
+# storeFile: absolute, or relative to android/app/.
+storePassword=
+keyPassword=
+keyAlias=upload
+storeFile=/home/you/keys/little-steps-upload.jks

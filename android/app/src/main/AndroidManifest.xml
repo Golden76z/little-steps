@@ -3,7 +3,7 @@
     <!-- Reminders are rescheduled after a reboot. -->
     <uses-permission android:name="android.permission.RECEIVE_BOOT_COMPLETED"/>
     <application
-        android:label="little_steps"
+        android:label="Little Steps"
         android:name="${applicationName}"
         android:icon="@mipmap/ic_launcher">
         <activity

@@ -1,4 +1,4 @@
-package dev.golden.little_steps
+package dev.golden.littlesteps
 
 import io.flutter.embedding.android.FlutterActivity
 

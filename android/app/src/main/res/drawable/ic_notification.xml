@@ -1,0 +1,14 @@
+<?xml version="1.0" encoding="utf-8"?>
+<!-- Status-bar icon: a white four-pointed sparkle, as in the app. -->
+<vector xmlns:android="http://schemas.android.com/apk/res/android"
+    android:width="24dp"
+    android:height="24dp"
+    android:viewportWidth="24"
+    android:viewportHeight="24">
+    <path
+        android:fillColor="#FFFFFFFF"
+        android:pathData="M10,2C10.5,7 12,8.5 17,9C12,9.5 10.5,11 10,16C9.5,11 8,9.5 3,9C8,8.5 9.5,7 10,2Z" />
+    <path
+        android:fillColor="#FFFFFFFF"
+        android:pathData="M18,13C18.3,15.6 18.9,16.2 21.5,16.5C18.9,16.8 18.3,17.4 18,20C17.7,17.4 17.1,16.8 14.5,16.5C17.1,16.2 17.7,15.6 18,13Z" />
+</vector>

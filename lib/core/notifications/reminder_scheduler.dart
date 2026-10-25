@@ -6,6 +6,7 @@ import 'package:timezone/data/latest.dart' as tz;
 import 'package:timezone/timezone.dart' as tz;
 
 import '../router/app_router.dart';
+import '../theme/sorbet_colors.dart';
 
 /// A notification ready to schedule: localized texts and the route it opens.
 final class ScheduledNotification {
@@ -63,8 +64,8 @@ class LocalReminderScheduler implements ReminderScheduler {
     }
     await _plugin.initialize(
       settings: const InitializationSettings(
-        // ponytail: the launcher icon; a monochrome status-bar icon would look cleaner.
-        android: AndroidInitializationSettings('@mipmap/ic_launcher'),
+        // White sparkle, android/app/src/main/res/drawable/ic_notification.xml.
+        android: AndroidInitializationSettings('@drawable/ic_notification'),
         iOS: DarwinInitializationSettings(
           requestAlertPermission: false,
           requestBadgePermission: false,
@@ -111,6 +112,8 @@ class LocalReminderScheduler implements ReminderScheduler {
         'reminders',
         channelName,
         channelDescription: channelDescription,
+        // Tints the white sparkle in the notification shade.
+        color: SorbetColors.light.accent,
       ),
       iOS: const DarwinNotificationDetails(),
     );

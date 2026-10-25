@@ -4,6 +4,8 @@ import 'package:drift_flutter/drift_flutter.dart';
 import '../domain/day.dart';
 import '../domain/habit.dart';
 
+import 'app_database.steps.dart';
+
 part 'app_database.g.dart';
 
 // Enums are stored by name (textEnum) so reordering them never corrupts data.
@@ -115,9 +117,10 @@ class AppDatabase extends _$AppDatabase {
 
   @override
   MigrationStrategy get migration => MigrationStrategy(
-    onUpgrade: (m, from, to) async {
-      if (from < 2) await m.createTable(settings);
-    },
+    // Each version bump: `dart run drift_dev make-migrations`, then add a step.
+    onUpgrade: stepByStep(
+      from1To2: (m, schema) => m.createTable(schema.settings),
+    ),
     beforeOpen: (details) => customStatement('PRAGMA foreign_keys = ON'),
   );
 }
