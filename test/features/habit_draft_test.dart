@@ -164,8 +164,8 @@ void main() {
     });
   });
 
-  test('free plan allows 5 active habits', () {
-    expect(canCreateHabit(4), isTrue);
-    expect(canCreateHabit(5), isFalse);
+  test('the free v1 has no habit limit (Premium is not sold yet)', () {
+    expect(canCreateHabit(5), isTrue);
+    expect(canCreateHabit(50), isTrue);
   });
 }

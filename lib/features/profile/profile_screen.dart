@@ -20,6 +20,7 @@ import '../../core/widgets/round_icon_button.dart';
 import '../../core/widgets/sorbet_card.dart';
 import '../../core/widgets/sorbet_switch.dart';
 import '../../core/widgets/xp_avatar.dart';
+import '../create_habit/habit_draft.dart';
 import 'data_sheet.dart';
 
 const _firstNameKey = 'firstName';
@@ -99,8 +100,10 @@ class ProfileScreen extends ConsumerWidget {
           padding: const EdgeInsets.fromLTRB(20, 16, 20, 0),
           child: Column(
             children: [
-              const _PremiumCard(),
-              const SizedBox(height: 12),
+              if (premiumOffered) ...[
+                const _PremiumCard(),
+                const SizedBox(height: 12),
+              ],
               SorbetCard(
                 padding: const EdgeInsets.symmetric(
                   horizontal: 14,
@@ -127,15 +130,16 @@ class ProfileScreen extends ConsumerWidget {
                       label: l10n.rowOrganize,
                       onTap: () => context.push(Routes.organize),
                     ),
-                    ProfileRow(
-                      leading: ProfileIconBox(
-                        color: c.tones[HabitColor.pink]!.light,
-                        icon: PhosphorIconsRegular.palette,
+                    if (premiumOffered)
+                      ProfileRow(
+                        leading: ProfileIconBox(
+                          color: c.tones[HabitColor.pink]!.light,
+                          icon: PhosphorIconsRegular.palette,
+                        ),
+                        label: l10n.rowTheme,
+                        value: l10n.themeSorbet,
+                        onTap: () => context.push(Routes.premium),
                       ),
-                      label: l10n.rowTheme,
-                      value: l10n.themeSorbet,
-                      onTap: () => context.push(Routes.premium),
-                    ),
                     ProfileRow(
                       leading: ProfileIconBox(
                         color: c.habit[HabitColor.lilac]!,

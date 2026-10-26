@@ -13,6 +13,7 @@ import '../../core/l10n/l10n.dart';
 import '../../core/theme/sorbet_colors.dart';
 import '../../core/time/today_provider.dart';
 import '../../core/widgets/sorbet_sheet.dart';
+import '../create_habit/habit_draft.dart';
 import 'profile_screen.dart';
 
 /// Hands a file to the system share sheet; swapped in tests.
@@ -171,12 +172,14 @@ class _DataSheet extends StatelessWidget {
           onTap: () => Navigator.pop(context, _DataAction.import),
           last: true,
         ),
-        const SizedBox(height: 8),
-        Text(
-          l10n.csvPremium,
-          style: Theme.of(context).textTheme.bodySmall!
-              .copyWith(color: c.muted),
-        ),
+        if (premiumOffered) ...[
+          const SizedBox(height: 8),
+          Text(
+            l10n.csvPremium,
+            style: Theme.of(context).textTheme.bodySmall!
+                .copyWith(color: c.muted),
+          ),
+        ],
       ],
     );
   }

@@ -234,7 +234,7 @@ void main() {
     expect(find.text('08:00'), findsNothing);
   });
 
-  testApp('beyond 5 habits the + opens Premium', (tester, db) async {
+  testApp('beyond 5 habits the + still opens the creation', (tester, db) async {
     final repo = HabitRepository(db);
     await tester.runAsync(() async {
       for (var i = 0; i < 5; i++) {
@@ -243,7 +243,8 @@ void main() {
     });
     await pumpApp(tester, db, locale: 'fr');
     await openCreate(tester);
-    expect(find.text('Little Steps Premium'), findsOneWidget);
+    expect(find.text('Little Steps Premium'), findsNothing);
+    expect(find.text('Nouvelle habitude'), findsOneWidget);
   });
 
   testApp('Modifier edits the habit in place', (tester, db) async {

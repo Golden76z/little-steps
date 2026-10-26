@@ -3,10 +3,15 @@ import 'package:flutter/foundation.dart';
 import '../../core/domain/day.dart';
 import '../../core/domain/habit.dart';
 
+/// Premium is not sold yet: v1 is entirely free, its entry points (banner,
+/// theme row, CSV note, habit limit) stay hidden until billing exists.
+const premiumOffered = false;
+
 const freeHabitLimit = 5;
 
 /// Free plan: [freeHabitLimit] active habits; beyond, Premium.
-bool canCreateHabit(int activeHabits) => activeHabits < freeHabitLimit;
+bool canCreateHabit(int activeHabits) =>
+    !premiumOffered || activeHabits < freeHabitLimit;
 
 /// Popular habits of P1 (and the E1 ideas), with their settings.
 enum Preset { water, read, draw, run, vitamins, gratitude, meditate }

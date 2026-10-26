@@ -65,7 +65,7 @@ void main() {
       ],
     );
     await openSheet(tester);
-    expect(find.text('L’export CSV reste réservé à Premium.'), findsOneWidget);
+    expect(find.text('L’export CSV reste réservé à Premium.'), findsNothing);
     await tester.tap(find.text('Exporter (JSON)'));
     await settle(tester);
     final (name, contents) = shared.single;

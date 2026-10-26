@@ -95,25 +95,18 @@ void main() {
   testApp('settings rows show their values', (tester, db) async {
     await openProfile(tester, db);
     expect(find.text('07:30 · 21:00'), findsOneWidget);
-    expect(find.text('Sorbet'), findsOneWidget);
     expect(find.text('JSON'), findsOneWidget);
     expect(find.text('Bientôt'), findsOneWidget);
     expect(find.text('03:00'), findsOneWidget);
   });
 
-  for (final label in ['Thème', 'Essayer']) {
-    testApp('$label opens Premium', (tester, db) async {
-      await openProfile(tester, db);
-      if (label != 'Essayer') {
-        // Scroll the last rows clear of the floating bar.
-        await tester.drag(find.text('Sorbet'), const Offset(0, -300));
-        await tester.pumpAndSettle();
-      }
-      await tester.tap(find.text(label));
-      await tester.pumpAndSettle();
-      expect(find.text('Little Steps Premium'), findsOneWidget);
-    });
-  }
+  testApp('the free v1 shows no Premium entry point', (tester, db) async {
+    await openProfile(tester, db);
+    expect(find.text('Passe à Premium'), findsNothing);
+    expect(find.text('Essayer'), findsNothing);
+    // The only theme: no row leading to a locked choice.
+    expect(find.text('Thème'), findsNothing);
+  });
 
   testApp('the dark mode switch is off and disabled', (tester, db) async {
     await openProfile(tester, db);
@@ -176,7 +169,7 @@ void main() {
   testApp('the day start moves to 5 am', (tester, db) async {
     await openProfile(tester, db);
     // Scroll the last row clear of the floating bar.
-    await tester.drag(find.text('Sorbet'), const Offset(0, -300));
+    await tester.drag(find.text('JSON'), const Offset(0, -300));
     await tester.pumpAndSettle();
     await tester.tap(find.text('Début de la journée'));
     await tester.pumpAndSettle();
