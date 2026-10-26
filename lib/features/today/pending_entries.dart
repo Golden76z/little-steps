@@ -20,6 +20,7 @@ class PendingEntries extends Notifier<Map<(int, Day), double>> {
 
   @override
   Map<(int, Day), double> build() {
+    ref.watch(dataReplacedProvider);
     ref.listen(historyProvider, (_, next) {
       if (next.value case final history?) _confirm(history);
     });

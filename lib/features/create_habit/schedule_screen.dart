@@ -282,8 +282,9 @@ class _ActiveDays extends StatelessWidget {
           container: true,
           child: ClipRRect(
             borderRadius: BorderRadius.circular(16),
+            // No spacing: each cell's target takes half of the 1 px gap on both
+            // sides, so seven fit 48 px wide on a 412 dp phone.
             child: Row(
-              spacing: 1,
               children: [
                 for (final d in week)
                   Expanded(
@@ -328,10 +329,12 @@ class _ActiveDays extends StatelessWidget {
       label: on ? l10n.dayActive(name) : l10n.dayRest(name),
       excludeSemantics: true,
       child: GestureDetector(
+        behavior: HitTestBehavior.opaque,
         onTap: () => onChange((draft) => draft.toggleDay(d.weekday)),
         child: AnimatedContainer(
           duration: context.motion(Motion.fast),
           curve: Motion.curve,
+          margin: const EdgeInsets.symmetric(horizontal: 0.5),
           constraints: const BoxConstraints(minHeight: 58),
           decoration: BoxDecoration(
             color: on ? c.dayOn : c.cellOff,

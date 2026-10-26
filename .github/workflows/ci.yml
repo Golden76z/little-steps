@@ -1,0 +1,50 @@
+name: CI
+
+on:
+  push:
+    branches: [main]
+  pull_request:
+    branches: [main]
+
+jobs:
+  build:
+    runs-on: ubuntu-latest
+    timeout-minutes: 30
+    steps:
+      - uses: actions/checkout@v4
+
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+
+      - uses: subosito/flutter-action@v2
+        with:
+          channel: stable
+          flutter-version: 3.47.2
+          cache: true
+
+      - run: flutter pub get
+
+      - name: Generated drift code is up to date
+        run: |
+          dart run build_runner build -d
+          git diff --exit-code
+
+      - name: Generated translations are up to date
+        run: |
+          flutter gen-l10n
+          git diff --exit-code
+
+      - run: dart format --output=none --set-exit-if-changed lib test integration_test
+
+      - run: flutter analyze
+
+      - run: flutter test
+
+      - run: flutter build apk --debug
+
+      - uses: actions/upload-artifact@v4
+        with:
+          name: little-steps-debug-apk
+          path: build/app/outputs/flutter-apk/app-debug.apk

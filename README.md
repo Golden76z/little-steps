@@ -13,3 +13,5 @@ flutter pub get
 flutter analyze && flutter test
 flutter run
 ```
+
+Tests unitaires, tests d'intégration sur appareil et CI : [`docs/testing.md`](docs/testing.md).

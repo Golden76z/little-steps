@@ -163,6 +163,18 @@ class $HabitsTable extends Habits with TableInfo<$HabitsTable, HabitRow> {
         type: DriftSqlType.int,
         requiredDuringInsert: false,
       ).withConverter<Day?>($HabitsTable.$converterarchivedOnn);
+  static const VerificationMeta _positionMeta = const VerificationMeta(
+    'position',
+  );
+  @override
+  late final GeneratedColumn<int> position = GeneratedColumn<int>(
+    'position',
+    aliasedName,
+    false,
+    type: DriftSqlType.int,
+    requiredDuringInsert: false,
+    defaultValue: const Constant(0),
+  );
   @override
   List<GeneratedColumn> get $columns => [
     id,
@@ -181,6 +193,7 @@ class $HabitsTable extends Habits with TableInfo<$HabitsTable, HabitRow> {
     streakDangerAlert,
     createdOn,
     archivedOn,
+    position,
   ];
   @override
   String get aliasedName => _alias ?? actualTableName;
@@ -250,6 +263,12 @@ class $HabitsTable extends Habits with TableInfo<$HabitsTable, HabitRow> {
       );
     } else if (isInserting) {
       context.missing(_streakDangerAlertMeta);
+    }
+    if (data.containsKey('position')) {
+      context.handle(
+        _positionMeta,
+        position.isAcceptableOrUnknown(data['position']!, _positionMeta),
+      );
     }
     return context;
   }
@@ -342,6 +361,10 @@ class $HabitsTable extends Habits with TableInfo<$HabitsTable, HabitRow> {
           data['${effectivePrefix}archived_on'],
         ),
       ),
+      position: attachedDatabase.typeMapping.read(
+        DriftSqlType.int,
+        data['${effectivePrefix}position'],
+      )!,
     );
   }
 
@@ -391,6 +414,9 @@ class HabitRow extends DataClass implements Insertable<HabitRow> {
   final bool streakDangerAlert;
   final Day createdOn;
   final Day? archivedOn;
+
+  /// Place in the user's order; ties fall back to the id.
+  final int position;
   const HabitRow({
     required this.id,
     required this.name,
@@ -408,6 +434,7 @@ class HabitRow extends DataClass implements Insertable<HabitRow> {
     required this.streakDangerAlert,
     required this.createdOn,
     this.archivedOn,
+    required this.position,
   });
   @override
   Map<String, Expression> toColumns(bool nullToAbsent) {
@@ -460,6 +487,7 @@ class HabitRow extends DataClass implements Insertable<HabitRow> {
         $HabitsTable.$converterarchivedOnn.toSql(archivedOn),
       );
     }
+    map['position'] = Variable<int>(position);
     return map;
   }
 
@@ -483,6 +511,7 @@ class HabitRow extends DataClass implements Insertable<HabitRow> {
       archivedOn: archivedOn == null && nullToAbsent
           ? const Value.absent()
           : Value(archivedOn),
+      position: Value(position),
     );
   }
 
@@ -518,6 +547,7 @@ class HabitRow extends DataClass implements Insertable<HabitRow> {
       streakDangerAlert: serializer.fromJson<bool>(json['streakDangerAlert']),
       createdOn: serializer.fromJson<Day>(json['createdOn']),
       archivedOn: serializer.fromJson<Day?>(json['archivedOn']),
+      position: serializer.fromJson<int>(json['position']),
     );
   }
   @override
@@ -550,6 +580,7 @@ class HabitRow extends DataClass implements Insertable<HabitRow> {
       'streakDangerAlert': serializer.toJson<bool>(streakDangerAlert),
       'createdOn': serializer.toJson<Day>(createdOn),
       'archivedOn': serializer.toJson<Day?>(archivedOn),
+      'position': serializer.toJson<int>(position),
     };
   }
 
@@ -570,6 +601,7 @@ class HabitRow extends DataClass implements Insertable<HabitRow> {
     bool? streakDangerAlert,
     Day? createdOn,
     Value<Day?> archivedOn = const Value.absent(),
+    int? position,
   }) => HabitRow(
     id: id ?? this.id,
     name: name ?? this.name,
@@ -587,6 +619,7 @@ class HabitRow extends DataClass implements Insertable<HabitRow> {
     streakDangerAlert: streakDangerAlert ?? this.streakDangerAlert,
     createdOn: createdOn ?? this.createdOn,
     archivedOn: archivedOn.present ? archivedOn.value : this.archivedOn,
+    position: position ?? this.position,
   );
   HabitRow copyWithCompanion(HabitsCompanion data) {
     return HabitRow(
@@ -616,6 +649,7 @@ class HabitRow extends DataClass implements Insertable<HabitRow> {
       archivedOn: data.archivedOn.present
           ? data.archivedOn.value
           : this.archivedOn,
+      position: data.position.present ? data.position.value : this.position,
     );
   }
 
@@ -637,7 +671,8 @@ class HabitRow extends DataClass implements Insertable<HabitRow> {
           ..write('reminders: $reminders, ')
           ..write('streakDangerAlert: $streakDangerAlert, ')
           ..write('createdOn: $createdOn, ')
-          ..write('archivedOn: $archivedOn')
+          ..write('archivedOn: $archivedOn, ')
+          ..write('position: $position')
           ..write(')'))
         .toString();
   }
@@ -660,6 +695,7 @@ class HabitRow extends DataClass implements Insertable<HabitRow> {
     streakDangerAlert,
     createdOn,
     archivedOn,
+    position,
   );
   @override
   bool operator ==(Object other) =>
@@ -680,7 +716,8 @@ class HabitRow extends DataClass implements Insertable<HabitRow> {
           other.reminders == this.reminders &&
           other.streakDangerAlert == this.streakDangerAlert &&
           other.createdOn == this.createdOn &&
-          other.archivedOn == this.archivedOn);
+          other.archivedOn == this.archivedOn &&
+          other.position == this.position);
 }
 
 class HabitsCompanion extends UpdateCompanion<HabitRow> {
@@ -700,6 +737,7 @@ class HabitsCompanion extends UpdateCompanion<HabitRow> {
   final Value<bool> streakDangerAlert;
   final Value<Day> createdOn;
   final Value<Day?> archivedOn;
+  final Value<int> position;
   const HabitsCompanion({
     this.id = const Value.absent(),
     this.name = const Value.absent(),
@@ -717,6 +755,7 @@ class HabitsCompanion extends UpdateCompanion<HabitRow> {
     this.streakDangerAlert = const Value.absent(),
     this.createdOn = const Value.absent(),
     this.archivedOn = const Value.absent(),
+    this.position = const Value.absent(),
   });
   HabitsCompanion.insert({
     this.id = const Value.absent(),
@@ -735,6 +774,7 @@ class HabitsCompanion extends UpdateCompanion<HabitRow> {
     required bool streakDangerAlert,
     required Day createdOn,
     this.archivedOn = const Value.absent(),
+    this.position = const Value.absent(),
   }) : name = Value(name),
        type = Value(type),
        color = Value(color),
@@ -765,6 +805,7 @@ class HabitsCompanion extends UpdateCompanion<HabitRow> {
     Expression<bool>? streakDangerAlert,
     Expression<int>? createdOn,
     Expression<int>? archivedOn,
+    Expression<int>? position,
   }) {
     return RawValuesInsertable({
       if (id != null) 'id': id,
@@ -783,6 +824,7 @@ class HabitsCompanion extends UpdateCompanion<HabitRow> {
       if (streakDangerAlert != null) 'streak_danger_alert': streakDangerAlert,
       if (createdOn != null) 'created_on': createdOn,
       if (archivedOn != null) 'archived_on': archivedOn,
+      if (position != null) 'position': position,
     });
   }
 
@@ -803,6 +845,7 @@ class HabitsCompanion extends UpdateCompanion<HabitRow> {
     Value<bool>? streakDangerAlert,
     Value<Day>? createdOn,
     Value<Day?>? archivedOn,
+    Value<int>? position,
   }) {
     return HabitsCompanion(
       id: id ?? this.id,
@@ -821,6 +864,7 @@ class HabitsCompanion extends UpdateCompanion<HabitRow> {
       streakDangerAlert: streakDangerAlert ?? this.streakDangerAlert,
       createdOn: createdOn ?? this.createdOn,
       archivedOn: archivedOn ?? this.archivedOn,
+      position: position ?? this.position,
     );
   }
 
@@ -893,6 +937,9 @@ class HabitsCompanion extends UpdateCompanion<HabitRow> {
         $HabitsTable.$converterarchivedOnn.toSql(archivedOn.value),
       );
     }
+    if (position.present) {
+      map['position'] = Variable<int>(position.value);
+    }
     return map;
   }
 
@@ -914,7 +961,8 @@ class HabitsCompanion extends UpdateCompanion<HabitRow> {
           ..write('reminders: $reminders, ')
           ..write('streakDangerAlert: $streakDangerAlert, ')
           ..write('createdOn: $createdOn, ')
-          ..write('archivedOn: $archivedOn')
+          ..write('archivedOn: $archivedOn, ')
+          ..write('position: $position')
           ..write(')'))
         .toString();
   }
@@ -1955,6 +2003,7 @@ typedef $$HabitsTableCreateCompanionBuilder = HabitsCompanion Function({
   required bool streakDangerAlert,
   required Day createdOn,
   Value<Day?> archivedOn,
+  Value<int> position,
 });
 typedef $$HabitsTableUpdateCompanionBuilder = HabitsCompanion Function({
   Value<int> id,
@@ -1973,6 +2022,7 @@ typedef $$HabitsTableUpdateCompanionBuilder = HabitsCompanion Function({
   Value<bool> streakDangerAlert,
   Value<Day> createdOn,
   Value<Day?> archivedOn,
+  Value<int> position,
 });
 
 final class $$HabitsTableReferences
@@ -2116,6 +2166,11 @@ class $$HabitsTableFilterComposer
         builder: (column) => ColumnWithTypeConverterFilters(column),
       );
 
+  ColumnFilters<int> get position => $composableBuilder(
+    column: $table.position,
+    builder: (column) => ColumnFilters(column),
+  );
+
   Expression<bool> pausesRefs(
     Expression<bool> Function($$PausesTableFilterComposer f) f,
   ) {
@@ -2255,6 +2310,11 @@ class $$HabitsTableOrderingComposer
     column: $table.archivedOn,
     builder: (column) => ColumnOrderings(column),
   );
+
+  ColumnOrderings<int> get position => $composableBuilder(
+    column: $table.position,
+    builder: (column) => ColumnOrderings(column),
+  );
 }
 
 class $$HabitsTableAnnotationComposer
@@ -2326,6 +2386,9 @@ class $$HabitsTableAnnotationComposer
         column: $table.archivedOn,
         builder: (column) => column,
       );
+
+  GeneratedColumn<int> get position =>
+      $composableBuilder(column: $table.position, builder: (column) => column);
 
   Expression<T> pausesRefs<T extends Object>(
     Expression<T> Function($$PausesTableAnnotationComposer a) f,
@@ -2422,6 +2485,7 @@ class $$HabitsTableTableManager
                 Value<bool> streakDangerAlert = const Value.absent(),
                 Value<Day> createdOn = const Value.absent(),
                 Value<Day?> archivedOn = const Value.absent(),
+                Value<int> position = const Value.absent(),
               }) => HabitsCompanion(
                 id: id,
                 name: name,
@@ -2439,6 +2503,7 @@ class $$HabitsTableTableManager
                 streakDangerAlert: streakDangerAlert,
                 createdOn: createdOn,
                 archivedOn: archivedOn,
+                position: position,
               ),
           createCompanionCallback:
               ({
@@ -2458,6 +2523,7 @@ class $$HabitsTableTableManager
                 required bool streakDangerAlert,
                 required Day createdOn,
                 Value<Day?> archivedOn = const Value.absent(),
+                Value<int> position = const Value.absent(),
               }) => HabitsCompanion.insert(
                 id: id,
                 name: name,
@@ -2475,6 +2541,7 @@ class $$HabitsTableTableManager
                 streakDangerAlert: streakDangerAlert,
                 createdOn: createdOn,
                 archivedOn: archivedOn,
+                position: position,
               ),
           withReferenceMapper: (p0) => p0
               .map(

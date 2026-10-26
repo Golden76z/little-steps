@@ -20,6 +20,7 @@ import '../../core/widgets/round_icon_button.dart';
 import '../../core/widgets/sorbet_card.dart';
 import '../../core/widgets/sorbet_switch.dart';
 import '../../core/widgets/xp_avatar.dart';
+import 'data_sheet.dart';
 
 const _firstNameKey = 'firstName';
 
@@ -120,6 +121,14 @@ class ProfileScreen extends ConsumerWidget {
                     ),
                     ProfileRow(
                       leading: ProfileIconBox(
+                        color: c.habit[HabitColor.lavender]!,
+                        icon: PhosphorIconsRegular.arrowsDownUp,
+                      ),
+                      label: l10n.rowOrganize,
+                      onTap: () => context.push(Routes.organize),
+                    ),
+                    ProfileRow(
+                      leading: ProfileIconBox(
                         color: c.tones[HabitColor.pink]!.light,
                         icon: PhosphorIconsRegular.palette,
                       ),
@@ -192,8 +201,9 @@ class ProfileScreen extends ConsumerWidget {
                         icon: PhosphorIconsRegular.export,
                       ),
                       label: l10n.rowExport,
-                      value: l10n.csv,
-                      onTap: () => context.push(Routes.premium),
+                      // Free as JSON; CSV stays a Premium feature.
+                      value: l10n.json,
+                      onTap: () => showDataSheet(context, ref),
                     ),
                     ProfileRow(
                       leading: ProfileIconBox(

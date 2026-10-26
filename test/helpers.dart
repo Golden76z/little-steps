@@ -2,6 +2,7 @@ import 'package:drift/native.dart';
 import 'package:flutter/services.dart';
 import 'package:flutter/material.dart' hide Badge;
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_riverpod/misc.dart' show Override;
 import 'package:flutter_test/flutter_test.dart';
 import 'package:little_steps/app.dart';
 import 'package:little_steps/core/database/app_database.dart';
@@ -70,6 +71,7 @@ Future<void> pumpApp(
   WidgetTester tester,
   AppDatabase db, {
   String locale = 'en',
+  List<Override> overrides = const [],
 }) async {
   // A common Android phone (412 × 915 dp) rather than the 800 × 600 default.
   tester.view.physicalSize = const Size(412, 915);
@@ -84,6 +86,7 @@ Future<void> pumpApp(
           scheduler = FakeScheduler(),
         ),
         soundPlayerProvider.overrideWithValue(sounds = FakeSoundPlayer()),
+        ...overrides,
       ],
       child: LittleStepsApp(locale: Locale(locale)),
     ),

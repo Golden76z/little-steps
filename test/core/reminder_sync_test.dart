@@ -51,6 +51,22 @@ void main() {
     expect(scheduler.scheduled.first.at, DateTime(2026, 10, 21, 20));
   });
 
+  testApp('resuming a pause brings its reminders back', (tester, db) async {
+    final repo = HabitRepository(db);
+    final today = Day(2026, 10, 20);
+    final id = (await tester.runAsync(() async {
+      final id = await repo.createHabit(reading());
+      await repo.pauseHabit(id, Pause(today.addDays(-2), today.addDays(30)));
+      return id;
+    }))!;
+    await pumpApp(tester, db, locale: 'fr');
+    await sync(tester);
+    expect(scheduler.scheduled, isEmpty);
+    await tester.runAsync(() => repo.resumeHabit(id, today));
+    await sync(tester);
+    expect(scheduler.scheduled.first.at, DateTime(2026, 10, 20, 20));
+  });
+
   testApp('the streak alert lists the habits at risk', (tester, db) async {
     await tester.runAsync(() async {
       final repo = HabitRepository(db);

@@ -1199,7 +1199,7 @@
       }
     }
   },
-  "rowExport": "Export my data",
+  "rowExport": "Back up my data",
   "csv": "CSV",
   "rowDayStart": "Day starts at",
   "dayStartHint": "Until this hour, the night still counts for the day before.",
@@ -1253,6 +1253,52 @@
     "placeholders": {
       "xp": {
         "type": "int"
+      }
+    }
+  },
+  "rowOrganize": "Organize my habits",
+  "organizeHint": "Drag a habit to move it",
+  "moveHabit": "Move {name}",
+  "@moveHabit": {
+    "description": "Accessibility label of a habit's drag handle",
+    "placeholders": {
+      "name": {
+        "type": "String"
+      }
+    }
+  },
+  "json": "JSON",
+  "dataSheetTitle": "My data",
+  "exportJson": "Export (JSON)",
+  "importData": "Import",
+  "csvPremium": "CSV export stays a Premium feature.",
+  "importConfirmTitle": "Replace all your data?",
+  "importConfirmBody": "Your habits and history on this phone will be replaced by the file’s. This can’t be undone.",
+  "importReplace": "Replace",
+  "importInvalid": "This file isn’t a Little Steps backup.",
+  "importDone": "Data imported",
+  "importFailed": "Import failed, nothing changed.",
+  "exportFailed": "Export failed.",
+  "resumeNow": "Resume now",
+  "@resumeNow": {
+    "description": "Options sheet row: end a habit's current or planned pause"
+  },
+  "pausePlanned": "Pause planned from {from} to {to}",
+  "@pausePlanned": {
+    "placeholders": {
+      "from": {
+        "type": "String"
+      },
+      "to": {
+        "type": "String"
+      }
+    }
+  },
+  "toastResumed": "{name} is back on from today",
+  "@toastResumed": {
+    "placeholders": {
+      "name": {
+        "type": "String"
       }
     }
   }

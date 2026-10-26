@@ -1388,7 +1388,7 @@ class AppLocalizationsFr extends AppLocalizations {
   }
 
   @override
-  String get rowExport => 'Exporter mes données';
+  String get rowExport => 'Sauvegarder mes données';
 
   @override
   String get csv => 'CSV';
@@ -1455,5 +1455,67 @@ class AppLocalizationsFr extends AppLocalizations {
   @override
   String xpGained(int xp) {
     return '+$xp XP';
+  }
+
+  @override
+  String get rowOrganize => 'Organiser mes habitudes';
+
+  @override
+  String get organizeHint => 'Fais glisser une habitude pour la déplacer';
+
+  @override
+  String moveHabit(String name) {
+    return 'Déplacer $name';
+  }
+
+  @override
+  String get json => 'JSON';
+
+  @override
+  String get dataSheetTitle => 'Mes données';
+
+  @override
+  String get exportJson => 'Exporter (JSON)';
+
+  @override
+  String get importData => 'Importer';
+
+  @override
+  String get csvPremium => 'L’export CSV reste réservé à Premium.';
+
+  @override
+  String get importConfirmTitle => 'Remplacer toutes tes données ?';
+
+  @override
+  String get importConfirmBody =>
+      'Tes habitudes et ton historique sur ce téléphone seront remplacés par ceux du fichier. Impossible de revenir en arrière.';
+
+  @override
+  String get importReplace => 'Remplacer';
+
+  @override
+  String get importInvalid =>
+      'Ce fichier n’est pas une sauvegarde Little Steps.';
+
+  @override
+  String get importDone => 'Données importées';
+
+  @override
+  String get importFailed => 'L’import a échoué, rien n’a changé.';
+
+  @override
+  String get exportFailed => 'L’export a échoué.';
+
+  @override
+  String get resumeNow => 'Reprendre maintenant';
+
+  @override
+  String pausePlanned(String from, String to) {
+    return 'Pause prévue du $from au $to';
+  }
+
+  @override
+  String toastResumed(String name) {
+    return 'Tu reprends $name dès aujourd’hui';
   }
 }

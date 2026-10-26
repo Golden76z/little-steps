@@ -44,18 +44,34 @@ class _CelebrationsState extends ConsumerState<Celebrations>
 
   /// The celebration waiting for the habit's own (its +XP flight) to end.
   Timer? _pending;
+
+  /// Set while an import settles: its streams emit one by one, so every
+  /// history until they go quiet only becomes the baseline.
+  Timer? _rebasing;
+
+  void _settling() {
+    _rebasing?.cancel();
+    _rebasing = Timer(Motion.slow, () => _rebasing = null);
+  }
+
   bool _withBurst = false;
 
   @override
   void initState() {
     super.initState();
+    // An import is not an achievement: its history becomes the new baseline.
+    ref.listenManual(dataReplacedProvider, (_, _) {
+      _pending?.cancel();
+      _settling();
+    });
     ref.listenManual(historyProvider, (_, next) {
       final history = next.value;
       if (history == null) return;
       final now = _achievements(history, ref.read(todayProvider));
       final known = _known;
-      if (known == null) {
+      if (known == null || _rebasing != null) {
         _known = now;
+        if (_rebasing != null) _settling();
         return;
       }
       final celebrated = ref.read(celebratedProvider.notifier);
@@ -92,6 +108,7 @@ class _CelebrationsState extends ConsumerState<Celebrations>
   @override
   void dispose() {
     _pending?.cancel();
+    _rebasing?.cancel();
     _controller.dispose();
     super.dispose();
   }

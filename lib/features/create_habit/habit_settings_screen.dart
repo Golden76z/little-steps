@@ -72,6 +72,8 @@ class _HabitSettingsScreenState extends ConsumerState<HabitSettingsScreen> {
       ),
       children: [
         SorbetCard(
+          // The colour grid's bottom targets reach into the card's padding.
+          padding: const EdgeInsets.fromLTRB(16, 14, 16, 0),
           child: Column(
             crossAxisAlignment: CrossAxisAlignment.stretch,
             children: [
@@ -108,7 +110,6 @@ class _HabitSettingsScreenState extends ConsumerState<HabitSettingsScreen> {
                   ),
                 ),
               ),
-              const SizedBox(height: 12),
               _ColorGrid(
                 selected: draft.color,
                 onSelected: (color) => _pick((d) => d.copyWith(color: color)),
@@ -271,63 +272,83 @@ class _Preview extends StatelessWidget {
   }
 }
 
-/// 6×2 glued colour swatches. One adjustable control for assistive tech:
-/// the 28 px rows are too short to be separate targets.
+/// 6×2 glued colour swatches, 28 px tall but 48 px targets: the top row
+/// reaches up into the gap above, the bottom one down into the card padding.
 class _ColorGrid extends StatelessWidget {
   const _ColorGrid({required this.selected, required this.onSelected});
 
   final HabitColor selected;
   final ValueChanged<HabitColor> onSelected;
 
+  static const _reach = 20.0;
+
   @override
   Widget build(BuildContext context) {
-    final l10n = context.l10n;
-    final c = context.sorbet;
     const all = HabitColor.values;
-    final i = selected.index;
+    // Glued tiles: only the grid's outer corners are round.
+    Radius corner(bool outer) => Radius.circular(outer ? 12 : 3);
     return Semantics(
-      label: l10n.colorLabel,
-      value: colorName(l10n, selected),
-      increasedValue: colorName(l10n, all[(i + 1) % all.length]),
-      decreasedValue: colorName(l10n, all[(i - 1) % all.length]),
-      onIncrease: () => onSelected(all[(i + 1) % all.length]),
-      onDecrease: () => onSelected(all[(i - 1) % all.length]),
-      child: ExcludeSemantics(
-        child: ClipRRect(
-          borderRadius: BorderRadius.circular(12),
-          child: Column(
-            spacing: 1,
-            children: [
-              for (var row = 0; row < 2; row++)
-                Row(
-                  spacing: 1,
-                  children: [
-                    for (final color in all.skip(row * 6).take(6))
-                      Expanded(
-                        child: GestureDetector(
-                          onTap: () => onSelected(color),
-                          child: AnimatedContainer(
-                            duration: context.motion(Motion.fast),
-                            curve: Motion.curve,
-                            height: 28,
-                            decoration: BoxDecoration(
-                              color: c.habit[color],
-                              borderRadius: BorderRadius.circular(3),
-                              border: color == selected
-                                  ? Border.all(color: c.ink, width: 3)
-                                  : null,
-                            ),
-                          ),
-                        ),
+      label: context.l10n.colorLabel,
+      container: true,
+      child: Column(
+        spacing: 1,
+        children: [
+          for (var row = 0; row < 2; row++)
+            Row(
+              spacing: 1,
+              children: [
+                for (var col = 0; col < 6; col++)
+                  Expanded(
+                    child: _swatch(
+                      context,
+                      all[row * 6 + col],
+                      row,
+                      BorderRadius.only(
+                        topLeft: corner(row == 0 && col == 0),
+                        topRight: corner(row == 0 && col == 5),
+                        bottomLeft: corner(row == 1 && col == 0),
+                        bottomRight: corner(row == 1 && col == 5),
                       ),
-                  ],
-                ),
-            ],
-          ),
-        ),
+                    ),
+                  ),
+              ],
+            ),
+        ],
       ),
     );
   }
+
+  Widget _swatch(
+    BuildContext context,
+    HabitColor color,
+    int row,
+    BorderRadius radius,
+  ) => Semantics(
+    button: true,
+    selected: color == selected,
+    label: colorName(context.l10n, color),
+    child: GestureDetector(
+      behavior: HitTestBehavior.opaque,
+      onTap: () => onSelected(color),
+      child: Padding(
+        padding: row == 0
+            ? const EdgeInsets.only(top: _reach)
+            : const EdgeInsets.only(bottom: _reach),
+        child: AnimatedContainer(
+          duration: context.motion(Motion.fast),
+          curve: Motion.curve,
+          height: 28,
+          decoration: BoxDecoration(
+            color: context.sorbet.habit[color],
+            borderRadius: radius,
+            border: color == selected
+                ? Border.all(color: context.sorbet.ink, width: 3)
+                : null,
+          ),
+        ),
+      ),
+    ),
+  );
 }
 
 class _GoalCard extends StatelessWidget {

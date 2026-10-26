@@ -78,6 +78,39 @@ void main() {
     expect(h.statusOn(day.addDays(3)), DayStatus.paused);
   });
 
+  group('resumeHabit', () {
+    Future<List<(Day, Day)>> pauses() async => [
+      for (final p in (await repo.watchHabits().first).single.pauses)
+        (p.from, p.to),
+    ];
+
+    test('a pause under way ends yesterday', () async {
+      final id = await repo.createHabit(water());
+      await repo.pauseHabit(id, Pause(day.addDays(-3), day.addDays(4)));
+      await repo.resumeHabit(id, day);
+      expect(await pauses(), [(day.addDays(-3), day.addDays(-1))]);
+    });
+
+    test('a pause starting today or later is removed', () async {
+      final id = await repo.createHabit(water());
+      await repo.pauseHabit(id, Pause(day, day.addDays(6)));
+      await repo.pauseHabit(id, Pause(day.addDays(10), day.addDays(12)));
+      await repo.resumeHabit(id, day);
+      expect(await pauses(), isEmpty);
+    });
+
+    test('past pauses and other habits are left alone', () async {
+      final id = await repo.createHabit(water());
+      final other = await repo.createHabit(water());
+      await repo.pauseHabit(id, Pause(day.addDays(-9), day.addDays(-2)));
+      await repo.pauseHabit(other, Pause(day, day.addDays(6)));
+      await repo.resumeHabit(id, day);
+      final habits = {for (final h in await repo.watchHabits().first) h.id: h};
+      expect(habits[id]!.pauses.single.to, day.addDays(-2));
+      expect(habits[other]!.pauses, hasLength(1));
+    });
+  });
+
   test('archived habits leave the active list but stay in history', () async {
     final id = await repo.createHabit(water());
     await repo.archiveHabit(id, day.addDays(1));
@@ -215,5 +248,38 @@ void main() {
     expectLater(stream.map((l) => l.length), emitsInOrder([0, 1]));
     await pumpEventQueue();
     await repo.createHabit(water());
+  });
+
+  group('order', () {
+    Future<List<String>> names() async =>
+        (await repo.watchHabits().first).map((h) => h.name).toList();
+    Future<int> named(String name) => repo.createHabit(
+      Habit(
+        id: 0,
+        name: name,
+        type: HabitType.yesNo,
+        color: HabitColor.mint,
+        icon: 'book',
+        goal: 1,
+        step: 1,
+        createdOn: day,
+      ),
+    );
+
+    test('reordering sets the list order', () async {
+      final a = await named('A');
+      final b = await named('B');
+      final c = await named('C');
+      await repo.reorder([c, a, b]);
+      expect(await names(), ['C', 'A', 'B']);
+    });
+
+    test('a new habit goes last, after a reorder', () async {
+      final a = await named('A');
+      final b = await named('B');
+      await repo.reorder([b, a]);
+      await named('C');
+      expect(await names(), ['B', 'A', 'C']);
+    });
   });
 }

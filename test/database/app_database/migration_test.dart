@@ -6,6 +6,7 @@ import 'package:little_steps/core/database/app_database.dart';
 import 'package:flutter_test/flutter_test.dart';
 
 import 'generated/schema.dart';
+import 'generated/schema_v3.dart' as v3;
 
 void main() {
   driftRuntimeOptions.dontWarnAboutMultipleDatabases = true;
@@ -32,5 +33,29 @@ void main() {
         }
       });
     }
+  });
+
+  test('v3 numbers existing habits in id order', () async {
+    final schema = await verifier.schemaAt(2);
+    for (final name in ['A', 'B', 'C']) {
+      schema.rawDatabase.execute(
+        'INSERT INTO habits (name, type, color, icon, goal, step, '
+        'schedule_mode, active_days, times_per_week, moment, reminders, '
+        'streak_danger_alert, created_on) '
+        "VALUES (?, 'yesNo', 'sky', 'drop', 1, 1, 'days', 127, 3, "
+        "'anytime', '', 1, 20000)",
+        [name],
+      );
+    }
+    final db = AppDatabase(schema.newConnection());
+    await verifier.migrateAndValidate(db, 3);
+    await db.close();
+    final migrated = v3.DatabaseAtV3(schema.newConnection());
+    final rows = await (migrated.select(
+      migrated.habits,
+    )..orderBy([(h) => OrderingTerm.asc(h.position)])).get();
+    expect(rows.map((r) => r.name), ['A', 'B', 'C']);
+    expect(rows.map((r) => r.position).toSet(), hasLength(3));
+    await migrated.close();
   });
 }

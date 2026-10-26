@@ -58,6 +58,7 @@ class SessionTimers extends Notifier<Map<int, Session>> {
 
   @override
   Map<int, Session> build() {
+    ref.watch(dataReplacedProvider);
     ref.onDispose(() {
       for (final t in _alarms.values) {
         t.cancel();

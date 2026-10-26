@@ -8,6 +8,7 @@ import '../../features/create_habit/habit_settings_screen.dart';
 import '../../features/create_habit/premium_screen.dart';
 import '../../features/create_habit/schedule_screen.dart';
 import '../../features/habit_detail/habit_detail_screen.dart';
+import '../../features/profile/organize_screen.dart';
 import '../../features/profile/profile_screen.dart';
 import '../../features/profile/reminders_screen.dart';
 import '../../features/progress/progress_screen.dart';
@@ -27,6 +28,7 @@ abstract final class Routes {
   static const createSchedule = '/create/schedule';
   static const premium = '/premium';
   static const reminders = '/reminders';
+  static const organize = '/organize';
 
   static String habit(int id, {bool startTimer = false}) =>
       '/habit/$id${startTimer ? '?timer=1' : ''}';
@@ -106,6 +108,10 @@ final routerProvider = Provider<GoRouter>((ref) {
       GoRoute(
         path: Routes.reminders,
         pageBuilder: (_, state) => _page(state, const RemindersScreen()),
+      ),
+      GoRoute(
+        path: Routes.organize,
+        pageBuilder: (_, state) => _page(state, const OrganizeScreen()),
       ),
       GoRoute(
         path: '/habit/:id',

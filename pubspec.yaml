@@ -42,9 +42,14 @@ dependencies:
   timezone: ^0.11.2
   flutter_timezone: ^5.1.1
   audioplayers: ^6.8.1
+  share_plus: ^13.3.1
+  file_selector: ^1.1.0
+  path_provider: ^2.1.6
 
 dev_dependencies:
   flutter_test:
+    sdk: flutter
+  integration_test:
     sdk: flutter
 
   # The "flutter_lints" package below contains a set of recommended lints to

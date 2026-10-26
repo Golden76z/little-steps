@@ -1418,7 +1418,7 @@ class AppLocalizationsEn extends AppLocalizations {
   }
 
   @override
-  String get rowExport => 'Export my data';
+  String get rowExport => 'Back up my data';
 
   @override
   String get csv => 'CSV';
@@ -1484,5 +1484,66 @@ class AppLocalizationsEn extends AppLocalizations {
   @override
   String xpGained(int xp) {
     return '+$xp XP';
+  }
+
+  @override
+  String get rowOrganize => 'Organize my habits';
+
+  @override
+  String get organizeHint => 'Drag a habit to move it';
+
+  @override
+  String moveHabit(String name) {
+    return 'Move $name';
+  }
+
+  @override
+  String get json => 'JSON';
+
+  @override
+  String get dataSheetTitle => 'My data';
+
+  @override
+  String get exportJson => 'Export (JSON)';
+
+  @override
+  String get importData => 'Import';
+
+  @override
+  String get csvPremium => 'CSV export stays a Premium feature.';
+
+  @override
+  String get importConfirmTitle => 'Replace all your data?';
+
+  @override
+  String get importConfirmBody =>
+      'Your habits and history on this phone will be replaced by the file’s. This can’t be undone.';
+
+  @override
+  String get importReplace => 'Replace';
+
+  @override
+  String get importInvalid => 'This file isn’t a Little Steps backup.';
+
+  @override
+  String get importDone => 'Data imported';
+
+  @override
+  String get importFailed => 'Import failed, nothing changed.';
+
+  @override
+  String get exportFailed => 'Export failed.';
+
+  @override
+  String get resumeNow => 'Resume now';
+
+  @override
+  String pausePlanned(String from, String to) {
+    return 'Pause planned from $from to $to';
+  }
+
+  @override
+  String toastResumed(String name) {
+    return '$name is back on from today';
   }
 }

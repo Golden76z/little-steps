@@ -8,6 +8,7 @@ import 'package:little_steps/core/widgets/fade_through_switcher.dart';
 import 'package:little_steps/core/widgets/rolling_text.dart';
 
 import 'package:little_steps/features/today/pill_entrance.dart';
+
 import '../helpers.dart';
 
 Habit yesNo(String name) => Habit(
@@ -279,16 +280,54 @@ void main() {
     await pumpApp(tester, db, locale: 'fr');
     await tapText(tester, 'Créer ma première habitude');
     await expectLater(tester, meetsGuideline(androidTapTargetGuideline));
+    await expectLater(tester, meetsGuideline(labeledTapTargetGuideline));
     await tapText(tester, 'Boire de l’eau');
     await tapText(tester, 'Continuer · Boire de l’eau');
     await expectLater(tester, meetsGuideline(androidTapTargetGuideline));
+    await expectLater(tester, meetsGuideline(labeledTapTargetGuideline));
     tester.platformDispatcher.textScaleFactorTestValue = 2;
     await tester.pumpAndSettle();
     expect(tester.takeException(), isNull);
     await tapText(tester, 'Continuer');
     await expectLater(tester, meetsGuideline(androidTapTargetGuideline));
+    await expectLater(tester, meetsGuideline(labeledTapTargetGuideline));
     expect(tester.takeException(), isNull);
     tester.platformDispatcher.clearTextScaleFactorTestValue();
+    handle.dispose();
+  });
+
+  testApp('colour swatches and weekdays are 48 px targets, drawn as before', (
+    tester,
+    db,
+  ) async {
+    final handle = tester.ensureSemantics();
+    await pumpApp(tester, db, locale: 'fr');
+    await tapText(tester, 'Créer ma première habitude');
+    await tapText(tester, 'Boire de l’eau');
+    await tapText(tester, 'Continuer · Boire de l’eau');
+    final lemon = find.bySemanticsLabel('Citron');
+    expect(tester.getSize(lemon).height, 48);
+    final swatch = find.descendant(
+      of: lemon,
+      matching: find.byType(AnimatedContainer),
+    );
+    expect(tester.getSize(swatch).height, 28);
+    expect(
+      tester.getSemantics(lemon),
+      isSemantics(isButton: true, isSelected: false, hasTapAction: true),
+    );
+    // The bottom row reaches down: a tap under the drawn swatch still counts.
+    await tester.tapAt(tester.getRect(lemon).bottomCenter - const Offset(0, 4));
+    await tester.pumpAndSettle();
+    expect(tester.getSemantics(lemon), isSemantics(isSelected: true));
+    await expectLater(tester, meetsGuideline(androidTapTargetGuideline));
+    await expectLater(tester, meetsGuideline(labeledTapTargetGuideline));
+
+    await tapText(tester, 'Continuer');
+    final monday = find.bySemanticsLabel('lundi, actif');
+    expect(tester.getSize(monday).width, greaterThanOrEqualTo(48));
+    await expectLater(tester, meetsGuideline(androidTapTargetGuideline));
+    await expectLater(tester, meetsGuideline(labeledTapTargetGuideline));
     handle.dispose();
   });
 }

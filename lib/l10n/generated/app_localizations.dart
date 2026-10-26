@@ -2099,7 +2099,7 @@ abstract class AppLocalizations {
   /// No description provided for @rowExport.
   ///
   /// In en, this message translates to:
-  /// **'Export my data'**
+  /// **'Back up my data'**
   String get rowExport;
 
   /// No description provided for @csv.
@@ -2191,6 +2191,114 @@ abstract class AppLocalizations {
   /// In en, this message translates to:
   /// **'+{xp} XP'**
   String xpGained(int xp);
+
+  /// No description provided for @rowOrganize.
+  ///
+  /// In en, this message translates to:
+  /// **'Organize my habits'**
+  String get rowOrganize;
+
+  /// No description provided for @organizeHint.
+  ///
+  /// In en, this message translates to:
+  /// **'Drag a habit to move it'**
+  String get organizeHint;
+
+  /// Accessibility label of a habit's drag handle
+  ///
+  /// In en, this message translates to:
+  /// **'Move {name}'**
+  String moveHabit(String name);
+
+  /// No description provided for @json.
+  ///
+  /// In en, this message translates to:
+  /// **'JSON'**
+  String get json;
+
+  /// No description provided for @dataSheetTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'My data'**
+  String get dataSheetTitle;
+
+  /// No description provided for @exportJson.
+  ///
+  /// In en, this message translates to:
+  /// **'Export (JSON)'**
+  String get exportJson;
+
+  /// No description provided for @importData.
+  ///
+  /// In en, this message translates to:
+  /// **'Import'**
+  String get importData;
+
+  /// No description provided for @csvPremium.
+  ///
+  /// In en, this message translates to:
+  /// **'CSV export stays a Premium feature.'**
+  String get csvPremium;
+
+  /// No description provided for @importConfirmTitle.
+  ///
+  /// In en, this message translates to:
+  /// **'Replace all your data?'**
+  String get importConfirmTitle;
+
+  /// No description provided for @importConfirmBody.
+  ///
+  /// In en, this message translates to:
+  /// **'Your habits and history on this phone will be replaced by the file’s. This can’t be undone.'**
+  String get importConfirmBody;
+
+  /// No description provided for @importReplace.
+  ///
+  /// In en, this message translates to:
+  /// **'Replace'**
+  String get importReplace;
+
+  /// No description provided for @importInvalid.
+  ///
+  /// In en, this message translates to:
+  /// **'This file isn’t a Little Steps backup.'**
+  String get importInvalid;
+
+  /// No description provided for @importDone.
+  ///
+  /// In en, this message translates to:
+  /// **'Data imported'**
+  String get importDone;
+
+  /// No description provided for @importFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Import failed, nothing changed.'**
+  String get importFailed;
+
+  /// No description provided for @exportFailed.
+  ///
+  /// In en, this message translates to:
+  /// **'Export failed.'**
+  String get exportFailed;
+
+  /// Options sheet row: end a habit's current or planned pause
+  ///
+  /// In en, this message translates to:
+  /// **'Resume now'**
+  String get resumeNow;
+
+  /// No description provided for @pausePlanned.
+  ///
+  /// In en, this message translates to:
+  /// **'Pause planned from {from} to {to}'**
+  String pausePlanned(String from, String to);
+
+  /// No description provided for @toastResumed.
+  ///
+  /// In en, this message translates to:
+  /// **'{name} is back on from today'**
+  String toastResumed(String name);
 }
 
 class _AppLocalizationsDelegate

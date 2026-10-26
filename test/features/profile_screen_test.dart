@@ -1,5 +1,6 @@
 import 'package:flutter/material.dart';
 import 'package:flutter_riverpod/flutter_riverpod.dart';
+import 'package:flutter_riverpod/misc.dart' show Override;
 import 'package:flutter_test/flutter_test.dart';
 import 'package:little_steps/core/database/app_database.dart';
 import 'package:little_steps/core/database/habit_repository.dart';
@@ -26,7 +27,11 @@ Habit yesNo(String name, Day createdOn, List<int> reminders) => Habit(
 /// Lire since 15 August (07:30, 21:00), Sport since 1 September (07:30).
 /// Both done 2–5 September and 19–20 October, Lire also on 18 October:
 /// streak 2, record 4, 13 pills filled, 6 perfect days (no joker yet).
-Future<void> openProfile(WidgetTester tester, AppDatabase db) async {
+Future<void> openProfile(
+  WidgetTester tester,
+  AppDatabase db, {
+  List<Override> overrides = const [],
+}) async {
   // The mockup's 390 × 844 screen, so every row clears the floating bar.
   tester.view
     ..physicalSize = const Size(1170, 2532)
@@ -54,7 +59,7 @@ Future<void> openProfile(WidgetTester tester, AppDatabase db) async {
       HabitEntry(habitId: read, day: Day(2026, 10, 18), value: 1),
     );
   });
-  await pumpApp(tester, db, locale: 'fr');
+  await pumpApp(tester, db, locale: 'fr', overrides: overrides);
   await tester.tap(find.bySemanticsLabel('Profil'));
   await settle(tester);
 }
@@ -91,12 +96,12 @@ void main() {
     await openProfile(tester, db);
     expect(find.text('07:30 · 21:00'), findsOneWidget);
     expect(find.text('Sorbet'), findsOneWidget);
-    expect(find.text('CSV'), findsOneWidget);
+    expect(find.text('JSON'), findsOneWidget);
     expect(find.text('Bientôt'), findsOneWidget);
     expect(find.text('03:00'), findsOneWidget);
   });
 
-  for (final label in ['Thème', 'Exporter mes données', 'Essayer']) {
+  for (final label in ['Thème', 'Essayer']) {
     testApp('$label opens Premium', (tester, db) async {
       await openProfile(tester, db);
       if (label != 'Essayer') {

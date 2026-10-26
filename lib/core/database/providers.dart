@@ -45,3 +45,17 @@ final historyProvider = FutureProvider<History>(
 final settingProvider = StreamProvider.family<String?, String>(
   (ref, key) => ref.watch(habitRepositoryProvider).watchSetting(key),
 );
+
+/// Bumped right before an import replaces all the data: what was kept in
+/// memory about the old habits (runs, pending taps, celebrated baseline)
+/// starts over.
+final dataReplacedProvider = NotifierProvider<DataReplaced, int>(
+  DataReplaced.new,
+);
+
+class DataReplaced extends Notifier<int> {
+  @override
+  int build() => 0;
+
+  void bump() => state++;
+}

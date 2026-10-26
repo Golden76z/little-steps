@@ -28,6 +28,9 @@ class Habits extends Table {
   BoolColumn get streakDangerAlert => boolean()();
   IntColumn get createdOn => integer().map(const DayConverter())();
   IntColumn get archivedOn => integer().map(const DayConverter()).nullable()();
+
+  /// Place in the user's order; ties fall back to the id.
+  IntColumn get position => integer().withDefault(const Constant(0))();
 }
 
 @DataClassName('PauseRow')
@@ -113,13 +116,17 @@ class AppDatabase extends _$AppDatabase {
     : super(executor ?? driftDatabase(name: 'little_steps'));
 
   @override
-  int get schemaVersion => 2;
+  int get schemaVersion => 3;
 
   @override
   MigrationStrategy get migration => MigrationStrategy(
     // Each version bump: `dart run drift_dev make-migrations`, then add a step.
     onUpgrade: stepByStep(
       from1To2: (m, schema) => m.createTable(schema.settings),
+      from2To3: (m, schema) async {
+        await m.addColumn(schema.habits, schema.habits.position);
+        await customStatement('UPDATE habits SET position = id');
+      },
     ),
     beforeOpen: (details) => customStatement('PRAGMA foreign_keys = ON'),
   );

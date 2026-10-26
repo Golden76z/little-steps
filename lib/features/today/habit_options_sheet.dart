@@ -6,6 +6,7 @@ import '../../core/database/providers.dart';
 import '../../core/domain/day.dart';
 import '../../core/domain/habit.dart';
 import '../../core/domain/rules.dart';
+import '../../core/feedback/feedback.dart';
 import '../../core/icons/habit_icons.dart';
 import '../../core/icons/phosphor_icons.dart';
 import '../../core/l10n/formatters.dart';
@@ -66,6 +67,8 @@ class _HabitOptionsState extends ConsumerState<_HabitOptions> {
             firstWeekday: context.firstWeekday,
           ).current;
     final resume = _resumeOn(today);
+    // The first pause under way or planned; resuming lifts all of them.
+    final pause = _habit.pauses.where((p) => p.to >= today).firstOrNull;
     final rowDivider = BorderSide(color: c.sheetDivider, width: 1.5);
 
     return Column(
@@ -99,93 +102,111 @@ class _HabitOptionsState extends ConsumerState<_HabitOptions> {
                   context.push(Routes.createSettings);
                 },
               ),
-              _OptionRow(
-                icon: PhosphorIconsRegular.pauseCircle,
-                label: l10n.pauseHabit,
-                trailing: Text(
-                  l10n.pauseHint,
-                  style: text.labelMedium!.copyWith(color: c.muted),
+              if (pause != null)
+                _OptionRow(
+                  icon: PhosphorIconsRegular.playCircle,
+                  label: l10n.resumeNow,
+                  subtitle: pause.from <= today
+                      ? l10n.pausedUntil(fmt.longDate(pause.to))
+                      : l10n.pausePlanned(
+                          fmt.longDate(pause.from),
+                          fmt.longDate(pause.to),
+                        ),
+                  height: 60,
+                  border: rowDivider,
+                  onTap: () => _resume(today),
+                )
+              else ...[
+                _OptionRow(
+                  icon: PhosphorIconsRegular.pauseCircle,
+                  label: l10n.pauseHabit,
+                  trailing: Text(
+                    l10n.pauseHint,
+                    style: text.labelMedium!.copyWith(color: c.muted),
+                  ),
+                  expanded: _pauseOpen,
+                  onTap: () => setState(() => _pauseOpen = !_pauseOpen),
                 ),
-                expanded: _pauseOpen,
-                onTap: () => setState(() => _pauseOpen = !_pauseOpen),
-              ),
-              FadeThroughSwitcher(
-                child: _pauseOpen
-                    ? Padding(
-                        key: const ValueKey(true),
-                        padding: const EdgeInsets.only(bottom: 14),
-                        child: Column(
-                          crossAxisAlignment: CrossAxisAlignment.stretch,
-                          children: [
-                            Semantics(
-                              label: l10n.pauseLength,
-                              container: true,
-                              child: SegmentedStrip.outlined(
-                                count: 4,
-                                selected: _duration,
-                                onSelected: (i) => _pickDuration(i, today),
-                                itemBuilder: (context, i, on) => Text(
-                                  [
-                                    l10n.pause1Week,
-                                    l10n.pause2Weeks,
-                                    l10n.pause1Month,
-                                    l10n.pauseDates,
-                                  ][i],
-                                  style: text.labelLarge!.copyWith(
-                                    color: on ? c.ink : c.muted,
+                FadeThroughSwitcher(
+                  child: _pauseOpen
+                      ? Padding(
+                          key: const ValueKey(true),
+                          padding: const EdgeInsets.only(bottom: 14),
+                          child: Column(
+                            crossAxisAlignment: CrossAxisAlignment.stretch,
+                            children: [
+                              Semantics(
+                                label: l10n.pauseLength,
+                                container: true,
+                                child: SegmentedStrip.outlined(
+                                  count: 4,
+                                  selected: _duration,
+                                  onSelected: (i) => _pickDuration(i, today),
+                                  itemBuilder: (context, i, on) => Text(
+                                    [
+                                      l10n.pause1Week,
+                                      l10n.pause2Weeks,
+                                      l10n.pause1Month,
+                                      l10n.pauseDates,
+                                    ][i],
+                                    style: text.labelLarge!.copyWith(
+                                      color: on ? c.ink : c.muted,
+                                    ),
                                   ),
                                 ),
                               ),
-                            ),
-                            const SizedBox(height: 10),
-                            MarkedText(
-                              l10n.pauseFrozen(
-                                _habit.isWeekly
-                                    ? l10n.weeksCount(streak)
-                                    : l10n.daysCount(streak),
-                                resume == null
-                                    ? l10n.pauseChosenDay
-                                    : fmt.longDate(resume),
+                              const SizedBox(height: 10),
+                              MarkedText(
+                                l10n.pauseFrozen(
+                                  _habit.isWeekly
+                                      ? l10n.weeksCount(streak)
+                                      : l10n.daysCount(streak),
+                                  resume == null
+                                      ? l10n.pauseChosenDay
+                                      : fmt.longDate(resume),
+                                ),
+                                style: text.bodySmall!.copyWith(
+                                  height: 1.35,
+                                  color: c.inkSoft,
+                                ),
+                                strong: TextStyle(
+                                  fontWeight: FontWeight.w600,
+                                  color: c.ink,
+                                ),
                               ),
-                              style: text.bodySmall!.copyWith(
-                                height: 1.35,
-                                color: c.inkSoft,
+                              const SizedBox(height: 12),
+                              FilledButton(
+                                onPressed: resume == null || _paused
+                                    ? null
+                                    : () => _pause(today, resume),
+                                style: FilledButton.styleFrom(
+                                  minimumSize: const Size.fromHeight(50),
+                                  backgroundColor: c.accent,
+                                  foregroundColor: c.onAccent,
+                                  disabledBackgroundColor: _paused
+                                      ? c.surface
+                                      : c.chipOff,
+                                  disabledForegroundColor: _paused
+                                      ? c.ink
+                                      : c.faint,
+                                  textStyle: text.bodyLarge,
+                                ),
+                                child: Text(
+                                  _paused
+                                      ? l10n.pauseActive
+                                      : l10n.pauseConfirm,
+                                ),
                               ),
-                              strong: TextStyle(
-                                fontWeight: FontWeight.w600,
-                                color: c.ink,
-                              ),
-                            ),
-                            const SizedBox(height: 12),
-                            FilledButton(
-                              onPressed: resume == null || _paused
-                                  ? null
-                                  : () => _pause(today, resume),
-                              style: FilledButton.styleFrom(
-                                minimumSize: const Size.fromHeight(50),
-                                backgroundColor: c.accent,
-                                foregroundColor: c.onAccent,
-                                disabledBackgroundColor: _paused
-                                    ? c.surface
-                                    : c.chipOff,
-                                disabledForegroundColor: _paused
-                                    ? c.ink
-                                    : c.faint,
-                                textStyle: text.bodyLarge,
-                              ),
-                              child: Text(
-                                _paused ? l10n.pauseActive : l10n.pauseConfirm,
-                              ),
-                            ),
-                          ],
+                            ],
+                          ),
+                        )
+                      : const SizedBox(
+                          key: ValueKey(false),
+                          width: double.infinity,
                         ),
-                      )
-                    : const SizedBox(
-                        key: ValueKey(false),
-                        width: double.infinity,
-                      ),
-              ),
-              Container(height: 1.5, color: c.sheetDivider),
+                ),
+                Container(height: 1.5, color: c.sheetDivider),
+              ],
               _OptionRow(
                 icon: PhosphorIconsRegular.archive,
                 label: l10n.archive,
@@ -228,6 +249,20 @@ class _HabitOptionsState extends ConsumerState<_HabitOptions> {
         .read(habitRepositoryProvider)
         .pauseHabit(_habit.id, Pause(today, resume.addDays(-1)));
     if (mounted) setState(() => _paused = true);
+  }
+
+  Future<void> _resume(Day today) async {
+    final l10n = context.l10n;
+    final messenger = ScaffoldMessenger.of(context);
+    final repo = ref.read(habitRepositoryProvider);
+    ref.read(feedbackProvider).haptic(Haptic.light);
+    Navigator.pop(context);
+    await repo.resumeHabit(_habit.id, today);
+    messenger
+      ..hideCurrentSnackBar()
+      ..showSnackBar(
+        SnackBar(persist: false, content: Text(l10n.toastResumed(_habit.name))),
+      );
   }
 
   Future<void> _archive(Day today) async {

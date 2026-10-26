@@ -144,6 +144,7 @@ void main() {
     ]) {
       expect(find.text(label), findsOneWidget);
     }
+    expect(find.text('Reprendre maintenant'), findsNothing);
     // The sheet's scrim covers the floating bar: a tap there only closes it.
     await tester.tap(find.bySemanticsLabel('Progrès'), warnIfMissed: false);
     await tester.pumpAndSettle();
@@ -309,6 +310,51 @@ void main() {
     await settle(tester);
     expect(find.text('Repos aujourd’hui'), findsOneWidget);
     expect(find.text('En pause jusqu’au lundi 26 octobre'), findsOneWidget);
+  });
+
+  testToday('resuming a paused habit brings it back today', (tester, db) async {
+    final id = await repo.createHabit(make('Sport', HabitType.yesNo));
+    await repo.pauseHabit(id, Pause(today.addDays(-2), today.addDays(5)));
+    await pumpToday(tester, db);
+    expect(find.text('Repos aujourd’hui'), findsOneWidget);
+    await tester.longPress(find.text('Sport'));
+    await tester.pumpAndSettle();
+    expect(find.text('Mettre en pause'), findsNothing);
+    // On the resting pill and in the sheet.
+    expect(
+      find.text('En pause jusqu’au dimanche 25 octobre'),
+      findsNWidgets(2),
+    );
+    final haptics = recordHaptics(tester);
+    await tester.tap(find.text('Reprendre maintenant'));
+    await settle(tester);
+    expect(haptics, ['HapticFeedbackType.lightImpact']);
+    expect(find.text('Repos aujourd’hui'), findsNothing);
+    expect(find.text('Tu reprends Sport dès aujourd’hui'), findsOneWidget);
+    final pause = (await tester.runAsync(() => repo.watchHabits().first))!
+        .single
+        .pauses
+        .single;
+    expect((pause.from, pause.to), (today.addDays(-2), today.addDays(-1)));
+  });
+
+  testToday('a planned pause can be cancelled from the sheet', (
+    tester,
+    db,
+  ) async {
+    final id = await repo.createHabit(make('Sport', HabitType.yesNo));
+    await repo.pauseHabit(id, Pause(today.addDays(3), today.addDays(9)));
+    await pumpToday(tester, db);
+    await tester.longPress(find.bySemanticsLabel('Sport, ouvrir'));
+    await tester.pumpAndSettle();
+    expect(
+      find.text('Pause prévue du vendredi 23 octobre au jeudi 29 octobre'),
+      findsOneWidget,
+    );
+    await tester.tap(find.text('Reprendre maintenant'));
+    await settle(tester);
+    final habit = (await tester.runAsync(() => repo.watchHabits().first))!;
+    expect(habit.single.pauses, isEmpty);
   });
 
   testToday('rest-day habits are grouped at the bottom', (tester, db) async {
